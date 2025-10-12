@@ -10,7 +10,7 @@ import {
 } from '@/hooks/useDashboard';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 
-const COLORS = ['#003366', '#00C853', '#FF6D00', '#FFC400'];
+const COLORS = ['#002D62', '#E30613', '#0070C0', '#6C757D'];
 
 export default function Index() {
   const { t } = useI18n();
