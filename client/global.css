@@ -12,51 +12,47 @@
    * A different format will require also updating the theme in tailwind.config.ts.
   */
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* ACES Branding */
+    --background: 228 20% 97%; /* #F5F6FA */
+    --foreground: 0 0% 13%;   /* #212121 */
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 0 0% 13%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 0 0% 13%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 210 100% 20%;            /* #003366 */
+    --primary-foreground: 0 0% 100%;    /* white */
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 210 16% 90%;
+    --secondary-foreground: 210 100% 20%;
 
-    --muted: 210 40% 96.1%;
+    --muted: 210 16% 90%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 149 100% 39%;             /* #00C853 */
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 28 100% 50%;         /* #FF6D00 */
+    --destructive-foreground: 0 0% 100%;
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --ring: 210 100% 20%;
 
-    --radius: 0.5rem;
+    /* Global radius: 12px (buttons etc). Cards use explicit rounded-[20px] */
+    --radius: 12px;
 
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Sidebar */
+    --sidebar-background: 210 100% 20%;       /* #003366 */
+    --sidebar-foreground: 0 0% 100%;          /* white */
+    --sidebar-primary: 149 100% 39%;          /* #00C853 */
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 100% 24%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 210 30% 30%;
+    --sidebar-ring: 149 100% 39%;
   }
 
   .dark {
