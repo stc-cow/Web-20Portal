@@ -25,3 +25,8 @@ dist-ssr
 
 .config/
 !.env
+build/
+.env
+.env.*
+*.key
+*.pem
