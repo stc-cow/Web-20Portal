@@ -1,8 +1,8 @@
-import { AppShell } from "@/components/layout/AppSidebar";
-import Header from "@/components/layout/Header";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { AppShell } from '@/components/layout/AppSidebar';
+import Header from '@/components/layout/Header';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
@@ -10,8 +10,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { useEffect, useMemo, useState } from "react";
+} from '@/components/ui/table';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Eye,
   Pencil,
@@ -21,23 +21,23 @@ import {
   Printer,
   CheckCircle2,
   XCircle,
-} from "lucide-react";
-import { supabase } from "@/lib/supabase";
+} from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 
 // Dashboard-mapped row
 type SiteRow = {
@@ -57,21 +57,21 @@ type SiteRow = {
 };
 
 const allColumns = [
-  { key: "index", label: "#" },
-  { key: "name", label: "Name" },
-  { key: "generator", label: "Generator" },
-  { key: "currentLiters", label: "Current Liters in Tank" },
-  { key: "dailyVirtual", label: "Daily virtual consumption" },
-  { key: "rate", label: "Rate" },
-  { key: "driver", label: "Driver" },
-  { key: "project", label: "Project" },
-  { key: "city", label: "City" },
-  { key: "address", label: "Address" },
-  { key: "active", label: "Active" },
-  { key: "settings", label: "Settings" },
+  { key: 'index', label: '#' },
+  { key: 'name', label: 'Name' },
+  { key: 'generator', label: 'Generator' },
+  { key: 'currentLiters', label: 'Current Liters in Tank' },
+  { key: 'dailyVirtual', label: 'Daily virtual consumption' },
+  { key: 'rate', label: 'Rate' },
+  { key: 'driver', label: 'Driver' },
+  { key: 'project', label: 'Project' },
+  { key: 'city', label: 'City' },
+  { key: 'address', label: 'Address' },
+  { key: 'active', label: 'Active' },
+  { key: 'settings', label: 'Settings' },
 ] as const;
 
-type ColumnKey = (typeof allColumns)[number]["key"];
+type ColumnKey = (typeof allColumns)[number]['key'];
 
 type EditForm = {
   id: number;
@@ -82,7 +82,7 @@ type EditForm = {
 };
 
 export default function SitesPage() {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
   const [rows, setRows] = useState<SiteRow[]>([]);
   const [page, setPage] = useState(1);
   const [pageSize] = useState(10);
@@ -107,21 +107,21 @@ export default function SitesPage() {
   const [viewing, setViewing] = useState<SiteRow | null>(null);
 
   const mapRow = (d: any): SiteRow => {
-    const status = (d.cow_status || "").toString();
+    const status = (d.cow_status || '').toString();
     const sNorm = status.trim().toLowerCase();
-    const isActive = sNorm.includes("on-air") || sNorm.includes("in progress");
+    const isActive = sNorm.includes('on-air') || sNorm.includes('in progress');
     return {
       id: Number(d.id),
-      name: d.site_name || "",
-      generator: d.site_name || "",
-      currentLiters: "",
-      dailyVirtual: "",
-      lastAvg: "",
-      rate: "",
-      driver: "",
-      project: "stc COW",
-      city: d.district || "",
-      address: d.city || "",
+      name: d.site_name || '',
+      generator: d.site_name || '',
+      currentLiters: '',
+      dailyVirtual: '',
+      lastAvg: '',
+      rate: '',
+      driver: '',
+      project: 'stc COW',
+      city: d.district || '',
+      address: d.city || '',
       active: isActive,
       cowStatus: status,
     };
@@ -131,9 +131,9 @@ export default function SitesPage() {
     let mounted = true;
     (async () => {
       const { data, error } = await supabase
-        .from("sites")
-        .select("id, site_name, district, city, cow_status")
-        .order("created_at", { ascending: false });
+        .from('sites')
+        .select('id, site_name, district, city, cow_status')
+        .order('created_at', { ascending: false });
       if (!mounted) return;
       if (error || !data) {
         setRows([]);
@@ -166,17 +166,17 @@ export default function SitesPage() {
     const visible = allColumns.filter(
       (c) =>
         cols[c.key] &&
-        !["index", "settings", "active"].includes(c.key as string),
+        !['index', 'settings', 'active'].includes(c.key as string),
     );
-    const head = visible.map((c) => c.label).join(",");
+    const head = visible.map((c) => c.label).join(',');
     const body = filtered
-      .map((r) => visible.map((c) => (r as any)[c.key]).join(","))
-      .join("\n");
-    const blob = new Blob([head + "\n" + body], {
-      type: "text/csv;charset=utf-8;",
+      .map((r) => visible.map((c) => (r as any)[c.key]).join(','))
+      .join('\n');
+    const blob = new Blob([head + '\n' + body], {
+      type: 'text/csv;charset=utf-8;',
     });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
+    const a = document.createElement('a');
     a.href = url;
     const today = new Date().toISOString().slice(0, 10);
     a.download = `ACES_Sites_Report_${today}.xlsx`;
@@ -185,7 +185,7 @@ export default function SitesPage() {
   };
 
   const remove = async (id: number) => {
-    const { error } = await supabase.from("sites").delete().eq("id", id);
+    const { error } = await supabase.from('sites').delete().eq('id', id);
     if (!error) setRows((r) => r.filter((x) => x.id !== id));
   };
 
@@ -207,15 +207,15 @@ export default function SitesPage() {
   const saveEdit = async () => {
     if (!editing) return;
     const { error, data } = await supabase
-      .from("sites")
+      .from('sites')
       .update({
         site_name: editing.site_name,
         district: editing.district,
         city: editing.city,
         cow_status: editing.cow_status,
       })
-      .eq("id", editing.id)
-      .select("id, site_name, district, city, cow_status")
+      .eq('id', editing.id)
+      .select('id, site_name, district, city, cow_status')
       .single();
     if (!error && data) {
       setRows((r) => r.map((x) => (x.id === editing.id ? mapRow(data) : x)));
@@ -462,27 +462,27 @@ export default function SitesPage() {
           {viewing && (
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <span className="text-muted-foreground">Name:</span>{" "}
+                <span className="text-muted-foreground">Name:</span>{' '}
                 {viewing.name}
               </div>
               <div>
-                <span className="text-muted-foreground">Generator:</span>{" "}
+                <span className="text-muted-foreground">Generator:</span>{' '}
                 {viewing.generator}
               </div>
               <div>
-                <span className="text-muted-foreground">City (District):</span>{" "}
+                <span className="text-muted-foreground">City (District):</span>{' '}
                 {viewing.city}
               </div>
               <div>
-                <span className="text-muted-foreground">Address (City):</span>{" "}
+                <span className="text-muted-foreground">Address (City):</span>{' '}
                 {viewing.address}
               </div>
               <div>
-                <span className="text-muted-foreground">Status:</span>{" "}
+                <span className="text-muted-foreground">Status:</span>{' '}
                 {viewing.cowStatus}
               </div>
               <div>
-                <span className="text-muted-foreground">Project:</span>{" "}
+                <span className="text-muted-foreground">Project:</span>{' '}
                 {viewing.project}
               </div>
             </div>

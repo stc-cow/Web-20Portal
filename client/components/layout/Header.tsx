@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Bell } from "lucide-react";
-import { useI18n } from "@/i18n";
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { SidebarTrigger } from '@/components/ui/sidebar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Bell } from 'lucide-react';
+import { useI18n } from '@/i18n';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -13,7 +13,7 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
 
 export default function Header() {
   const navigate = useNavigate();
@@ -23,46 +23,46 @@ export default function Header() {
 
   useEffect(() => {
     const sync = () => {
-      setLoggedIn(localStorage.getItem("auth.loggedIn") === "true");
+      setLoggedIn(localStorage.getItem('auth.loggedIn') === 'true');
       setUsername(
-        localStorage.getItem("auth.username") ||
-          localStorage.getItem("remember.username") ||
+        localStorage.getItem('auth.username') ||
+          localStorage.getItem('remember.username') ||
           null,
       );
     };
     sync();
-    window.addEventListener("storage", sync);
-    return () => window.removeEventListener("storage", sync);
+    window.addEventListener('storage', sync);
+    return () => window.removeEventListener('storage', sync);
   }, []);
 
   const onLogout = () => {
-    localStorage.removeItem("auth.loggedIn");
-    localStorage.removeItem("auth.username");
+    localStorage.removeItem('auth.loggedIn');
+    localStorage.removeItem('auth.username');
     setLoggedIn(false);
-    navigate("/login");
+    navigate('/login');
   };
 
-  const toggleLang = () => setLang(lang === "en" ? "ar" : "en");
+  const toggleLang = () => setLang(lang === 'en' ? 'ar' : 'en');
 
   return (
     <header className="sticky top-0 z-20 w-full bg-white shadow-[0_2px_6px_rgba(0,0,0,0.08)]">
       <div className="flex h-14 items-center gap-3 px-4">
         <SidebarTrigger />
-        <div className="ml-1 text-lg font-semibold">{t("dashboard")}</div>
+        <div className="ml-1 text-lg font-semibold">{t('dashboard')}</div>
         <div className="ml-auto flex items-center gap-3">
           <div className="hidden md:block">
-            <Input placeholder={t("searchPlaceholder")} className="h-9 w-64" />
+            <Input placeholder={t('searchPlaceholder')} className="h-9 w-64" />
           </div>
           <Button
             variant="outline"
             size="sm"
             onClick={toggleLang}
-            aria-label={t("language")}
+            aria-label={t('language')}
             className="border-[#0C2340] text-[#0C2340]"
           >
-            {lang === "en" ? "AR" : "EN"}
+            {lang === 'en' ? 'AR' : 'EN'}
           </Button>
-          <Button variant="ghost" size="icon" aria-label={t("notifications")}>
+          <Button variant="ghost" size="icon" aria-label={t('notifications')}>
             <Bell className="h-5 w-5 text-[#5B6770]" />
           </Button>
           <DropdownMenu>
@@ -73,7 +73,7 @@ export default function Header() {
               >
                 <Avatar className="h-8 w-8">
                   <AvatarFallback>
-                    {username?.[0]?.toUpperCase() || "A"}
+                    {username?.[0]?.toUpperCase() || 'A'}
                   </AvatarFallback>
                 </Avatar>
               </button>
@@ -84,19 +84,19 @@ export default function Header() {
                   <DropdownMenuLabel>
                     <div className="flex flex-col">
                       <span className="text-xs text-muted-foreground">
-                        {t("signedInAs")}
+                        {t('signedInAs')}
                       </span>
-                      <span className="font-medium">{username ?? "User"}</span>
+                      <span className="font-medium">{username ?? 'User'}</span>
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={onLogout}>
-                    {t("logout")}
+                    {t('logout')}
                   </DropdownMenuItem>
                 </>
               ) : (
-                <DropdownMenuItem onClick={() => navigate("/login")}>
-                  {t("login")}
+                <DropdownMenuItem onClick={() => navigate('/login')}>
+                  {t('login')}
                 </DropdownMenuItem>
               )}
             </DropdownMenuContent>

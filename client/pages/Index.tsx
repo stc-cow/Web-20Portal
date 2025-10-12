@@ -13,18 +13,31 @@ export default function Index() {
     <AppShell>
       <Header />
       <div className="px-4 pb-10 pt-4">
-        <div className="mb-4 text-sm text-muted-foreground">{t('dashboard')}</div>
+        <div className="mb-4 text-sm text-muted-foreground">
+          {t('dashboard')}
+        </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <KpiCard label={t('litersToday')} value={formatNum(kpis?.litersToday)} />
+          <KpiCard
+            label={t('litersToday')}
+            value={formatNum(kpis?.litersToday)}
+          />
           <KpiCard label={t('liters30d')} value={formatNum(kpis?.liters30d)} />
-          <KpiCard label={t('activeMissions')} value={formatNum(kpis?.activeMissions)} />
-          <KpiCard label={t('activeDrivers')} value={formatNum(kpis?.activeDrivers)} />
+          <KpiCard
+            label={t('activeMissions')}
+            value={formatNum(kpis?.activeMissions)}
+          />
+          <KpiCard
+            label={t('activeDrivers')}
+            value={formatNum(kpis?.activeDrivers)}
+          />
         </div>
 
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           <Card>
             <CardContent className="p-6">
-              <div className="text-sm text-muted-foreground">{t('regionTotals')}</div>
+              <div className="text-sm text-muted-foreground">
+                {t('regionTotals')}
+              </div>
               <div className="mt-3 text-3xl font-semibold">
                 {t('central')}: {formatNum(regionTotals?.central)}
               </div>

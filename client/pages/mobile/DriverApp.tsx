@@ -1,23 +1,23 @@
-import { useEffect, useMemo, useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { useEffect, useMemo, useState } from 'react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 import {
   Table,
   TableBody,
@@ -25,25 +25,25 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { supabase } from "@/lib/supabase";
-import { Bell } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
+} from '@/components/ui/table';
+import { supabase } from '@/lib/supabase';
+import { Bell } from 'lucide-react';
+import { toast } from '@/hooks/use-toast';
 
 export default function DriverApp() {
   const [profile, setProfile] = useState<{
     name: string;
     phone: string;
   } | null>(null);
-  const [name, setName] = useState("");
+  const [name, setName] = useState('');
   const [demoMode, setDemoMode] = useState(false);
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState('');
   const [verifying, setVerifying] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState('');
   const [tasks, setTasks] = useState<any[]>([]);
-  const [query, setQuery] = useState("");
-  const [filterMode, setFilterMode] = useState<"all" | "active" | "returned">(
-    "all",
+  const [query, setQuery] = useState('');
+  const [filterMode, setFilterMode] = useState<'all' | 'active' | 'returned'>(
+    'all',
   );
   const [editOpen, setEditOpen] = useState(false);
   const [showTasks, setShowTasks] = useState(false);
@@ -53,58 +53,58 @@ export default function DriverApp() {
   const [unreadCount, setUnreadCount] = useState(0);
   const [entry, setEntry] = useState({
     // required fields for this form
-    site_id: "",
-    mission_id: "",
-    actual_liters_in_tank: "",
-    quantity_added: "",
-    notes: "",
+    site_id: '',
+    mission_id: '',
+    actual_liters_in_tank: '',
+    quantity_added: '',
+    notes: '',
     // image urls (filled after upload)
-    counter_before_url: "",
-    tank_before_url: "",
-    counter_after_url: "",
-    tank_after_url: "",
+    counter_before_url: '',
+    tank_before_url: '',
+    counter_after_url: '',
+    tank_after_url: '',
     // legacy/compat fields used by existing submit logic (kept hidden)
-    tank_type: "",
-    completed_at: "",
-    vertical_calculated_liters: "",
-    liters: "",
-    rate: "",
-    station: "",
-    receipt: "",
-    photo_url: "",
-    odometer: "",
+    tank_type: '',
+    completed_at: '',
+    vertical_calculated_liters: '',
+    liters: '',
+    rate: '',
+    station: '',
+    receipt: '',
+    photo_url: '',
+    odometer: '',
   });
 
   // upload state
   const [uploading, setUploading] = useState<Record<string, boolean>>({});
   const [previews, setPreviews] = useState<Record<string, string>>({});
-  const DRIVER_BUCKET = "driver-uploads";
+  const DRIVER_BUCKET = 'driver-uploads';
 
   const keyMap = {
-    counter_before: "counter_before_url",
-    tank_before: "tank_before_url",
-    counter_after: "counter_after_url",
-    tank_after: "tank_after_url",
+    counter_before: 'counter_before_url',
+    tank_before: 'tank_before_url',
+    counter_after: 'counter_after_url',
+    tank_after: 'tank_after_url',
   } as const;
 
   const handleFile = async (tag: keyof typeof keyMap, file: File) => {
     const k = keyMap[tag];
     if (file.size > 10 * 1024 * 1024) {
-      alert("Max file size is 10MB");
+      alert('Max file size is 10MB');
       return;
     }
     setUploading((u) => ({ ...u, [tag]: true }));
     try {
-      const dir = `${(profile?.name || "driver").replace(/\s+/g, "_")}/${
-        activeTask?.id || "misc"
+      const dir = `${(profile?.name || 'driver').replace(/\s+/g, '_')}/${
+        activeTask?.id || 'misc'
       }`;
-      const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+      const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
       const path = `${dir}/${tag}_${Date.now()}.${ext}`;
       const { error } = await supabase.storage
         .from(DRIVER_BUCKET)
         .upload(path, file, {
           upsert: true,
-          contentType: file.type || "image/jpeg",
+          contentType: file.type || 'image/jpeg',
         });
       if (error) {
         alert(`Image upload failed: ${error.message}`);
@@ -123,48 +123,48 @@ export default function DriverApp() {
       const getParams = () => {
         const search = window.location.search;
         if (search && search.length > 1) return new URLSearchParams(search);
-        const hash = window.location.hash || "";
-        const qIndex = hash.indexOf("?");
+        const hash = window.location.hash || '';
+        const qIndex = hash.indexOf('?');
         if (qIndex >= 0) return new URLSearchParams(hash.substring(qIndex));
         return new URLSearchParams();
       };
       const params = getParams();
-      const demo = params.get("demo") === "1";
+      const demo = params.get('demo') === '1';
       setDemoMode(demo);
       if (demo) {
-        const demoProfile = { name: "Demo Driver", phone: "0500000000" };
+        const demoProfile = { name: 'Demo Driver', phone: '0500000000' };
         setProfile(demoProfile);
         setTasks([
           {
             id: 1001,
-            site_name: "Site A",
-            site_id: "SITE-A-001",
+            site_name: 'Site A',
+            site_id: 'SITE-A-001',
             driver_name: demoProfile.name,
             driver_phone: demoProfile.phone,
             scheduled_at: new Date().toISOString(),
-            status: "pending",
+            status: 'pending',
             required_liters: 500,
-            notes: "Check tank level before refuel",
+            notes: 'Check tank level before refuel',
           },
           {
             id: 1002,
-            site_name: "Site B",
-            site_id: "SITE-B-002",
+            site_name: 'Site B',
+            site_id: 'SITE-B-002',
             driver_name: demoProfile.name,
             driver_phone: demoProfile.phone,
             scheduled_at: new Date(Date.now() + 3600000).toISOString(),
-            status: "in_progress",
+            status: 'in_progress',
             required_liters: 300,
-            notes: "Photograph counter",
+            notes: 'Photograph counter',
           },
         ]);
-        if (params.get("open") === "1") {
+        if (params.get('open') === '1') {
           setActiveTask({ id: 1001 });
           setEditOpen(true);
         }
         return;
       }
-      const raw = localStorage.getItem("driver.profile");
+      const raw = localStorage.getItem('driver.profile');
       if (raw) setProfile(JSON.parse(raw));
     } catch {}
   }, []);
@@ -175,10 +175,10 @@ export default function DriverApp() {
     if (profile.phone && profile.phone.trim())
       ors.push(`driver_phone.eq.${profile.phone}`);
     const { data } = await supabase
-      .from("driver_tasks")
-      .select("*")
-      .or(ors.join(","))
-      .order("scheduled_at", { ascending: true });
+      .from('driver_tasks')
+      .select('*')
+      .or(ors.join(','))
+      .order('scheduled_at', { ascending: true });
     setTasks(data || []);
   };
 
@@ -191,12 +191,12 @@ export default function DriverApp() {
   }, [profile, demoMode]);
 
   const activeCount = useMemo(
-    () => tasks.filter((t) => t.status === "in_progress").length,
+    () => tasks.filter((t) => t.status === 'in_progress').length,
     [tasks],
   );
   const returnedCount = useMemo(
     () =>
-      tasks.filter((t) => t.admin_status === "Task returned to the driver")
+      tasks.filter((t) => t.admin_status === 'Task returned to the driver')
         .length,
     [tasks],
   );
@@ -204,10 +204,10 @@ export default function DriverApp() {
   const loadNotifications = async () => {
     if (!profile) return;
     const { data } = await supabase
-      .from("driver_notifications")
-      .select("id, created_at, title, message, driver_name, sent_by")
+      .from('driver_notifications')
+      .select('id, created_at, title, message, driver_name, sent_by')
       .or(`driver_name.is.null,driver_name.eq.${profile.name}`)
-      .order("created_at", { ascending: false })
+      .order('created_at', { ascending: false })
       .limit(50);
     setNotifications(data || []);
     const ids = (data || []).map((n: any) => n.id);
@@ -216,28 +216,28 @@ export default function DriverApp() {
       return;
     }
     const { data: reads } = await supabase
-      .from("driver_notification_reads")
-      .select("notification_id")
-      .eq("driver_name", profile.name)
-      .in("notification_id", ids);
+      .from('driver_notification_reads')
+      .select('notification_id')
+      .eq('driver_name', profile.name)
+      .in('notification_id', ids);
     const readSet = new Set((reads || []).map((r: any) => r.notification_id));
     const unread = ids.filter((id: number) => !readSet.has(id)).length;
     setUnreadCount(unread);
   };
 
   const filtered = useMemo(() => {
-    let base = tasks.filter((t) => t.status !== "completed");
-    if (filterMode === "active")
-      base = base.filter((t) => t.status === "in_progress");
-    if (filterMode === "returned")
+    let base = tasks.filter((t) => t.status !== 'completed');
+    if (filterMode === 'active')
+      base = base.filter((t) => t.status === 'in_progress');
+    if (filterMode === 'returned')
       base = base.filter(
-        (t) => t.admin_status === "Task returned to the driver",
+        (t) => t.admin_status === 'Task returned to the driver',
       );
     if (!query) return base;
     const q = query.toLowerCase();
     return base.filter((t) =>
       [t.site_name, t.status, t.notes].some((v: any) =>
-        String(v || "")
+        String(v || '')
           .toLowerCase()
           .includes(q),
       ),
@@ -246,50 +246,50 @@ export default function DriverApp() {
 
   const sha256 = async (text: string) => {
     const enc = new TextEncoder().encode(text);
-    const buf = await crypto.subtle.digest("SHA-256", enc);
+    const buf = await crypto.subtle.digest('SHA-256', enc);
     return Array.from(new Uint8Array(buf))
-      .map((b) => b.toString(16).padStart(2, "0"))
-      .join("");
+      .map((b) => b.toString(16).padStart(2, '0'))
+      .join('');
   };
 
   const verifyPassword = async () => {
-    setErrorMsg("");
+    setErrorMsg('');
     const n = name.trim();
     const pw = password;
     if (!n || !pw) {
-      setErrorMsg("Enter username and password");
+      setErrorMsg('Enter username and password');
       return;
     }
     setVerifying(true);
     try {
       const { data, error } = await supabase
-        .from("drivers")
-        .select("*")
-        .ilike("name", n)
-        .order("id", { ascending: false })
+        .from('drivers')
+        .select('*')
+        .ilike('name', n)
+        .order('id', { ascending: false })
         .limit(1);
       if (error) {
-        setErrorMsg("Login unavailable");
+        setErrorMsg('Login unavailable');
         return;
       }
       const row: any = data && data[0];
       if (!row || row.active === false) {
-        setErrorMsg("Account not found or inactive");
+        setErrorMsg('Account not found or inactive');
         return;
       }
       if (!row.password_sha256) {
-        setErrorMsg("Password not set");
+        setErrorMsg('Password not set');
         return;
       }
       const hash = await sha256(pw);
       if (hash !== row.password_sha256) {
-        setErrorMsg("Invalid password");
+        setErrorMsg('Invalid password');
         return;
       }
-      const prof = { name: row.name || n, phone: (row.phone as string) || "" };
+      const prof = { name: row.name || n, phone: (row.phone as string) || '' };
       setProfile(prof);
       try {
-        localStorage.setItem("driver.profile", JSON.stringify(prof));
+        localStorage.setItem('driver.profile', JSON.stringify(prof));
       } catch {}
     } finally {
       setVerifying(false);
@@ -299,42 +299,42 @@ export default function DriverApp() {
   const logout = () => {
     setProfile(null);
     try {
-      localStorage.removeItem("driver.profile");
+      localStorage.removeItem('driver.profile');
     } catch {}
   };
 
   const startTask = async (t: any) => {
     const { error } = await supabase
-      .from("driver_tasks")
-      .update({ status: "in_progress" })
-      .eq("id", t.id);
+      .from('driver_tasks')
+      .update({ status: 'in_progress' })
+      .eq('id', t.id);
     if (!error)
       setTasks((arr) =>
-        arr.map((x) => (x.id === t.id ? { ...x, status: "in_progress" } : x)),
+        arr.map((x) => (x.id === t.id ? { ...x, status: 'in_progress' } : x)),
       );
   };
 
   const openComplete = (t: any) => {
     setActiveTask(t);
     setEntry({
-      site_id: String(t.site_name || ""),
-      mission_id: String(t.id || ""),
-      actual_liters_in_tank: "",
-      quantity_added: "",
-      notes: t.notes || "",
-      counter_before_url: "",
-      tank_before_url: "",
-      counter_after_url: "",
-      tank_after_url: "",
-      tank_type: "",
-      completed_at: "",
-      vertical_calculated_liters: "",
-      liters: "",
-      rate: "",
-      station: "",
-      receipt: "",
-      photo_url: "",
-      odometer: "",
+      site_id: String(t.site_name || ''),
+      mission_id: String(t.id || ''),
+      actual_liters_in_tank: '',
+      quantity_added: '',
+      notes: t.notes || '',
+      counter_before_url: '',
+      tank_before_url: '',
+      counter_after_url: '',
+      tank_after_url: '',
+      tank_type: '',
+      completed_at: '',
+      vertical_calculated_liters: '',
+      liters: '',
+      rate: '',
+      station: '',
+      receipt: '',
+      photo_url: '',
+      odometer: '',
     });
     setPreviews({});
     setEditOpen(true);
@@ -342,10 +342,10 @@ export default function DriverApp() {
 
   const saveCompletion = async () => {
     if (!activeTask) return;
-    const qty = parseFloat(entry.quantity_added || entry.liters || "0");
+    const qty = parseFloat(entry.quantity_added || entry.liters || '0');
     const rate = entry.rate ? parseFloat(entry.rate) : null;
     const odometer = entry.odometer ? parseInt(entry.odometer) : null;
-    await supabase.from("driver_task_entries").insert({
+    await supabase.from('driver_task_entries').insert({
       task_id: activeTask.id,
       liters: qty,
       rate,
@@ -356,9 +356,9 @@ export default function DriverApp() {
       submitted_by: profile?.name || null,
     });
     await supabase
-      .from("driver_tasks")
-      .update({ status: "completed", notes: entry.notes || null })
-      .eq("id", activeTask.id);
+      .from('driver_tasks')
+      .update({ status: 'completed', notes: entry.notes || null })
+      .eq('id', activeTask.id);
     setTasks((arr) => arr.filter((x) => x.id !== activeTask.id));
     setEditOpen(false);
     setActiveTask(null);
@@ -396,7 +396,7 @@ export default function DriverApp() {
                   onClick={verifyPassword}
                   disabled={verifying}
                 >
-                  {verifying ? "Checking..." : "Login"}
+                  {verifying ? 'Checking...' : 'Login'}
                 </Button>
               </div>
               {errorMsg && (
@@ -443,16 +443,16 @@ export default function DriverApp() {
                       driver_name: profile.name,
                     }));
                     await supabase
-                      .from("driver_notification_reads")
+                      .from('driver_notification_reads')
                       .upsert(rows, {
-                        onConflict: "notification_id,driver_name",
+                        onConflict: 'notification_id,driver_name',
                       } as any);
                     // Delete notifications targeted to this driver after marking as read
                     await supabase
-                      .from("driver_notifications")
+                      .from('driver_notifications')
                       .delete()
-                      .in("id", ids as any)
-                      .eq("driver_name", profile.name);
+                      .in('id', ids as any)
+                      .eq('driver_name', profile.name);
                     setUnreadCount(0);
                   }
                   setNotifOpen(true);
@@ -462,7 +462,7 @@ export default function DriverApp() {
               </Button>
               {unreadCount > 0 && (
                 <span className="absolute -right-1 -top-1 min-w-[18px] rounded-full bg-red-600 px-1 text-center text-[11px] font-semibold leading-4 text-white">
-                  {unreadCount > 99 ? "99+" : unreadCount}
+                  {unreadCount > 99 ? '99+' : unreadCount}
                 </span>
               )}
             </div>
@@ -485,7 +485,7 @@ export default function DriverApp() {
           <Button
             className="flex-1"
             onClick={async () => {
-              setFilterMode("active");
+              setFilterMode('active');
               setShowTasks(true);
               await loadTasks();
             }}
@@ -496,7 +496,7 @@ export default function DriverApp() {
             variant="outline"
             className="flex-1"
             onClick={async () => {
-              setFilterMode("returned");
+              setFilterMode('returned');
               setShowTasks(true);
               await loadTasks();
             }}
@@ -507,7 +507,7 @@ export default function DriverApp() {
             variant="outline"
             className="flex-1"
             onClick={async () => {
-              setFilterMode("all");
+              setFilterMode('all');
               setShowTasks(true);
               await loadTasks();
             }}
@@ -573,37 +573,37 @@ export default function DriverApp() {
                   </div>
                   <div className="text-xs">
                     <span
-                      className={`rounded px-2 py-1 ${t.admin_status === "Task returned to the driver" ? "bg-indigo-500/10 text-indigo-600" : t.status === "completed" ? "bg-emerald-500/10 text-emerald-600" : t.status === "in_progress" ? "bg-amber-500/10 text-amber-600" : "bg-sky-500/10 text-sky-600"}`}
+                      className={`rounded px-2 py-1 ${t.admin_status === 'Task returned to the driver' ? 'bg-indigo-500/10 text-indigo-600' : t.status === 'completed' ? 'bg-emerald-500/10 text-emerald-600' : t.status === 'in_progress' ? 'bg-amber-500/10 text-amber-600' : 'bg-sky-500/10 text-sky-600'}`}
                     >
-                      {t.admin_status === "Task returned to the driver"
-                        ? "Returned"
+                      {t.admin_status === 'Task returned to the driver'
+                        ? 'Returned'
                         : t.status}
                     </span>
                   </div>
                 </div>
                 <div className="grid gap-3 p-4 text-sm text-muted-foreground">
                   <div>
-                    <span className="font-medium text-foreground">Driver:</span>{" "}
+                    <span className="font-medium text-foreground">Driver:</span>{' '}
                     {t.driver_name}
                   </div>
                   <div>
                     <span className="font-medium text-foreground">
                       Required Liters:
-                    </span>{" "}
-                    {t.required_liters ?? "-"}
+                    </span>{' '}
+                    {t.required_liters ?? '-'}
                   </div>
                   <div>
-                    <span className="font-medium text-foreground">Notes:</span>{" "}
-                    {t.notes ?? "-"}
+                    <span className="font-medium text-foreground">Notes:</span>{' '}
+                    {t.notes ?? '-'}
                   </div>
                 </div>
                 <div className="flex items-center justify-end gap-2 border-t p-3">
-                  {t.status === "pending" && (
+                  {t.status === 'pending' && (
                     <Button size="sm" onClick={() => startTask(t)}>
                       Start
                     </Button>
                   )}
-                  {t.status !== "completed" && (
+                  {t.status !== 'completed' && (
                     <Button
                       size="sm"
                       variant="secondary"
@@ -687,7 +687,7 @@ export default function DriverApp() {
                     if (!f) return;
                     const url = URL.createObjectURL(f);
                     setPreviews((p) => ({ ...p, counter_before: url }));
-                    await handleFile("counter_before", f);
+                    await handleFile('counter_before', f);
                   }}
                 />
                 {(previews.counter_before || entry.counter_before_url) && (
@@ -714,7 +714,7 @@ export default function DriverApp() {
                     if (!f) return;
                     const url = URL.createObjectURL(f);
                     setPreviews((p) => ({ ...p, tank_before: url }));
-                    await handleFile("tank_before", f);
+                    await handleFile('tank_before', f);
                   }}
                 />
                 {(previews.tank_before || entry.tank_before_url) && (
@@ -744,7 +744,7 @@ export default function DriverApp() {
                     if (!f) return;
                     const url = URL.createObjectURL(f);
                     setPreviews((p) => ({ ...p, counter_after: url }));
-                    await handleFile("counter_after", f);
+                    await handleFile('counter_after', f);
                   }}
                 />
                 {(previews.counter_after || entry.counter_after_url) && (
@@ -771,7 +771,7 @@ export default function DriverApp() {
                     if (!f) return;
                     const url = URL.createObjectURL(f);
                     setPreviews((p) => ({ ...p, tank_after: url }));
-                    await handleFile("tank_after", f);
+                    await handleFile('tank_after', f);
                   }}
                 />
                 {(previews.tank_after || entry.tank_after_url) && (

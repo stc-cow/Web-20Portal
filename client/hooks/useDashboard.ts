@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/lib/supabase";
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/lib/supabase';
 
 function num(n: any): number {
   const v = Number(n);
@@ -8,12 +8,12 @@ function num(n: any): number {
 
 export function useKpis() {
   return useQuery({
-    queryKey: ["kpis"],
+    queryKey: ['kpis'],
     queryFn: async () => {
       const [t1, t30, counts] = await Promise.all([
-        supabase.from("v_liters_today").select("*").maybeSingle(),
-        supabase.from("v_liters_30d").select("*").maybeSingle(),
-        supabase.from("v_counts").select("*").maybeSingle(),
+        supabase.from('v_liters_today').select('*').maybeSingle(),
+        supabase.from('v_liters_30d').select('*').maybeSingle(),
+        supabase.from('v_counts').select('*').maybeSingle(),
       ]);
       return {
         litersToday: num((t1.data as any)?.total_liters ?? 0),
@@ -27,12 +27,12 @@ export function useKpis() {
 
 export function useStatusPie() {
   return useQuery({
-    queryKey: ["statusPie"],
+    queryKey: ['statusPie'],
     queryFn: async () => {
-      const { data } = await supabase.from("v_task_status").select("*");
+      const { data } = await supabase.from('v_task_status').select('*');
       const rows = Array.isArray(data) ? data : [];
       return rows.map((r: any) => ({
-        name: r.status ?? "Unknown",
+        name: r.status ?? 'Unknown',
         value: num(r.count),
       }));
     },
@@ -41,12 +41,12 @@ export function useStatusPie() {
 
 export function useZonePie() {
   return useQuery({
-    queryKey: ["zonePie"],
+    queryKey: ['zonePie'],
     queryFn: async () => {
-      const { data } = await supabase.from("v_task_zones").select("*");
+      const { data } = await supabase.from('v_task_zones').select('*');
       const rows = Array.isArray(data) ? data : [];
       return rows.map((r: any) => ({
-        name: r.zone ?? "Unknown",
+        name: r.zone ?? 'Unknown',
         value: num(r.count),
       }));
     },
@@ -55,12 +55,12 @@ export function useZonePie() {
 
 export function useFuelTrend() {
   return useQuery({
-    queryKey: ["fuelTrend"],
+    queryKey: ['fuelTrend'],
     queryFn: async () => {
       const { data } = await supabase
-        .from("v_liters_trend")
-        .select("*")
-        .order("day");
+        .from('v_liters_trend')
+        .select('*')
+        .order('day');
       const rows = Array.isArray(data) ? data : [];
       return rows.map((r: any) => ({ day: r.day, liters: num(r.liters) }));
     },
@@ -69,18 +69,18 @@ export function useFuelTrend() {
 
 export function useRegionLitersTotal() {
   return useQuery({
-    queryKey: ["regionLitersTotal"],
+    queryKey: ['regionLitersTotal'],
     queryFn: async () => {
       const { data } = await supabase
-        .from("v_liters_by_zone_total")
-        .select("zone, liters");
+        .from('v_liters_by_zone_total')
+        .select('zone, liters');
       const rows = Array.isArray(data) ? data : [];
       let central = 0,
         east = 0;
       for (const r of rows) {
-        const z = String((r as any).zone || "");
-        if (z === "Central") central += num((r as any).liters);
-        if (z === "East") east += num((r as any).liters);
+        const z = String((r as any).zone || '');
+        if (z === 'Central') central += num((r as any).liters);
+        if (z === 'East') east += num((r as any).liters);
       }
       return { central, east };
     },

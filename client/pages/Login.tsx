@@ -1,14 +1,14 @@
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "react-router-dom";
-import { supabase } from "@/lib/supabase";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/lib/supabase';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog,
   DialogContent,
@@ -16,21 +16,21 @@ import {
   DialogTitle,
   DialogFooter,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { useI18n } from "@/i18n";
-import { toast } from "@/hooks/use-toast";
-import { Loader2, Eye, EyeOff } from "lucide-react";
+} from '@/components/ui/dialog';
+import { useI18n } from '@/i18n';
+import { toast } from '@/hooks/use-toast';
+import { Loader2, Eye, EyeOff } from 'lucide-react';
 
 const schema = z.object({
-  username: z.string().min(1, "Username is required"),
-  password: z.string().min(1, "Password is required"),
+  username: z.string().min(1, 'Username is required'),
+  password: z.string().min(1, 'Password is required'),
   remember: z.boolean().optional().default(false),
 });
 
 type FormValues = z.infer<typeof schema>;
 
-const VALID_PASSWORD = "Aces@6343";
-const ADMINS_STORAGE_KEY = "app.admins";
+const VALID_PASSWORD = 'Aces@6343';
+const ADMINS_STORAGE_KEY = 'app.admins';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -41,17 +41,17 @@ export default function Login() {
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { username: "Bannaga", password: "", remember: false },
+    defaultValues: { username: 'Bannaga', password: '', remember: false },
   });
 
   useEffect(() => {
-    const remembered = localStorage.getItem("remember.username");
+    const remembered = localStorage.getItem('remember.username');
     if (remembered) {
-      setValue("username", remembered);
-      setValue("remember", true);
+      setValue('username', remembered);
+      setValue('remember', true);
     }
-    if (localStorage.getItem("auth.loggedIn") === "true") {
-      navigate("/");
+    if (localStorage.getItem('auth.loggedIn') === 'true') {
+      navigate('/');
     }
   }, [setValue, navigate]);
 
@@ -62,77 +62,77 @@ export default function Login() {
     // Validate against Supabase admins table
     let ok = false;
     const { data, error } = await supabase
-      .from("admins")
-      .select("id, username, password, position")
-      .eq("username", values.username.trim())
+      .from('admins')
+      .select('id, username, password, position')
+      .eq('username', values.username.trim())
       .maybeSingle();
     let isSuperAdmin = false;
     if (!error && data) {
       ok = data.password === values.password;
-      isSuperAdmin = (data.position || "").toLowerCase() === "admin";
+      isSuperAdmin = (data.position || '').toLowerCase() === 'admin';
     }
     // fallback to legacy hardcoded admin if table not yet populated
     if (!ok) {
       const { data: authUser, error: authErr } = await supabase
-        .from("authorizations")
-        .select("username, password, position")
-        .eq("username", values.username.trim())
+        .from('authorizations')
+        .select('username, password, position')
+        .eq('username', values.username.trim())
         .maybeSingle();
       if (!authErr && authUser) {
         ok = authUser.password === values.password;
         isSuperAdmin =
-          String(authUser.position || "").toLowerCase() === "admin";
+          String(authUser.position || '').toLowerCase() === 'admin';
       }
     }
     if (!ok && (!data || error)) {
       ok =
-        values.username.trim() === "Bannaga" && values.password === "Aces@6343";
+        values.username.trim() === 'Bannaga' && values.password === 'Aces@6343';
       if (ok) isSuperAdmin = true;
     }
 
     if (!ok) {
-      setAuthError("Invalid username or password.");
+      setAuthError('Invalid username or password.');
       return;
     }
     if (values.remember) {
-      localStorage.setItem("remember.username", values.username);
+      localStorage.setItem('remember.username', values.username);
     } else {
-      localStorage.removeItem("remember.username");
+      localStorage.removeItem('remember.username');
     }
-    localStorage.setItem("auth.loggedIn", "true");
-    localStorage.setItem("auth.username", values.username);
-    localStorage.setItem("auth.role", isSuperAdmin ? "superadmin" : "user");
+    localStorage.setItem('auth.loggedIn', 'true');
+    localStorage.setItem('auth.username', values.username);
+    localStorage.setItem('auth.role', isSuperAdmin ? 'superadmin' : 'user');
     // Log to admin_log table
     try {
       await supabase
-        .from("admin_log")
-        .insert({ username: values.username, event: "login" });
+        .from('admin_log')
+        .insert({ username: values.username, event: 'login' });
     } catch {}
-    navigate("/");
+    navigate('/');
   };
 
   const { t } = useI18n();
   const [resetOpen, setResetOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [resetEmail, setResetEmail] = useState("");
+  const [resetEmail, setResetEmail] = useState('');
 
   const sendReset = async () => {
     const email = resetEmail.trim();
     const emailOk = /[^@\s]+@[^@\s]+\.[^@\s]+/.test(email);
     if (!emailOk) {
-      toast({ title: t("invalidEmail") });
+      toast({ title: t('invalidEmail') });
       return;
     }
     try {
-      await fetch("/api/password-reset", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      await fetch('/api/password-reset', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
       });
-      toast({ title: t("resetEmailSent") });
+      toast({ title: t('resetEmailSent') });
       setResetOpen(false);
     } catch {
-      toast({ title: t("resetEmailSent") });
+      toast({ title: t('resetEmailSent') });
       setResetOpen(false);
     }
   };
@@ -146,7 +146,7 @@ export default function Login() {
         style={{
           backgroundImage:
             "url('https://cdn.builder.io/api/v1/image/assets%2Fbd65b3cd7a86452e803a3d7dc7a3d048%2F8d9e83e302314801bae39aaa4940bba6?format=webp&width=1600')",
-          backgroundAttachment: "fixed",
+          backgroundAttachment: 'fixed',
         }}
       />
       {/* Dark overlay for contrast */}
@@ -170,21 +170,21 @@ export default function Login() {
                 Sign in to ACES MSD Fuel Portal
               </h1>
               <p className="mt-2 text-xs md:text-sm text-black/60 text-center">
-                {t("signInSubtitle")}
+                {t('signInSubtitle')}
               </p>
               <div className="border-t border-black/10 my-4" />
             </div>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
               <div>
                 <Label htmlFor="username" className="text-black/70">
-                  {t("username")}
+                  {t('username')}
                 </Label>
                 <Input
                   id="username"
-                  placeholder={t("username")}
+                  placeholder={t('username')}
                   autoComplete="username"
                   className="mt-2 h-12 rounded-lg bg-[#f2f2f2] border border-black/10 text-black placeholder:text-black/50 shadow-inner transition-colors duration-200 focus:border-cyan-500 focus-visible:ring-2 focus-visible:ring-cyan-400/30"
-                  {...register("username")}
+                  {...register('username')}
                 />
                 {errors.username && (
                   <p className="mt-1 text-xs text-rose-400">
@@ -194,21 +194,21 @@ export default function Login() {
               </div>
               <div>
                 <Label htmlFor="password" className="text-black/70">
-                  {t("password")}
+                  {t('password')}
                 </Label>
                 <div className="relative mt-2">
                   <Input
                     id="password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder={t("password")}
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder={t('password')}
                     autoComplete="current-password"
                     className="h-12 rounded-lg bg-[#f2f2f2] border border-black/10 text-black placeholder:text-black/50 shadow-inner transition-colors duration-200 focus:border-cyan-500 focus-visible:ring-2 focus-visible:ring-cyan-400/30 pr-10"
-                    {...register("password")}
+                    {...register('password')}
                   />
                   <button
                     type="button"
                     aria-label={
-                      showPassword ? "Hide password" : "Show password"
+                      showPassword ? 'Hide password' : 'Show password'
                     }
                     onClick={() => setShowPassword((v) => !v)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-black/60 hover:text-black"
@@ -226,9 +226,9 @@ export default function Login() {
                 <label className="flex items-center gap-2 text-black/70">
                   <Checkbox
                     className="border-black/30 data-[state=checked]:bg-primary"
-                    {...register("remember")}
+                    {...register('remember')}
                   />
-                  <span className="text-sm">{t("rememberMe")}</span>
+                  <span className="text-sm">{t('rememberMe')}</span>
                 </label>
               </div>
               {authError && (
@@ -240,7 +240,7 @@ export default function Login() {
                 disabled={isSubmitting}
               >
                 {isSubmitting && <Loader2 className="mr-2 h-5 w-5" />}
-                {isSubmitting ? t("signingIn") : t("login")}
+                {isSubmitting ? t('signingIn') : t('login')}
               </Button>
             </form>
           </CardContent>
@@ -250,10 +250,10 @@ export default function Login() {
       <Dialog open={resetOpen} onOpenChange={setResetOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{t("resetPassword")}</DialogTitle>
+            <DialogTitle>{t('resetPassword')}</DialogTitle>
           </DialogHeader>
           <div className="space-y-2">
-            <Label htmlFor="resetEmail">{t("enterEmailToReset")}</Label>
+            <Label htmlFor="resetEmail">{t('enterEmailToReset')}</Label>
             <Input
               id="resetEmail"
               type="email"
@@ -268,10 +268,10 @@ export default function Login() {
               type="button"
               onClick={() => setResetOpen(false)}
             >
-              {t("cancel")}
+              {t('cancel')}
             </Button>
             <Button type="button" onClick={sendReset}>
-              {t("sendResetLink")}
+              {t('sendResetLink')}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -1,11 +1,11 @@
-import type { CapacitorConfig } from "@capacitor/cli";
+import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: "com.aces.fuel",
-  appName: "ACES Fuel",
-  webDir: "docs",
+  appId: 'com.aces.fuel',
+  appName: 'ACES Fuel',
+  webDir: 'docs',
   server: {
-    androidScheme: "https",
+    androidScheme: 'https',
   },
 };
 

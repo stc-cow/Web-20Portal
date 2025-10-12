@@ -1,6 +1,6 @@
-import Header from "@/components/layout/Header";
-import { AppShell } from "@/components/layout/AppSidebar";
-import { Card, CardContent } from "@/components/ui/card";
+import Header from '@/components/layout/Header';
+import { AppShell } from '@/components/layout/AppSidebar';
+import { Card, CardContent } from '@/components/ui/card';
 import {
   Table,
   TableBody,
@@ -8,10 +8,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { useI18n } from "@/i18n";
-import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
+} from '@/components/ui/table';
+import { useI18n } from '@/i18n';
+import { useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabase';
 
 type Log = { id: number; username: string; event: string; created_at: string };
 
@@ -25,9 +25,9 @@ export default function AdminLogPage() {
     (async () => {
       setLoading(true);
       const { data, error } = await supabase
-        .from("admin_log")
-        .select("id, username, event, created_at")
-        .order("created_at", { ascending: false })
+        .from('admin_log')
+        .select('id, username, event, created_at')
+        .order('created_at', { ascending: false })
         .limit(200);
       if (!cancelled && !error && data) setRows(data as any);
       setLoading(false);
@@ -42,15 +42,15 @@ export default function AdminLogPage() {
       <Header />
       <div className="px-4 pb-10 pt-4">
         <div className="mb-4 text-sm text-muted-foreground">
-          {t("settingsAdminLog")}
+          {t('settingsAdminLog')}
         </div>
         <Card>
           <CardContent className="p-0">
             <Table>
               <TableHeader>
                 <TableRow className="bg-[hsl(var(--primary))] text-white hover:bg-[hsl(var(--primary))]">
-                  <TableHead className="text-white">{t("username")}</TableHead>
-                  <TableHead className="text-white">{t("time")}</TableHead>
+                  <TableHead className="text-white">{t('username')}</TableHead>
+                  <TableHead className="text-white">{t('time')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -60,7 +60,7 @@ export default function AdminLogPage() {
                       colSpan={2}
                       className="text-center text-sm text-muted-foreground"
                     >
-                      {t("loading")}
+                      {t('loading')}
                     </TableCell>
                   </TableRow>
                 )}
@@ -70,7 +70,7 @@ export default function AdminLogPage() {
                       colSpan={2}
                       className="text-center text-sm text-muted-foreground"
                     >
-                      {t("noDataYet")}
+                      {t('noDataYet')}
                     </TableCell>
                   </TableRow>
                 )}

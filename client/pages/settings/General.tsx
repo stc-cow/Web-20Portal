@@ -1,12 +1,12 @@
-import { AppShell } from "@/components/layout/AppSidebar";
-import Header from "@/components/layout/Header";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useEffect, useState } from "react";
-import { toast } from "@/hooks/use-toast";
-import { useI18n } from "@/i18n";
-import { supabase } from "@/lib/supabase";
+import { AppShell } from '@/components/layout/AppSidebar';
+import Header from '@/components/layout/Header';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useEffect, useState } from 'react';
+import { toast } from '@/hooks/use-toast';
+import { useI18n } from '@/i18n';
+import { supabase } from '@/lib/supabase';
 
 type SettingsForm = {
   fuel_unit_price: number;
@@ -22,26 +22,26 @@ type SettingsForm = {
 export default function GeneralSettingsPage() {
   const { t } = useI18n();
   const role =
-    typeof window !== "undefined" ? localStorage.getItem("auth.role") : null;
-  const isAdmin = role === "superadmin";
+    typeof window !== 'undefined' ? localStorage.getItem('auth.role') : null;
+  const isAdmin = role === 'superadmin';
 
   const [form, setForm] = useState<SettingsForm>({
     fuel_unit_price: 0.63,
     vat_rate: 0.15,
-    supplier_name: "",
-    supplier_address: "",
-    invoice_prefix: "INV-SEC-",
+    supplier_name: '',
+    supplier_address: '',
+    invoice_prefix: 'INV-SEC-',
     invoice_sequence: 1,
-    fcm_server_key: "",
-    fcm_sender_id: "",
+    fcm_server_key: '',
+    fcm_sender_id: '',
   });
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     (async () => {
       const { data } = await supabase
-        .from("settings")
-        .select("*")
+        .from('settings')
+        .select('*')
         .limit(1)
         .maybeSingle();
       if (data) {
@@ -62,7 +62,7 @@ export default function GeneralSettingsPage() {
   const save = async () => {
     if (!isAdmin) return;
     setSaving(true);
-    const { error } = await supabase.from("settings").upsert(
+    const { error } = await supabase.from('settings').upsert(
       [
         {
           id: 1,
@@ -76,14 +76,14 @@ export default function GeneralSettingsPage() {
           fcm_sender_id: form.fcm_sender_id,
         },
       ],
-      { onConflict: "id" },
+      { onConflict: 'id' },
     );
     setSaving(false);
     if (error) {
-      toast({ title: "Save failed", description: error.message });
+      toast({ title: 'Save failed', description: error.message });
       return;
     }
-    toast({ title: "Saved", description: "General settings updated." });
+    toast({ title: 'Saved', description: 'General settings updated.' });
   };
 
   return (
@@ -91,7 +91,7 @@ export default function GeneralSettingsPage() {
       <Header />
       <div className="px-4 pb-10 pt-4">
         <div className="mb-4 text-sm text-muted-foreground">
-          {t("generalSettings")}
+          {t('generalSettings')}
         </div>
         {!isAdmin && (
           <div className="mb-3 rounded border bg-muted p-3 text-sm">
@@ -221,7 +221,7 @@ export default function GeneralSettingsPage() {
                     disabled={saving}
                     className="bg-sky-600 hover:bg-sky-500"
                   >
-                    {saving ? "Saving..." : "Save"}
+                    {saving ? 'Saving...' : 'Save'}
                   </Button>
                 </div>
               )}

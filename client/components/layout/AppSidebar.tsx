@@ -15,11 +15,11 @@ import {
   SidebarProvider,
   SidebarRail,
   SidebarSeparator,
-} from "@/components/ui/sidebar";
-import { Link, useLocation } from "react-router-dom";
-import { useI18n } from "@/i18n";
-import { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/sidebar';
+import { Link, useLocation } from 'react-router-dom';
+import { useI18n } from '@/i18n';
+import { useEffect, useState } from 'react';
+import { cn } from '@/lib/utils';
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
@@ -32,33 +32,33 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
 function AppSidebar() {
   const [pathname, setPathname] = useState(() =>
-    typeof window !== "undefined" ? window.location.pathname : "/",
+    typeof window !== 'undefined' ? window.location.pathname : '/',
   );
 
   useEffect(() => {
     const onPop = () => setPathname(window.location.pathname);
-    window.addEventListener("popstate", onPop);
-    return () => window.removeEventListener("popstate", onPop);
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
   }, []);
 
   const isActive = (p: string) => pathname === p;
-  const [openUsers, setOpenUsers] = useState(pathname.startsWith("/users"));
+  const [openUsers, setOpenUsers] = useState(pathname.startsWith('/users'));
   const [openEmployees, setOpenEmployees] = useState(
-    pathname.startsWith("/employees"),
+    pathname.startsWith('/employees'),
   );
   const [openSettings, setOpenSettings] = useState(
-    pathname.startsWith("/settings"),
+    pathname.startsWith('/settings'),
   );
   useEffect(() => {
-    if (pathname.startsWith("/users")) setOpenUsers(true);
-    if (pathname.startsWith("/employees")) setOpenEmployees(true);
-    if (pathname.startsWith("/settings")) setOpenSettings(true);
+    if (pathname.startsWith('/users')) setOpenUsers(true);
+    if (pathname.startsWith('/employees')) setOpenEmployees(true);
+    if (pathname.startsWith('/settings')) setOpenSettings(true);
   }, [pathname]);
 
   const { t } = useI18n();
   const role =
-    typeof window !== "undefined" ? localStorage.getItem("auth.role") : null;
-  const isAdmin = role === "superadmin";
+    typeof window !== 'undefined' ? localStorage.getItem('auth.role') : null;
+  const isAdmin = role === 'superadmin';
 
   return (
     <Sidebar
@@ -86,15 +86,15 @@ function AppSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  isActive={isActive("/")}
+                  isActive={isActive('/')}
                   className={cn(
-                    "hover:bg-[#102B57]",
-                    isActive("/") && "border-l-4 border-[#E60000]",
+                    'hover:bg-[#102B57]',
+                    isActive('/') && 'border-l-4 border-[#E60000]',
                   )}
                 >
                   <Link to="/" className="flex items-center">
                     <span className="font-bold text-white">
-                      {t("dashboard")}
+                      {t('dashboard')}
                     </span>
                   </Link>
                 </SidebarMenuButton>
@@ -103,15 +103,15 @@ function AppSidebar() {
                 <SidebarMenuItem>
                   <SidebarMenuButton
                     asChild
-                    isActive={isActive("/users")}
+                    isActive={isActive('/users')}
                     className={cn(
-                      "hover:bg-[#102B57]",
-                      isActive("/users") && "border-l-4 border-[#E60000]",
+                      'hover:bg-[#102B57]',
+                      isActive('/users') && 'border-l-4 border-[#E60000]',
                     )}
                   >
                     <Link to="/users" className="flex items-center">
                       <span className="font-bold text-white">
-                        {t("usersAuth")}
+                        {t('usersAuth')}
                       </span>
                     </Link>
                   </SidebarMenuButton>
@@ -120,15 +120,15 @@ function AppSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  isActive={isActive("/missions")}
+                  isActive={isActive('/missions')}
                   className={cn(
-                    "hover:bg-[#102B57]",
-                    isActive("/missions") && "border-l-4 border-[#E60000]",
+                    'hover:bg-[#102B57]',
+                    isActive('/missions') && 'border-l-4 border-[#E60000]',
                   )}
                 >
                   <Link to="/missions" className="flex items-center">
                     <span className="font-bold text-white">
-                      {t("missions")}
+                      {t('missions')}
                     </span>
                   </Link>
                 </SidebarMenuButton>
@@ -136,15 +136,15 @@ function AppSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  isActive={isActive("/employees")}
+                  isActive={isActive('/employees')}
                   className={cn(
-                    "hover:bg-[#102B57]",
-                    isActive("/employees") && "border-l-4 border-[#E60000]",
+                    'hover:bg-[#102B57]',
+                    isActive('/employees') && 'border-l-4 border-[#E60000]',
                   )}
                 >
                   <Link to="/employees" className="flex items-center">
                     <span className="font-bold text-white">
-                      {t("employees")}
+                      {t('employees')}
                     </span>
                   </Link>
                 </SidebarMenuButton>
@@ -152,43 +152,43 @@ function AppSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  isActive={isActive("/sites")}
+                  isActive={isActive('/sites')}
                   className={cn(
-                    "hover:bg-[#102B57]",
-                    isActive("/sites") && "border-l-4 border-[#E60000]",
+                    'hover:bg-[#102B57]',
+                    isActive('/sites') && 'border-l-4 border-[#E60000]',
                   )}
                 >
                   <Link to="/sites" className="flex items-center">
-                    <span className="font-bold text-white">{t("sites")}</span>
+                    <span className="font-bold text-white">{t('sites')}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  isActive={isActive("/reports")}
+                  isActive={isActive('/reports')}
                   className={cn(
-                    "hover:bg-[#102B57]",
-                    isActive("/reports") && "border-l-4 border-[#E60000]",
+                    'hover:bg-[#102B57]',
+                    isActive('/reports') && 'border-l-4 border-[#E60000]',
                   )}
                 >
                   <Link to="/reports" className="flex items-center">
-                    <span className="font-bold text-white">{t("reports")}</span>
+                    <span className="font-bold text-white">{t('reports')}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  isActive={isActive("/notifications")}
+                  isActive={isActive('/notifications')}
                   className={cn(
-                    "hover:bg-[#102B57]",
-                    isActive("/notifications") && "border-l-4 border-[#E60000]",
+                    'hover:bg-[#102B57]',
+                    isActive('/notifications') && 'border-l-4 border-[#E60000]',
                   )}
                 >
                   <Link to="/notifications" className="flex items-center">
                     <span className="font-bold text-white">
-                      {t("notifications")}
+                      {t('notifications')}
                     </span>
                   </Link>
                 </SidebarMenuButton>
@@ -196,15 +196,15 @@ function AppSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  isActive={isActive("/settings")}
+                  isActive={isActive('/settings')}
                   className={cn(
-                    "hover:bg-[#102B57]",
-                    isActive("/settings") && "border-l-4 border-[#E60000]",
+                    'hover:bg-[#102B57]',
+                    isActive('/settings') && 'border-l-4 border-[#E60000]',
                   )}
                 >
                   <Link to="/settings" className="flex items-center">
                     <span className="font-bold text-white">
-                      {t("settings")}
+                      {t('settings')}
                     </span>
                   </Link>
                 </SidebarMenuButton>

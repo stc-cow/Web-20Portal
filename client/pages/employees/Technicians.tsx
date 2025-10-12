@@ -1,10 +1,10 @@
-import { AppShell } from "@/components/layout/AppSidebar";
-import Header from "@/components/layout/Header";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
+import { AppShell } from '@/components/layout/AppSidebar';
+import Header from '@/components/layout/Header';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 import {
   Dialog,
   DialogContent,
@@ -12,14 +12,14 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { toast } from "@/hooks/use-toast";
+} from '@/components/ui/dialog';
+import { toast } from '@/hooks/use-toast';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
 import {
   Table,
   TableBody,
@@ -27,9 +27,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { useEffect, useMemo, useState } from "react";
-import { supabase } from "@/lib/supabase";
+} from '@/components/ui/table';
+import { useEffect, useMemo, useState } from 'react';
+import { supabase } from '@/lib/supabase';
 import {
   Columns2,
   Download,
@@ -39,7 +39,7 @@ import {
   Trash2,
   CheckCircle2,
   XCircle,
-} from "lucide-react";
+} from 'lucide-react';
 
 type Technician = {
   id: number;
@@ -49,20 +49,20 @@ type Technician = {
 };
 
 const initialRows: Technician[] = [
-  { id: 1, name: "test", phone: "513007562", active: true },
+  { id: 1, name: 'test', phone: '513007562', active: true },
 ];
 
 const allColumns = [
-  { key: "name", label: "Name" },
-  { key: "phone", label: "Phone" },
-  { key: "active", label: "Active" },
-  { key: "settings", label: "Settings" },
+  { key: 'name', label: 'Name' },
+  { key: 'phone', label: 'Phone' },
+  { key: 'active', label: 'Active' },
+  { key: 'settings', label: 'Settings' },
 ] as const;
 
-type ColumnKey = (typeof allColumns)[number]["key"];
+type ColumnKey = (typeof allColumns)[number]['key'];
 
 export default function TechniciansPage() {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
   const [rows, setRows] = useState<Technician[]>(initialRows);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -78,7 +78,7 @@ export default function TechniciansPage() {
     phone: string;
     active: boolean;
   };
-  const emptyForm: TechnicianForm = { name: "", phone: "", active: true };
+  const emptyForm: TechnicianForm = { name: '', phone: '', active: true };
   const [addOpen, setAddOpen] = useState(false);
   const [addForm, setAddForm] = useState<TechnicianForm>(emptyForm);
   const [addErrors, setAddErrors] = useState<
@@ -87,7 +87,7 @@ export default function TechniciansPage() {
 
   function validate(form: TechnicianForm) {
     const errs: Partial<Record<keyof TechnicianForm, string>> = {};
-    if (!form.name.trim()) errs.name = "required";
+    if (!form.name.trim()) errs.name = 'required';
     return errs;
   }
 
@@ -96,31 +96,31 @@ export default function TechniciansPage() {
     setAddErrors(errs);
     if (Object.keys(errs).length > 0) return;
     const { data, error } = await supabase
-      .from("technicians")
+      .from('technicians')
       .insert({
         name: addForm.name,
         phone: addForm.phone || null,
         active: addForm.active,
       })
-      .select("id, name, phone, active")
+      .select('id, name, phone, active')
       .single();
     if (error || !data) {
       toast({
-        title: "Create failed",
-        description: error?.message || "Unknown error",
+        title: 'Create failed',
+        description: error?.message || 'Unknown error',
       });
       return;
     }
     setRows((r) => [
       {
         id: Number(data.id),
-        name: (data.name as string) || "",
-        phone: (data.phone as string) || "",
+        name: (data.name as string) || '',
+        phone: (data.phone as string) || '',
         active: Boolean(data.active),
       },
       ...r,
     ]);
-    toast({ title: "Technician created" });
+    toast({ title: 'Technician created' });
     setAddForm(emptyForm);
     setAddOpen(false);
   };
@@ -141,31 +141,31 @@ export default function TechniciansPage() {
 
   const exportCsv = () => {
     const visible = allColumns.filter(
-      (c) => cols[c.key] && c.key !== "settings",
+      (c) => cols[c.key] && c.key !== 'settings',
     );
-    const head = visible.map((c) => c.label).join(",");
+    const head = visible.map((c) => c.label).join(',');
     const body = filtered
       .map((r) =>
         visible
           .map((c) =>
-            c.key === "active" ? (r.active ? "Yes" : "No") : (r as any)[c.key],
+            c.key === 'active' ? (r.active ? 'Yes' : 'No') : (r as any)[c.key],
           )
-          .join(","),
+          .join(','),
       )
-      .join("\n");
-    const blob = new Blob([head + "\n" + body], {
-      type: "text/csv;charset=utf-8;",
+      .join('\n');
+    const blob = new Blob([head + '\n' + body], {
+      type: 'text/csv;charset=utf-8;',
     });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
+    const a = document.createElement('a');
     a.href = url;
-    a.download = "technicians.csv";
+    a.download = 'technicians.csv';
     a.click();
     URL.revokeObjectURL(url);
   };
 
   const remove = async (id: number) => {
-    const { error } = await supabase.from("technicians").delete().eq("id", id);
+    const { error } = await supabase.from('technicians').delete().eq('id', id);
     if (!error) setRows((r) => r.filter((x) => x.id !== id));
   };
 
@@ -192,21 +192,21 @@ export default function TechniciansPage() {
     });
     if (Object.keys(errs).length > 0) return;
     const { error } = await supabase
-      .from("technicians")
+      .from('technicians')
       .update({
         name: editForm.name,
         phone: editForm.phone || null,
         active: editForm.active,
       })
-      .eq("id", editForm.id);
+      .eq('id', editForm.id);
     if (error) {
-      toast({ title: "Update failed", description: error.message });
+      toast({ title: 'Update failed', description: error.message });
       return;
     }
     setRows((r) =>
       r.map((x) => (x.id === editForm.id ? { ...x, ...editForm } : x)),
     );
-    toast({ title: "Technician updated" });
+    toast({ title: 'Technician updated' });
     setEditOpen(false);
     setEditForm(null);
   };
@@ -215,16 +215,16 @@ export default function TechniciansPage() {
     let mounted = true;
     (async () => {
       const { data, error } = await supabase
-        .from("technicians")
-        .select("id, name, phone, active")
-        .order("created_at", { ascending: false });
+        .from('technicians')
+        .select('id, name, phone, active')
+        .order('created_at', { ascending: false });
       if (!mounted) return;
       if (!error && data) {
         setRows(
           data.map((d: any) => ({
             id: Number(d.id),
-            name: d.name || "",
-            phone: d.phone || "",
+            name: d.name || '',
+            phone: d.phone || '',
             active: Boolean(d.active),
           })),
         );

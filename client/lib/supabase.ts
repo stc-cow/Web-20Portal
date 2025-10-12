@@ -1,20 +1,20 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from '@supabase/supabase-js';
 
 const runtimeUrl =
   (import.meta.env.VITE_SUPABASE_URL as string) ||
-  (typeof window !== "undefined" && (window as any).__env?.VITE_SUPABASE_URL) ||
-  "";
+  (typeof window !== 'undefined' && (window as any).__env?.VITE_SUPABASE_URL) ||
+  '';
 const runtimeAnon =
   (import.meta.env.VITE_SUPABASE_ANON_KEY as string) ||
-  (typeof window !== "undefined" &&
+  (typeof window !== 'undefined' &&
     (window as any).__env?.VITE_SUPABASE_ANON_KEY) ||
-  "";
+  '';
 
 function failingResponse() {
   return Promise.resolve({
     data: null,
     error: new Error(
-      "Supabase not configured. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY",
+      'Supabase not configured. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY',
     ),
   });
 }

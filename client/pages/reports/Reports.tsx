@@ -1,8 +1,8 @@
-import { AppShell } from "@/components/layout/AppSidebar";
-import Header from "@/components/layout/Header";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { AppShell } from '@/components/layout/AppSidebar';
+import Header from '@/components/layout/Header';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
@@ -10,10 +10,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { useEffect, useMemo, useState } from "react";
-import { Download } from "lucide-react";
-import { supabase } from "@/lib/supabase";
+} from '@/components/ui/table';
+import { useEffect, useMemo, useState } from 'react';
+import { Download } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 
 type SettingsRow = {
   id?: number;
@@ -36,17 +36,17 @@ type InvoiceLine = {
 };
 
 export default function ReportsPage() {
-  const [fromDate, setFromDate] = useState<string>("");
-  const [toDate, setToDate] = useState<string>("");
-  const [siteQuery, setSiteQuery] = useState("");
-  const [region, setRegion] = useState("");
+  const [fromDate, setFromDate] = useState<string>('');
+  const [toDate, setToDate] = useState<string>('');
+  const [siteQuery, setSiteQuery] = useState('');
+  const [region, setRegion] = useState('');
   const [lines, setLines] = useState<InvoiceLine[]>([]);
   const [settings, setSettings] = useState<Required<SettingsRow>>({
     fuel_unit_price: 0.63,
     vat_rate: 0.15,
-    supplier_name: "Supplier",
-    supplier_address: "",
-    invoice_prefix: "INV-SEC-",
+    supplier_name: 'Supplier',
+    supplier_address: '',
+    invoice_prefix: 'INV-SEC-',
     invoice_sequence: 1,
     id: 1,
   });
@@ -63,8 +63,8 @@ export default function ReportsPage() {
   useEffect(() => {
     (async () => {
       const { data } = await supabase
-        .from("settings")
-        .select("*")
+        .from('settings')
+        .select('*')
         .limit(1)
         .maybeSingle();
       if (data) {
@@ -83,9 +83,9 @@ export default function ReportsPage() {
 
   const load = async () => {
     const { data: tasks } = await supabase
-      .from("driver_tasks")
-      .select("id, site_name, zone")
-      .eq("admin_status", "approved");
+      .from('driver_tasks')
+      .select('id, site_name, zone')
+      .eq('admin_status', 'approved');
 
     const taskIds = (tasks ?? []).map((t: any) => Number(t.id));
     if (taskIds.length === 0) {
@@ -93,15 +93,15 @@ export default function ReportsPage() {
       return;
     }
 
-    const filters: any[] = [{ column: "task_id", op: "in", value: taskIds }];
+    const filters: any[] = [{ column: 'task_id', op: 'in', value: taskIds }];
     const q = supabase
-      .from("driver_task_entries")
-      .select("task_id, liters_added, timestamp");
-    if (fromDate) q.gte("timestamp", new Date(fromDate).toISOString());
+      .from('driver_task_entries')
+      .select('task_id, liters_added, timestamp');
+    if (fromDate) q.gte('timestamp', new Date(fromDate).toISOString());
     if (toDate) {
       const end = new Date(toDate);
       end.setHours(23, 59, 59, 999);
-      q.lte("timestamp", end.toISOString());
+      q.lte('timestamp', end.toISOString());
     }
     const { data: entries } = await q;
 
@@ -121,9 +121,9 @@ export default function ReportsPage() {
         const agg = byTask[Number(t.id)] || { liters: 0, last: null };
         return {
           taskId: Number(t.id),
-          siteName: t.site_name || "",
-          region: t.zone || "",
-          date: (agg.last ?? "").slice(0, 10),
+          siteName: t.site_name || '',
+          region: t.zone || '',
+          date: (agg.last ?? '').slice(0, 10),
           liters: agg.liters,
           unitPrice: unit,
           linePrice: agg.liters * unit,
@@ -146,22 +146,22 @@ export default function ReportsPage() {
   }, [fromDate, toDate, siteQuery, region]);
 
   const exportCsv = async () => {
-    const invNo = `${settings.invoice_prefix || "INV-"}${String(settings.invoice_sequence || 1).padStart(4, "0")}`;
+    const invNo = `${settings.invoice_prefix || 'INV-'}${String(settings.invoice_sequence || 1).padStart(4, '0')}`;
     const head = [
-      "Invoice No",
-      "Supplier",
-      "From",
-      "To",
-      "Site Name",
-      "Region",
-      "Date",
-      "Liters",
-      "Unit Price",
-      "Line Price",
-      "Subtotal",
-      "VAT Rate",
-      "Total With VAT",
-    ].join(",");
+      'Invoice No',
+      'Supplier',
+      'From',
+      'To',
+      'Site Name',
+      'Region',
+      'Date',
+      'Liters',
+      'Unit Price',
+      'Line Price',
+      'Subtotal',
+      'VAT Rate',
+      'Total With VAT',
+    ].join(',');
 
     const rows = lines
       .map((l) => [
@@ -176,39 +176,39 @@ export default function ReportsPage() {
         l.unitPrice,
         l.linePrice,
       ])
-      .map((arr) => arr.join(","));
+      .map((arr) => arr.join(','));
 
     const totalsRow = [
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
       subtotal,
       settings.vat_rate,
       total,
-    ].join(",");
+    ].join(',');
 
-    const blob = new Blob([head + "\n" + rows.join("\n") + "\n" + totalsRow], {
-      type: "text/csv;charset=utf-8;",
+    const blob = new Blob([head + '\n' + rows.join('\n') + '\n' + totalsRow], {
+      type: 'text/csv;charset=utf-8;',
     });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
+    const a = document.createElement('a');
     a.href = url;
-    a.download = `${invNo}_${fromDate || "all"}_${toDate || "all"}.csv`;
+    a.download = `${invNo}_${fromDate || 'all'}_${toDate || 'all'}.csv`;
     a.click();
     URL.revokeObjectURL(url);
 
     try {
       await supabase
-        .from("settings")
+        .from('settings')
         .update({ invoice_sequence: (settings.invoice_sequence || 1) + 1 })
-        .eq("id", settings.id || 1);
+        .eq('id', settings.id || 1);
       setSettings((s) => ({
         ...s,
         invoice_sequence: (s.invoice_sequence || 1) + 1,
@@ -307,7 +307,7 @@ export default function ReportsPage() {
             <div className="mt-4 grid grid-cols-1 gap-2 md:grid-cols-3">
               <div className="text-sm">Subtotal: {subtotal.toFixed(2)}</div>
               <div className="text-sm">
-                VAT ({((settings.vat_rate ?? 0) * 100).toFixed(0)}%):{" "}
+                VAT ({((settings.vat_rate ?? 0) * 100).toFixed(0)}%):{' '}
                 {(subtotal * (settings.vat_rate ?? 0)).toFixed(2)}
               </div>
               <div className="text-sm font-semibold">
