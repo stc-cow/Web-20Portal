@@ -530,7 +530,22 @@ export default function MissionsPage() {
           });
           return;
         }
-        const json = await res.json();
+        let json: any;
+        try {
+          const ct = res.headers.get('content-type') || '';
+          if (ct.includes('application/json')) json = await res.json();
+          else {
+            const text = await res.text();
+            console.error('REST returned non-JSON', text);
+            toast({ title: 'Failed to load missions', description: 'Supabase returned an unexpected response (non-JSON).' });
+            return;
+          }
+        } catch (parseErr) {
+          console.error('Failed parsing REST response', parseErr);
+          toast({ title: 'Failed to load missions', description: 'Invalid JSON from Supabase REST endpoint.' });
+          return;
+        }
+
         if (!Array.isArray(json) || json.length === 0) {
           toast({
             title: 'No missions found',
