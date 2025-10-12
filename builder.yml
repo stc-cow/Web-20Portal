@@ -14,4 +14,4 @@ builder:
     - name: Build and deploy latest Web Portal
       run: npm run build
     - name: Confirm deployment
-      message: "✅ Web Portal synced and rebuilt from GitHub (main branch)"
+      message: '✅ Web Portal synced and rebuilt from GitHub (main branch)'
