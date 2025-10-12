@@ -59,7 +59,7 @@ export default function Index() {
         <div className="mt-8 grid gap-8 md:grid-cols-2">
           <Card className="rounded-2xl shadow-[0_2px_6px_rgba(0,45,98,0.1)]">
             <CardHeader className="p-6">
-              <CardTitle className="text-[#003366]">
+              <CardTitle className="text-[#002D62]">
                 Fuel Added by Region
               </CardTitle>
             </CardHeader>
@@ -88,7 +88,7 @@ export default function Index() {
 
           <Card className="rounded-2xl shadow-[0_2px_6px_rgba(0,45,98,0.1)]">
             <CardHeader className="p-6">
-              <CardTitle className="text-[#003366]">
+              <CardTitle className="text-[#002D62]">
                 Fuel Added by Mission Category
               </CardTitle>
             </CardHeader>
