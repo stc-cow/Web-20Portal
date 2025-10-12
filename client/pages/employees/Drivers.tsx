@@ -214,7 +214,7 @@ export default function DriversPage() {
 
   const [viewOpen, setViewOpen] = useState(false);
   const [viewing, setViewing] = useState<Driver | null>(null);
-  const [editOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
   const [editForm, setEditForm] = useState<Driver | null>(null);
   const [editPassword, setEditPassword] = useState("");
 
