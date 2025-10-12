@@ -28825,13 +28825,11 @@ var pue = class {
         this.#e.setOptions(this.options),
         t._defaulted &&
           !FD(this.options, t) &&
-          this.#t
-            .getQueryCache()
-            .notify({
-              type: 'observerOptionsUpdated',
-              query: this.#e,
-              observer: this,
-            }));
+          this.#t.getQueryCache().notify({
+            type: 'observerOptionsUpdated',
+            query: this.#e,
+            observer: this,
+          }));
       const r = this.hasListeners();
       (r && $$(this.#e, n, this.options, t) && this.#d(),
         this.updateResult(),
@@ -80693,14 +80691,12 @@ function Lje() {
           localStorage.getItem('auth.username') ||
           localStorage.getItem('remember.username') ||
           'Admin';
-        await st
-          .from('driver_notifications')
-          .insert({
-            title: 'New mission assigned',
-            message: `A new mission has been assigned to you for site: ${x.siteName}`,
-            driver_name: x.driverName || null,
-            sent_by: pe,
-          });
+        await st.from('driver_notifications').insert({
+          title: 'New mission assigned',
+          message: `A new mission has been assigned to you for site: ${x.siteName}`,
+          driver_name: x.driverName || null,
+          sent_by: pe,
+        });
       } catch {}
       (w(y), _(!1));
     },
@@ -80746,21 +80742,19 @@ function Lje() {
       if (de === 'Task approved') {
         const Ne = n.find((B) => B.id === W);
         (Ne &&
-          (await st
-            .from('approved_reports')
-            .upsert(
-              {
-                task_id: W,
-                mission_id: Ne.missionId,
-                site_name: Ne.siteName,
-                driver_name: Ne.driverName,
-                quantity_added:
-                  Ne.quantityAddedLastTask || Ne.filledLiters || null,
-                notes: Ne.notes || null,
-                status: 'approved',
-              },
-              { onConflict: 'task_id' },
-            )),
+          (await st.from('approved_reports').upsert(
+            {
+              task_id: W,
+              mission_id: Ne.missionId,
+              site_name: Ne.siteName,
+              driver_name: Ne.driverName,
+              quantity_added:
+                Ne.quantityAddedLastTask || Ne.filledLiters || null,
+              notes: Ne.notes || null,
+              status: 'approved',
+            },
+            { onConflict: 'task_id' },
+          )),
           r((B) => B.filter((_e) => _e.id !== W)),
           $t({ title: 'Approved and moved to Reports' }));
         return;
@@ -93071,24 +93065,22 @@ function Jje() {
   const u = async () => {
     if (!n) return;
     l(!0);
-    const { error: d } = await st
-      .from('settings')
-      .upsert(
-        [
-          {
-            id: 1,
-            fuel_unit_price: r.fuel_unit_price,
-            vat_rate: r.vat_rate,
-            supplier_name: r.supplier_name,
-            supplier_address: r.supplier_address,
-            invoice_prefix: r.invoice_prefix,
-            invoice_sequence: r.invoice_sequence,
-            fcm_server_key: r.fcm_server_key,
-            fcm_sender_id: r.fcm_sender_id,
-          },
-        ],
-        { onConflict: 'id' },
-      );
+    const { error: d } = await st.from('settings').upsert(
+      [
+        {
+          id: 1,
+          fuel_unit_price: r.fuel_unit_price,
+          vat_rate: r.vat_rate,
+          supplier_name: r.supplier_name,
+          supplier_address: r.supplier_address,
+          invoice_prefix: r.invoice_prefix,
+          invoice_sequence: r.invoice_sequence,
+          fcm_server_key: r.fcm_server_key,
+          fcm_sender_id: r.fcm_sender_id,
+        },
+      ],
+      { onConflict: 'id' },
+    );
     if ((l(!1), d)) {
       $t({ title: 'Save failed', description: d.message });
       return;
@@ -95381,12 +95373,10 @@ function rke() {
         const Be = `${(e?.name || 'driver').replace(/\s+/g, '_')}/${O?.id || 'misc'}`,
           Ke = (_e.name.split('.').pop() || 'jpg').toLowerCase(),
           Nt = `${Be}/${B}_${Date.now()}.${Ke}`,
-          { error: on } = await st.storage
-            .from(X)
-            .upload(Nt, _e, {
-              upsert: !0,
-              contentType: _e.type || 'image/jpeg',
-            });
+          { error: on } = await st.storage.from(X).upload(Nt, _e, {
+            upsert: !0,
+            contentType: _e.type || 'image/jpeg',
+          });
         if (on) {
           alert(`Image upload failed: ${on.message}`);
           return;
@@ -95605,18 +95595,16 @@ function rke() {
       const B = parseFloat($.quantity_added || $.liters || '0'),
         _e = $.rate ? parseFloat($.rate) : null,
         pe = $.odometer ? parseInt($.odometer) : null;
-      (await st
-        .from('driver_task_entries')
-        .insert({
-          task_id: O.id,
-          liters: B,
-          rate: _e,
-          station: $.station || null,
-          receipt_number: $.receipt || null,
-          photo_url: $.photo_url || null,
-          odometer: pe,
-          submitted_by: e?.name || null,
-        }),
+      (await st.from('driver_task_entries').insert({
+        task_id: O.id,
+        liters: B,
+        rate: _e,
+        station: $.station || null,
+        receipt_number: $.receipt || null,
+        photo_url: $.photo_url || null,
+        odometer: pe,
+        submitted_by: e?.name || null,
+      }),
         await st
           .from('driver_tasks')
           .update({ status: 'completed', notes: $.notes || null })
