@@ -113,6 +113,13 @@ const en: Dict = {
   powerSource: "Power source",
   showSitesOverview: "Show Sites Overview",
   hideSitesOverview: "Hide Sites Overview",
+  litersToday: "Liters today",
+  liters30d: "Liters (30 days)",
+  regionTotals: "Region totals (liters)",
+  central: "Central",
+  east: "East",
+  welcome: "Welcome",
+  navigateSidebar: "Use the sidebar to navigate sections",
 };
 
 const ar: Dict = {
@@ -136,7 +143,7 @@ const ar: Dict = {
   generalSettings: "الإ��دادات العامة",
   literPrice: "سعر اللتر",
   maxDistance: "أقصى مسافة من المحطة لتأكيد المهمة",
-  language: "اللغة",
+  language: "ال��غة",
   save: "حفظ",
   saving: "جارٍ الحفظ...",
   signInTitle: "تسجيل الدخول إلى المشرف العام",
@@ -189,7 +196,7 @@ const ar: Dict = {
   hide: "إخفاء",
   show: "إظهار",
   settingName: "اسم الإعداد",
-  editSetting: "تعديل الإعداد",
+  editSetting: "تعديل ا��إعداد",
   details: "التفاصيل",
   setting: "الإعداد",
   name: "الاسم",
