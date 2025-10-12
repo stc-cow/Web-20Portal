@@ -89,7 +89,7 @@ function AppSidebar() {
                   isActive={isActive('/')}
                   className={cn(
                     'hover:bg-[#002b59]',
-                    isActive('/') && 'border-l-4 border-[#00C853]',
+                    isActive('/') && 'border-l-4 border-[#E30613]',
                   )}
                 >
                   <Link to="/" className="flex items-center">
@@ -106,7 +106,7 @@ function AppSidebar() {
                     isActive={isActive('/users')}
                     className={cn(
                       'hover:bg-[#002b59]',
-                      isActive('/users') && 'border-l-4 border-[#00C853]',
+                      isActive('/users') && 'border-l-4 border-[#E30613]',
                     )}
                   >
                     <Link to="/users" className="flex items-center">
@@ -123,7 +123,7 @@ function AppSidebar() {
                   isActive={isActive('/missions')}
                   className={cn(
                     'hover:bg-[#002b59]',
-                    isActive('/missions') && 'border-l-4 border-[#00C853]',
+                    isActive('/missions') && 'border-l-4 border-[#E30613]',
                   )}
                 >
                   <Link to="/missions" className="flex items-center">
@@ -139,7 +139,7 @@ function AppSidebar() {
                   isActive={isActive('/employees')}
                   className={cn(
                     'hover:bg-[#002b59]',
-                    isActive('/employees') && 'border-l-4 border-[#00C853]',
+                    isActive('/employees') && 'border-l-4 border-[#E30613]',
                   )}
                 >
                   <Link to="/employees" className="flex items-center">
@@ -155,7 +155,7 @@ function AppSidebar() {
                   isActive={isActive('/sites')}
                   className={cn(
                     'hover:bg-[#002b59]',
-                    isActive('/sites') && 'border-l-4 border-[#00C853]',
+                    isActive('/sites') && 'border-l-4 border-[#E30613]',
                   )}
                 >
                   <Link to="/sites" className="flex items-center">
@@ -169,7 +169,7 @@ function AppSidebar() {
                   isActive={isActive('/reports')}
                   className={cn(
                     'hover:bg-[#002b59]',
-                    isActive('/reports') && 'border-l-4 border-[#00C853]',
+                    isActive('/reports') && 'border-l-4 border-[#E30613]',
                   )}
                 >
                   <Link to="/reports" className="flex items-center">
@@ -183,7 +183,7 @@ function AppSidebar() {
                   isActive={isActive('/notifications')}
                   className={cn(
                     'hover:bg-[#002b59]',
-                    isActive('/notifications') && 'border-l-4 border-[#00C853]',
+                    isActive('/notifications') && 'border-l-4 border-[#E30613]',
                   )}
                 >
                   <Link to="/notifications" className="flex items-center">
@@ -199,7 +199,7 @@ function AppSidebar() {
                   isActive={isActive('/settings')}
                   className={cn(
                     'hover:bg-[#002b59]',
-                    isActive('/settings') && 'border-l-4 border-[#00C853]',
+                    isActive('/settings') && 'border-l-4 border-[#E30613]',
                   )}
                 >
                   <Link to="/settings" className="flex items-center">
