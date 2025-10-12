@@ -652,7 +652,7 @@ export default function MissionsPage() {
       .map((r) =>
         visible
           .map((c) => (r as any)[c.key])
-          .map((v) => (typeof v === "string" ? v.replaceAll(",", " ") : v))
+          .map((v) => (typeof v === "string" ? v.replace(/,/g, " ") : v))
           .join(","),
       )
       .join("\n");
