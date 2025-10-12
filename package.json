@@ -18,7 +18,9 @@
     "start": "node dist/server/node-build.mjs",
     "test": "vitest --run",
     "format.fix": "prettier --write .",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "ghpages:prepare": "pnpm build:client && rm -rf docs && mkdir -p docs && cp -r dist/spa/* docs/",
+    "builder:sync": "pnpm ghpages:prepare"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.75.0",
