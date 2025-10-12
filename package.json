@@ -19,7 +19,7 @@
     "test": "vitest --run",
     "format.fix": "prettier --write .",
     "typecheck": "tsc",
-    "ghpages:prepare": "pnpm build:client && rm -rf docs && mkdir -p docs && cp -r dist/spa/* docs/",
+    "ghpages:prepare": "pnpm build:client && rm -rf docs && mkdir -p docs && cp -r dist/spa/* docs/ && cp docs/index.html docs/404.html",
     "builder:sync": "pnpm ghpages:prepare"
   },
   "dependencies": {
