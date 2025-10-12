@@ -50,7 +50,7 @@ export default function Index() {
           <MetricCard
             title="East"
             value={regionTotals?.east}
-            color="#FF6D00"
+            color="#E30613"
             suffix=" L"
           />
         </div>
