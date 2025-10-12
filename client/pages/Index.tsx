@@ -5,13 +5,7 @@ import { useI18n } from '@/i18n';
 import { useKpis, useFuelTrend } from '@/hooks/useDashboard';
 import { supabase } from '@/lib/supabase';
 import { useEffect, useState } from 'react';
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-} from 'recharts';
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 
 export default function Index() {
   const { t } = useI18n();
@@ -40,14 +34,33 @@ export default function Index() {
   return (
     <AppShell>
       <Header />
-      <div className="px-6 pb-10 pt-4" style={{ background: 'hsl(var(--background))' }}>
-        <div className="mb-4 text-sm text-muted-foreground">{t('dashboard')}</div>
+      <div
+        className="px-6 pb-10 pt-4"
+        style={{ background: 'hsl(var(--background))' }}
+      >
+        <div className="mb-4 text-sm text-muted-foreground">
+          {t('dashboard')}
+        </div>
 
         {/* KPI Cards */}
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          <KpiCard title="Fuel Level" value={formatVal(kpis?.litersToday, '%')} color="#00C853" />
-          <KpiCard title="Power Usage" value={undefined} subtitle="kW" color="#003366" />
-          <KpiCard title="Generator Runtime" value={undefined} subtitle="hrs" color="#FF6D00" />
+          <KpiCard
+            title="Fuel Level"
+            value={formatVal(kpis?.litersToday, '%')}
+            color="#00C853"
+          />
+          <KpiCard
+            title="Power Usage"
+            value={undefined}
+            subtitle="kW"
+            color="#003366"
+          />
+          <KpiCard
+            title="Generator Runtime"
+            value={undefined}
+            subtitle="hrs"
+            color="#FF6D00"
+          />
         </div>
 
         {/* Charts + Recent */}
@@ -58,14 +71,26 @@ export default function Index() {
             </CardHeader>
             <CardContent className="p-6 pt-0">
               {Array.isArray(trend) && trend.length > 0 ? (
-                <AreaChart width={0} height={0} data={trend} className="w-full h-[280px]">
+                <AreaChart
+                  width={0}
+                  height={0}
+                  data={trend}
+                  className="w-full h-[280px]"
+                >
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="day" tick={{ fontSize: 12 }} />
                   <YAxis tick={{ fontSize: 12 }} />
-                  <Area type="monotone" dataKey="liters" stroke="#003366" fill="#00C85333" />
+                  <Area
+                    type="monotone"
+                    dataKey="liters"
+                    stroke="#003366"
+                    fill="#00C85333"
+                  />
                 </AreaChart>
               ) : (
-                <div className="text-sm text-muted-foreground">{t('noDataYet')}</div>
+                <div className="text-sm text-muted-foreground">
+                  {t('noDataYet')}
+                </div>
               )}
             </CardContent>
           </Card>
@@ -77,13 +102,22 @@ export default function Index() {
             <CardContent className="p-0">
               <div className="divide-y">
                 {recent.length === 0 && (
-                  <div className="p-4 text-sm text-muted-foreground">{t('noDataYet')}</div>
+                  <div className="p-4 text-sm text-muted-foreground">
+                    {t('noDataYet')}
+                  </div>
                 )}
                 {recent.map((r) => (
-                  <div key={r.id} className="flex items-center justify-between p-4">
+                  <div
+                    key={r.id}
+                    className="flex items-center justify-between p-4"
+                  >
                     <div className="min-w-0">
-                      <div className="truncate font-medium text-[#212121]">{r.site_name || 'Site'}</div>
-                      <div className="truncate text-xs text-muted-foreground">{r.driver_name || 'Driver'}</div>
+                      <div className="truncate font-medium text-[#212121]">
+                        {r.site_name || 'Site'}
+                      </div>
+                      <div className="truncate text-xs text-muted-foreground">
+                        {r.driver_name || 'Driver'}
+                      </div>
                     </div>
                     <span className="rounded-full bg-[#003366] px-3 py-1 text-xs text-white">
                       {r.status || 'unknown'}
@@ -120,7 +154,9 @@ function KpiCard({
           <div className="text-3xl font-semibold" style={{ color }}>
             {value ?? '—'}
           </div>
-          {subtitle && <div className="text-sm text-muted-foreground">{subtitle}</div>}
+          {subtitle && (
+            <div className="text-sm text-muted-foreground">{subtitle}</div>
+          )}
         </div>
       </CardContent>
     </Card>

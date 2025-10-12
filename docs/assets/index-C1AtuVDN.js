@@ -96068,18 +96068,16 @@ function $Re() {
       const O = parseFloat(w.liters || '0'),
         k = w.rate ? parseFloat(w.rate) : null,
         L = w.odometer ? parseInt(w.odometer) : null;
-      (await zt
-        .from('driver_task_entries')
-        .insert({
-          task_id: b.id,
-          liters: O,
-          rate: k,
-          station: w.station || null,
-          receipt_number: w.receipt || null,
-          photo_url: w.photo_url || null,
-          odometer: L,
-          submitted_by: e?.name || null,
-        }),
+      (await zt.from('driver_task_entries').insert({
+        task_id: b.id,
+        liters: O,
+        rate: k,
+        station: w.station || null,
+        receipt_number: w.receipt || null,
+        photo_url: w.photo_url || null,
+        odometer: L,
+        submitted_by: e?.name || null,
+      }),
         await zt
           .from('driver_tasks')
           .update({ status: 'completed', notes: w.notes || null })

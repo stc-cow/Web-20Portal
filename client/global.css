@@ -14,7 +14,7 @@
   :root {
     /* ACES Branding */
     --background: 228 20% 97%; /* #F5F6FA */
-    --foreground: 0 0% 13%;   /* #212121 */
+    --foreground: 0 0% 13%; /* #212121 */
 
     --card: 0 0% 100%;
     --card-foreground: 0 0% 13%;
@@ -22,8 +22,8 @@
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 13%;
 
-    --primary: 210 100% 20%;            /* #003366 */
-    --primary-foreground: 0 0% 100%;    /* white */
+    --primary: 210 100% 20%; /* #003366 */
+    --primary-foreground: 0 0% 100%; /* white */
 
     --secondary: 210 16% 90%;
     --secondary-foreground: 210 100% 20%;
@@ -31,10 +31,10 @@
     --muted: 210 16% 90%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 149 100% 39%;             /* #00C853 */
+    --accent: 149 100% 39%; /* #00C853 */
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 28 100% 50%;         /* #FF6D00 */
+    --destructive: 28 100% 50%; /* #FF6D00 */
     --destructive-foreground: 0 0% 100%;
 
     --border: 214.3 31.8% 91.4%;
@@ -45,9 +45,9 @@
     --radius: 12px;
 
     /* Sidebar */
-    --sidebar-background: 210 100% 20%;       /* #003366 */
-    --sidebar-foreground: 0 0% 100%;          /* white */
-    --sidebar-primary: 149 100% 39%;          /* #00C853 */
+    --sidebar-background: 210 100% 20%; /* #003366 */
+    --sidebar-foreground: 0 0% 100%; /* white */
+    --sidebar-primary: 149 100% 39%; /* #00C853 */
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 210 100% 24%;
     --sidebar-accent-foreground: 0 0% 100%;
