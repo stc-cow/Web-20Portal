@@ -143,7 +143,7 @@ const ar: Dict = {
   generalSettings: "الإ��دادات العامة",
   literPrice: "سعر اللتر",
   maxDistance: "أقصى مسافة من المحطة لتأكيد المهمة",
-  language: "ال��غة",
+  language: "اللغة",
   save: "حفظ",
   saving: "جارٍ الحفظ...",
   signInTitle: "تسجيل الدخول إلى المشرف العام",
@@ -196,7 +196,7 @@ const ar: Dict = {
   hide: "إخفاء",
   show: "إظهار",
   settingName: "اسم الإعداد",
-  editSetting: "تعديل ا��إعداد",
+  editSetting: "تعديل الإعداد",
   details: "التفاصيل",
   setting: "الإعداد",
   name: "الاسم",
@@ -217,6 +217,13 @@ const ar: Dict = {
   powerSource: "مصدر الطاقة",
   showSitesOverview: "عرض نظرة عامة على المواقع",
   hideSitesOverview: "إخفاء نظرة عامة على المواقع",
+  litersToday: "لترات اليوم",
+  liters30d: "اللترات (30 يومًا)",
+  regionTotals: "إجمالي المناطق (لترات)",
+  central: "ا��وسطى",
+  east: "الشرقية",
+  welcome: "مرحبًا",
+  navigateSidebar: "استخدم الشريط الجانبي للتنقل بين الأقسام",
 };
 
 const dictionaries: Record<Lang, Dict> = { en, ar };
