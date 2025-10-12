@@ -1,8 +1,8 @@
-import { AppShell } from "@/components/layout/AppSidebar";
-import Header from "@/components/layout/Header";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { AppShell } from '@/components/layout/AppSidebar';
+import Header from '@/components/layout/Header';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
@@ -10,13 +10,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { useEffect, useMemo, useState } from "react";
-import { supabase } from "@/lib/supabase";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { toast } from "@/hooks/use-toast";
+} from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { useEffect, useMemo, useState } from 'react';
+import { supabase } from '@/lib/supabase';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { toast } from '@/hooks/use-toast';
 import {
   Dialog,
   DialogContent,
@@ -24,14 +24,14 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 import {
   Columns2,
   Download,
@@ -41,7 +41,7 @@ import {
   Pencil,
   Trash2,
   UploadCloud,
-} from "lucide-react";
+} from 'lucide-react';
 
 // Mission type
 type Mission = {
@@ -67,127 +67,127 @@ type Mission = {
 const initialRows: Mission[] = [
   {
     id: 1,
-    missionId: "M-1",
-    siteName: "C700 COW312",
-    generator: "GEN-02",
-    project: "stc-cow",
-    driverName: "ZAFAR ABDUL SATTAR",
-    createdDate: "2025-03-23",
+    missionId: 'M-1',
+    siteName: 'C700 COW312',
+    generator: 'GEN-02',
+    project: 'stc-cow',
+    driverName: 'ZAFAR ABDUL SATTAR',
+    createdDate: '2025-03-23',
     filledLiters: 0,
     virtualCalculated: 0,
     actualInTank: 12,
     quantityAddedLastTask: 12,
-    city: "Dammam",
-    notes: "",
-    missionStatus: "Creation",
-    assignedDriver: "ZAFAR ABDUL SATTAR",
-    createdBy: "System",
+    city: 'Dammam',
+    notes: '',
+    missionStatus: 'Creation',
+    assignedDriver: 'ZAFAR ABDUL SATTAR',
+    createdBy: 'System',
   },
   {
     id: 2,
-    missionId: "M-2",
-    siteName: "L6999 COW6048",
-    generator: "GEN-01",
-    project: "stc-cow",
-    driverName: "Irfan",
-    createdDate: "2025-03-23",
+    missionId: 'M-2',
+    siteName: 'L6999 COW6048',
+    generator: 'GEN-01',
+    project: 'stc-cow',
+    driverName: 'Irfan',
+    createdDate: '2025-03-23',
     filledLiters: 0,
     virtualCalculated: 0,
     actualInTank: 0,
     quantityAddedLastTask: 0,
-    city: "Al-Ahsa",
-    notes: "",
-    missionStatus: "Creation",
-    assignedDriver: "Irfan",
-    createdBy: "System",
+    city: 'Al-Ahsa',
+    notes: '',
+    missionStatus: 'Creation',
+    assignedDriver: 'Irfan',
+    createdBy: 'System',
   },
   {
     id: 3,
-    missionId: "M-3",
-    siteName: "L6699 COW6148",
-    generator: "GEN-02",
-    project: "stc-cow",
-    driverName: "Muhammad Ansar",
-    createdDate: "2025-03-23",
+    missionId: 'M-3',
+    siteName: 'L6699 COW6148',
+    generator: 'GEN-02',
+    project: 'stc-cow',
+    driverName: 'Muhammad Ansar',
+    createdDate: '2025-03-23',
     filledLiters: 0,
     virtualCalculated: 0,
     actualInTank: 0,
     quantityAddedLastTask: 11,
-    city: "Muzahimiyah",
-    notes: "",
-    missionStatus: "Creation",
-    assignedDriver: "Muhammad Ansar",
-    createdBy: "System",
+    city: 'Muzahimiyah',
+    notes: '',
+    missionStatus: 'Creation',
+    assignedDriver: 'Muhammad Ansar',
+    createdBy: 'System',
   },
   {
     id: 4,
-    missionId: "M-4",
-    siteName: "L6699 COW6149",
-    generator: "GEN-03",
-    project: "stc-cow",
-    driverName: "Reaza",
-    createdDate: "2025-03-23",
+    missionId: 'M-4',
+    siteName: 'L6699 COW6149',
+    generator: 'GEN-03',
+    project: 'stc-cow',
+    driverName: 'Reaza',
+    createdDate: '2025-03-23',
     filledLiters: 0,
     virtualCalculated: 0,
     actualInTank: 0,
     quantityAddedLastTask: 0,
-    city: "Hafr Elbaten",
-    notes: "",
-    missionStatus: "Creation",
-    assignedDriver: "Reaza",
-    createdBy: "System",
+    city: 'Hafr Elbaten',
+    notes: '',
+    missionStatus: 'Creation',
+    assignedDriver: 'Reaza',
+    createdBy: 'System',
   },
 ];
 
 // ... later in handleAdd newRow assignment ...
 
-const STATUS_ORDER: Mission["missionStatus"][] = [
-  "Creation",
-  "Finished by Driver",
-  "Task approved",
-  "Task returned to the driver",
-  "Reported by driver",
-  "Canceled",
+const STATUS_ORDER: Mission['missionStatus'][] = [
+  'Creation',
+  'Finished by Driver',
+  'Task approved',
+  'Task returned to the driver',
+  'Reported by driver',
+  'Canceled',
 ];
 
-const statusColor: Record<Mission["missionStatus"], string> = {
-  Creation: "bg-orange-500",
-  "Finished by Driver": "bg-sky-500",
-  "Task approved": "bg-emerald-500",
-  "Task returned to the driver": "bg-indigo-500",
-  "Reported by driver": "bg-rose-500",
-  Canceled: "bg-gray-400",
+const statusColor: Record<Mission['missionStatus'], string> = {
+  Creation: 'bg-orange-500',
+  'Finished by Driver': 'bg-sky-500',
+  'Task approved': 'bg-emerald-500',
+  'Task returned to the driver': 'bg-indigo-500',
+  'Reported by driver': 'bg-rose-500',
+  Canceled: 'bg-gray-400',
 };
 
 const allColumns = [
-  { key: "missionId", label: "Mission ID" },
-  { key: "siteName", label: "Site Name" },
-  { key: "generator", label: "Generator" },
-  { key: "project", label: "Project" },
-  { key: "driverName", label: "Driver Name" },
-  { key: "createdDate", label: "Created Date" },
-  { key: "filledLiters", label: "Filled liters" },
-  { key: "virtualCalculated", label: "Virtual Calculated liters" },
-  { key: "actualInTank", label: "Actual liters found in Tank" },
-  { key: "quantityAddedLastTask", label: "Quantity added Last Task" },
-  { key: "city", label: "City" },
-  { key: "notes", label: "Notes" },
-  { key: "missionStatus", label: "Mission status" },
-  { key: "assignedDriver", label: "Driver" },
-  { key: "createdBy", label: "Created By" },
-  { key: "settings", label: "Settings" },
+  { key: 'missionId', label: 'Mission ID' },
+  { key: 'siteName', label: 'Site Name' },
+  { key: 'generator', label: 'Generator' },
+  { key: 'project', label: 'Project' },
+  { key: 'driverName', label: 'Driver Name' },
+  { key: 'createdDate', label: 'Created Date' },
+  { key: 'filledLiters', label: 'Filled liters' },
+  { key: 'virtualCalculated', label: 'Virtual Calculated liters' },
+  { key: 'actualInTank', label: 'Actual liters found in Tank' },
+  { key: 'quantityAddedLastTask', label: 'Quantity added Last Task' },
+  { key: 'city', label: 'City' },
+  { key: 'notes', label: 'Notes' },
+  { key: 'missionStatus', label: 'Mission status' },
+  { key: 'assignedDriver', label: 'Driver' },
+  { key: 'createdBy', label: 'Created By' },
+  { key: 'settings', label: 'Settings' },
 ] as const;
 
-type ColumnKey = (typeof allColumns)[number]["key"];
+type ColumnKey = (typeof allColumns)[number]['key'];
 
 export default function MissionsPage() {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
   const [rows, setRows] = useState<Mission[]>([]);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [statusFilter, setStatusFilter] = useState<
-    "All" | Mission["missionStatus"]
-  >("All");
+    'All' | Mission['missionStatus']
+  >('All');
   const [cols, setCols] = useState<Record<ColumnKey, boolean>>({
     missionId: true,
     siteName: true,
@@ -217,13 +217,13 @@ export default function MissionsPage() {
     notes?: string;
   };
   const emptyForm: AddTaskForm = {
-    siteName: "",
+    siteName: '',
     driverId: null,
-    driverName: "",
-    driverPhone: "",
-    scheduledAt: "",
+    driverName: '',
+    driverPhone: '',
+    scheduledAt: '',
     requiredLiters: null,
-    notes: "",
+    notes: '',
   };
   const [addOpen, setAddOpen] = useState(false);
   const [addForm, setAddForm] = useState<AddTaskForm>(emptyForm);
@@ -247,15 +247,15 @@ export default function MissionsPage() {
     let mounted = true;
     (async () => {
       const { data } = await supabase
-        .from("drivers")
-        .select("id, name, phone, active")
-        .order("name");
+        .from('drivers')
+        .select('id, name, phone, active')
+        .order('name');
       if (!mounted) return;
       if (data)
         setDrivers(
           data.map((d: any) => ({
             id: Number(d.id),
-            name: d.name || "",
+            name: d.name || '',
             phone: d.phone || null,
           })),
         );
@@ -267,8 +267,8 @@ export default function MissionsPage() {
 
   function validate(form: AddTaskForm) {
     const errs: Partial<Record<keyof AddTaskForm, string>> = {};
-    if (!form.siteName.trim()) errs.siteName = "required";
-    if (!form.driverName.trim()) errs.driverName = "required";
+    if (!form.siteName.trim()) errs.siteName = 'required';
+    if (!form.driverName.trim()) errs.driverName = 'required';
     return errs;
   }
 
@@ -285,22 +285,22 @@ export default function MissionsPage() {
       driver_name: addForm.driverName.trim(),
       driver_phone: addForm.driverPhone || null,
       scheduled_at: scheduled_iso,
-      status: "pending",
-      admin_status: "Creation",
+      status: 'pending',
+      admin_status: 'Creation',
       required_liters: addForm.requiredLiters ?? null,
       notes: addForm.notes || null,
     };
     const { data, error } = await supabase
-      .from("driver_tasks")
+      .from('driver_tasks')
       .insert(payload)
       .select(
-        "id, site_name, driver_name, scheduled_at, status, required_liters, notes, created_at",
+        'id, site_name, driver_name, scheduled_at, status, required_liters, notes, created_at',
       )
       .single();
     if (error || !data) {
       toast({
-        title: "Create failed",
-        description: error?.message || "Unknown error",
+        title: 'Create failed',
+        description: error?.message || 'Unknown error',
       });
       return;
     }
@@ -310,34 +310,34 @@ export default function MissionsPage() {
     const newRow: Mission = {
       id: Number(data.id),
       missionId: String(data.id),
-      siteName: (data.site_name as string) || "",
-      generator: "",
-      project: "",
-      driverName: (data.driver_name as string) || "",
+      siteName: (data.site_name as string) || '',
+      generator: '',
+      project: '',
+      driverName: (data.driver_name as string) || '',
       createdDate,
       filledLiters: 0,
       virtualCalculated: 0,
       actualInTank: 0,
       quantityAddedLastTask: Number(data.required_liters || 0),
-      city: "",
-      notes: (data.notes as string) || "",
-      missionStatus: "Creation",
-      assignedDriver: (data.driver_name as string) || "",
+      city: '',
+      notes: (data.notes as string) || '',
+      missionStatus: 'Creation',
+      assignedDriver: (data.driver_name as string) || '',
       createdBy:
-        localStorage.getItem("auth.username") ||
-        localStorage.getItem("remember.username") ||
-        "User",
+        localStorage.getItem('auth.username') ||
+        localStorage.getItem('remember.username') ||
+        'User',
     };
     setRows((r) => [newRow, ...r]);
-    toast({ title: "Task created" });
+    toast({ title: 'Task created' });
     // send notification to the assigned driver
     try {
       const sentBy =
-        localStorage.getItem("auth.username") ||
-        localStorage.getItem("remember.username") ||
-        "Admin";
-      await supabase.from("driver_notifications").insert({
-        title: "New mission assigned",
+        localStorage.getItem('auth.username') ||
+        localStorage.getItem('remember.username') ||
+        'Admin';
+      await supabase.from('driver_notifications').insert({
+        title: 'New mission assigned',
         message: `A new mission has been assigned to you for site: ${addForm.siteName}`,
         driver_name: addForm.driverName || null,
         sent_by: sentBy,
@@ -352,26 +352,26 @@ export default function MissionsPage() {
     if (!expanded[r.id]) {
       // load latest driver entry
       const { data } = await supabase
-        .from("driver_task_entries")
+        .from('driver_task_entries')
         .select(
-          "liters, rate, station, receipt_number, photo_url, odometer, submitted_by, submitted_at",
+          'liters, rate, station, receipt_number, photo_url, odometer, submitted_by, submitted_at',
         )
-        .eq("task_id", r.id)
-        .order("submitted_at", { ascending: false })
+        .eq('task_id', r.id)
+        .order('submitted_at', { ascending: false })
         .limit(1)
         .maybeSingle();
       setEntryByTask((m) => ({ ...m, [r.id]: data || null }));
       // try list storage pics
       try {
-        const dir = `${(r.driverName || "driver").replace(/\s+/g, "_")}/${r.id}`;
+        const dir = `${(r.driverName || 'driver').replace(/\s+/g, '_')}/${r.id}`;
         const { data: files } = await (supabase.storage as any)
-          .from("driver-uploads")
+          .from('driver-uploads')
           .list(dir, { limit: 20 });
         if (files && Array.isArray(files)) {
           const urls = files.map(
             (f: any) =>
               (supabase.storage as any)
-                .from("driver-uploads")
+                .from('driver-uploads')
                 .getPublicUrl(`${dir}/${f.name}`).data.publicUrl,
           );
           setImagesByTask((m) => ({ ...m, [r.id]: urls }));
@@ -382,21 +382,21 @@ export default function MissionsPage() {
 
   const setAdminStatus = async (
     id: number,
-    status: Mission["missionStatus"],
+    status: Mission['missionStatus'],
   ) => {
-    const newAdmin = status === "Task approved" ? "approved" : status;
+    const newAdmin = status === 'Task approved' ? 'approved' : status;
     const { error } = await supabase
-      .from("driver_tasks")
+      .from('driver_tasks')
       .update({ admin_status: newAdmin })
-      .eq("id", id);
+      .eq('id', id);
     if (error) {
-      toast({ title: "Update failed", description: error.message });
+      toast({ title: 'Update failed', description: error.message });
       return;
     }
-    if (status === "Task approved") {
+    if (status === 'Task approved') {
       const t = rows.find((r) => r.id === id);
       if (t) {
-        await supabase.from("approved_reports").upsert(
+        await supabase.from('approved_reports').upsert(
           {
             task_id: id,
             mission_id: t.missionId,
@@ -404,13 +404,13 @@ export default function MissionsPage() {
             driver_name: t.driverName,
             quantity_added: t.quantityAddedLastTask || t.filledLiters || null,
             notes: t.notes || null,
-            status: "approved",
+            status: 'approved',
           },
-          { onConflict: "task_id" },
+          { onConflict: 'task_id' },
         );
       }
       setRows((arr) => arr.filter((r) => r.id !== id));
-      toast({ title: "Approved and moved to Reports" });
+      toast({ title: 'Approved and moved to Reports' });
       return;
     }
     setRows((arr) =>
@@ -421,7 +421,7 @@ export default function MissionsPage() {
 
   const handleSyncAll = async () => {
     if (rows.length === 0) {
-      toast({ title: "No missions to sync" });
+      toast({ title: 'No missions to sync' });
       return;
     }
     const payload = rows.map((r) => ({
@@ -430,70 +430,70 @@ export default function MissionsPage() {
       driver_name: r.assignedDriver || r.driverName,
       driver_phone: null as string | null,
       scheduled_at: null as string | null,
-      status: "pending",
+      status: 'pending',
       admin_status: r.missionStatus,
       required_liters: r.quantityAddedLastTask || r.filledLiters || null,
       notes: r.notes || null,
     }));
-    const { error } = await supabase.from("driver_tasks").insert(payload);
+    const { error } = await supabase.from('driver_tasks').insert(payload);
     if (error) {
-      toast({ title: "Sync failed", description: error.message });
+      toast({ title: 'Sync failed', description: error.message });
       return;
     }
     try {
       const sentBy =
-        localStorage.getItem("auth.username") ||
-        localStorage.getItem("remember.username") ||
-        "Admin";
+        localStorage.getItem('auth.username') ||
+        localStorage.getItem('remember.username') ||
+        'Admin';
       const notices = rows.map((r) => ({
-        title: "New mission assigned",
+        title: 'New mission assigned',
         message: `A new mission has been assigned to you for site: ${r.siteName}`,
         driver_name: r.assignedDriver || r.driverName || null,
         sent_by: sentBy,
       }));
       if (notices.length > 0)
-        await supabase.from("driver_notifications").insert(notices);
+        await supabase.from('driver_notifications').insert(notices);
     } catch {}
-    toast({ title: "Missions synced to Supabase" });
+    toast({ title: 'Missions synced to Supabase' });
   };
 
   const loadFromDb = async () => {
     // Try using the supabase client first (handles auth/CORS). If that fails, fall back to direct REST to surface network/CORS errors.
     try {
       const { data, error } = await supabase
-        .from("driver_tasks")
+        .from('driver_tasks')
         .select(
-          "id, mission_id, site_name, driver_name, scheduled_at, status, admin_status, required_liters, notes, created_at",
+          'id, mission_id, site_name, driver_name, scheduled_at, status, admin_status, required_liters, notes, created_at',
         )
-        .order("created_at", { ascending: false });
+        .order('created_at', { ascending: false });
       if (error) throw error;
       if (!data || !Array.isArray(data) || data.length === 0) {
         toast({
-          title: "No missions found",
-          description: "Try adding a mission or refreshing.",
+          title: 'No missions found',
+          description: 'Try adding a mission or refreshing.',
         });
         setRows([]);
         return;
       }
-      const mapStatus = (s?: string): Mission["missionStatus"] => {
-        switch ((s || "").toLowerCase()) {
-          case "completed":
-            return "Finished by Driver";
-          case "in_progress":
-            return "Reported by driver";
-          case "canceled":
-            return "Canceled";
+      const mapStatus = (s?: string): Mission['missionStatus'] => {
+        switch ((s || '').toLowerCase()) {
+          case 'completed':
+            return 'Finished by Driver';
+          case 'in_progress':
+            return 'Reported by driver';
+          case 'canceled':
+            return 'Canceled';
           default:
-            return "Creation";
+            return 'Creation';
         }
       };
       const mapped: Mission[] = data.map((d: any) => ({
         id: Number(d.id),
-        missionId: String(d.mission_id || ""),
-        siteName: d.site_name || "",
-        generator: "",
-        project: "",
-        driverName: d.driver_name || "",
+        missionId: String(d.mission_id || ''),
+        siteName: d.site_name || '',
+        generator: '',
+        project: '',
+        driverName: d.driver_name || '',
         createdDate:
           (d.scheduled_at as string)?.slice(0, 10) ||
           (d.created_at as string)?.slice(0, 10) ||
@@ -502,16 +502,16 @@ export default function MissionsPage() {
         virtualCalculated: 0,
         actualInTank: 0,
         quantityAddedLastTask: Number(d.required_liters || 0),
-        city: "",
-        notes: d.notes || "",
+        city: '',
+        notes: d.notes || '',
         missionStatus: (d.admin_status as string) || mapStatus(d.status),
-        assignedDriver: d.driver_name || "",
-        createdBy: "System",
+        assignedDriver: d.driver_name || '',
+        createdBy: 'System',
       }));
       setRows(mapped);
       return;
     } catch (clientErr) {
-      console.error("Supabase client error", clientErr);
+      console.error('Supabase client error', clientErr);
       // REST fallback to surface CORS/network issues
       try {
         const url = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/driver_tasks?select=id,mission_id,site_name,driver_name,status,admin_status,required_liters,notes,created_at`;
@@ -523,9 +523,9 @@ export default function MissionsPage() {
         });
         if (!res.ok) {
           const text = await res.text();
-          console.error("REST fetch failed", res.status, text);
+          console.error('REST fetch failed', res.status, text);
           toast({
-            title: "Failed to load missions",
+            title: 'Failed to load missions',
             description: `REST ${res.status}: ${text}`,
           });
           return;
@@ -533,42 +533,42 @@ export default function MissionsPage() {
         const json = await res.json();
         if (!Array.isArray(json) || json.length === 0) {
           toast({
-            title: "No missions found",
-            description: "Try adding a mission or refreshing.",
+            title: 'No missions found',
+            description: 'Try adding a mission or refreshing.',
           });
           setRows([]);
           return;
         }
         const mapped = json.map((d: any) => ({
           id: Number(d.id),
-          missionId: String(d.mission_id || ""),
-          siteName: d.site_name || "",
-          generator: "",
-          project: "",
-          driverName: d.driver_name || "",
+          missionId: String(d.mission_id || ''),
+          siteName: d.site_name || '',
+          generator: '',
+          project: '',
+          driverName: d.driver_name || '',
           createdDate: (d.created_at || new Date().toISOString()).slice(0, 10),
           filledLiters: 0,
           virtualCalculated: 0,
           actualInTank: 0,
           quantityAddedLastTask: Number(d.required_liters || 0),
-          city: "",
-          notes: d.notes || "",
-          missionStatus: (d.admin_status as string) || "Creation",
-          assignedDriver: d.driver_name || "",
-          createdBy: "System",
+          city: '',
+          notes: d.notes || '',
+          missionStatus: (d.admin_status as string) || 'Creation',
+          assignedDriver: d.driver_name || '',
+          createdBy: 'System',
         }));
         setRows(mapped);
         return;
       } catch (restErr) {
-        console.error("REST fetch exception", restErr);
+        console.error('REST fetch exception', restErr);
         const origin =
-          typeof window !== "undefined"
+          typeof window !== 'undefined'
             ? window.location.origin
-            : "your app origin";
+            : 'your app origin';
         toast({
-          title: "Failed to load missions",
+          title: 'Failed to load missions',
           description:
-            "Network error (Failed to fetch). This commonly happens due to CORS or network restrictions. Add the app origin to Supabase Allowed Origins or ensure the project URL is reachable.",
+            'Network error (Failed to fetch). This commonly happens due to CORS or network restrictions. Add the app origin to Supabase Allowed Origins or ensure the project URL is reachable.',
         });
         console.info(
           `Action: add ${origin} to Supabase → Settings → API → Allowed origins (CORS)`,
@@ -581,15 +581,15 @@ export default function MissionsPage() {
   useEffect(() => {
     loadFromDb();
     const channel = (supabase as any)
-      .channel("missions-realtime")
+      .channel('missions-realtime')
       .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "driver_tasks" },
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'driver_tasks' },
         () => loadFromDb(),
       )
       .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "driver_task_entries" },
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'driver_task_entries' },
         () => loadFromDb(),
       )
       .subscribe();
@@ -601,12 +601,12 @@ export default function MissionsPage() {
   }, []);
 
   const counts = useMemo(() => {
-    const map: Record<Mission["missionStatus"], number> = {
+    const map: Record<Mission['missionStatus'], number> = {
       Creation: 0,
-      "Finished by Driver": 0,
-      "Task approved": 0,
-      "Task returned to the driver": 0,
-      "Reported by driver": 0,
+      'Finished by Driver': 0,
+      'Task approved': 0,
+      'Task returned to the driver': 0,
+      'Reported by driver': 0,
       Canceled: 0,
     };
     rows.forEach((r) => map[r.missionStatus]++);
@@ -614,8 +614,8 @@ export default function MissionsPage() {
   }, [rows]);
 
   const filteredByStatus = useMemo(() => {
-    const base = rows.filter((r) => r.missionStatus !== "Task approved");
-    if (statusFilter === "All") return base;
+    const base = rows.filter((r) => r.missionStatus !== 'Task approved');
+    if (statusFilter === 'All') return base;
     return base.filter((r) => r.missionStatus === statusFilter);
   }, [rows, statusFilter]);
 
@@ -646,30 +646,30 @@ export default function MissionsPage() {
 
   const exportCsv = () => {
     const visible = allColumns.filter(
-      (c) => cols[c.key] && c.key !== "settings",
+      (c) => cols[c.key] && c.key !== 'settings',
     );
-    const head = visible.map((c) => c.label).join(",");
+    const head = visible.map((c) => c.label).join(',');
     const body = filtered
       .map((r) =>
         visible
           .map((c) => (r as any)[c.key])
-          .map((v) => (typeof v === "string" ? v.replace(/,/g, " ") : v))
-          .join(","),
+          .map((v) => (typeof v === 'string' ? v.replace(/,/g, ' ') : v))
+          .join(','),
       )
-      .join("\n");
-    const blob = new Blob([head + "\n" + body], {
-      type: "text/csv;charset=utf-8;",
+      .join('\n');
+    const blob = new Blob([head + '\n' + body], {
+      type: 'text/csv;charset=utf-8;',
     });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
+    const a = document.createElement('a');
     a.href = url;
-    a.download = "missions.csv";
+    a.download = 'missions.csv';
     a.click();
     URL.revokeObjectURL(url);
   };
 
   const remove = async (id: number) => {
-    await supabase.from("driver_tasks").delete().eq("id", id);
+    await supabase.from('driver_tasks').delete().eq('id', id);
     setRows((r) => r.filter((x) => x.id !== id));
   };
 
@@ -716,14 +716,14 @@ export default function MissionsPage() {
                   <div className="grid gap-2">
                     <Label>Driver</Label>
                     <Select
-                      value={addForm.driverId ? String(addForm.driverId) : ""}
+                      value={addForm.driverId ? String(addForm.driverId) : ''}
                       onValueChange={(v) => {
                         const d = drivers.find((x) => String(x.id) === v);
                         setAddForm((s) => ({
                           ...s,
                           driverId: d ? d.id : null,
-                          driverName: d ? d.name : "",
-                          driverPhone: d?.phone || "",
+                          driverName: d ? d.name : '',
+                          driverPhone: d?.phone || '',
                         }));
                       }}
                     >
@@ -771,12 +771,12 @@ export default function MissionsPage() {
                     <Input
                       id="m-liters"
                       type="number"
-                      value={addForm.requiredLiters ?? ""}
+                      value={addForm.requiredLiters ?? ''}
                       onChange={(e) =>
                         setAddForm((s) => ({
                           ...s,
                           requiredLiters:
-                            e.target.value === ""
+                            e.target.value === ''
                               ? null
                               : Number(e.target.value),
                         }))
@@ -809,9 +809,9 @@ export default function MissionsPage() {
           <Badge
             variant="secondary"
             className="cursor-pointer"
-            onClick={() => setStatusFilter("All")}
+            onClick={() => setStatusFilter('All')}
           >
-            All{" "}
+            All{' '}
             <span className="ml-2 rounded bg-gray-200 px-1.5 py-0.5 text-xs text-foreground">
               {rows.length}
             </span>
@@ -956,7 +956,7 @@ export default function MissionsPage() {
                         <TableCell>{r.quantityAddedLastTask}</TableCell>
                       )}
                       {cols.city && <TableCell>{r.city}</TableCell>}
-                      {cols.notes && <TableCell>{r.notes || ""}</TableCell>}
+                      {cols.notes && <TableCell>{r.notes || ''}</TableCell>}
                       {cols.missionStatus && (
                         <TableCell>
                           <span
@@ -990,7 +990,7 @@ export default function MissionsPage() {
                                 e.stopPropagation();
                                 setAdminStatus(
                                   r.id,
-                                  "Task returned to the driver",
+                                  'Task returned to the driver',
                                 );
                               }}
                             >
@@ -1002,7 +1002,7 @@ export default function MissionsPage() {
                               className="h-7 px-2 text-xs"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                setAdminStatus(r.id, "Canceled");
+                                setAdminStatus(r.id, 'Canceled');
                               }}
                             >
                               Cancel
@@ -1015,7 +1015,7 @@ export default function MissionsPage() {
                                 setExpanded((e) => ({ ...e, [r.id]: !e[r.id] }))
                               }
                             >
-                              {expanded[r.id] ? "Hide" : "Edit / Approve"}
+                              {expanded[r.id] ? 'Hide' : 'Edit / Approve'}
                             </Button>
                             <Button
                               size="icon"
@@ -1070,28 +1070,28 @@ export default function MissionsPage() {
                               </div>
                               <div className="grid grid-cols-2 gap-2 text-sm">
                                 <div>
-                                  Liters: {entryByTask[r.id]?.liters ?? "-"}
+                                  Liters: {entryByTask[r.id]?.liters ?? '-'}
                                 </div>
                                 <div>
-                                  Rate: {entryByTask[r.id]?.rate ?? "-"}
+                                  Rate: {entryByTask[r.id]?.rate ?? '-'}
                                 </div>
                                 <div>
-                                  Station: {entryByTask[r.id]?.station ?? "-"}
+                                  Station: {entryByTask[r.id]?.station ?? '-'}
                                 </div>
                                 <div>
-                                  Receipt #:{" "}
-                                  {entryByTask[r.id]?.receipt_number ?? "-"}
+                                  Receipt #:{' '}
+                                  {entryByTask[r.id]?.receipt_number ?? '-'}
                                 </div>
                                 <div>
-                                  Odometer: {entryByTask[r.id]?.odometer ?? "-"}
+                                  Odometer: {entryByTask[r.id]?.odometer ?? '-'}
                                 </div>
                                 <div>
-                                  Submitted By:{" "}
-                                  {entryByTask[r.id]?.submitted_by ?? "-"}
+                                  Submitted By:{' '}
+                                  {entryByTask[r.id]?.submitted_by ?? '-'}
                                 </div>
                                 <div className="col-span-2">
-                                  Submitted At:{" "}
-                                  {entryByTask[r.id]?.submitted_at ?? "-"}
+                                  Submitted At:{' '}
+                                  {entryByTask[r.id]?.submitted_at ?? '-'}
                                 </div>
                               </div>
                             </div>
@@ -1141,7 +1141,7 @@ export default function MissionsPage() {
                                 className="bg-[#16A34A] hover:opacity-90"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  setAdminStatus(r.id, "Task approved");
+                                  setAdminStatus(r.id, 'Task approved');
                                 }}
                               >
                                 Approve

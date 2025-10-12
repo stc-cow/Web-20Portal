@@ -1,7 +1,7 @@
-import React, { useRef } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Float, Stars, useTexture } from "@react-three/drei";
-import * as THREE from "three";
+import React, { useRef } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Float, Stars, useTexture } from '@react-three/drei';
+import * as THREE from 'three';
 
 function ParallaxGroup({ children }: { children: React.ReactNode }) {
   const group = useRef<THREE.Group>(null!);
@@ -38,9 +38,9 @@ export default function Login3DBackground({ logoUrl }: { logoUrl: string }) {
   return (
     <div className="pointer-events-none absolute inset-0 -z-10">
       <Canvas dpr={[1, 2]} camera={{ position: [0, 0, 8], fov: 50 }}>
-        <color attach="background" args={["#0B1220"]} />
+        <color attach="background" args={['#0B1220']} />
         {/* Depth fog for contrast */}
-        <fog attach="fog" args={["#0B1220", 10, 25]} />
+        <fog attach="fog" args={['#0B1220', 10, 25]} />
 
         <ambientLight intensity={0.4} />
         <directionalLight position={[5, 5, 5]} intensity={1.2} />

@@ -12,7 +12,7 @@ export default defineConfig(({ mode }) => ({
       allow: [
         path.resolve(__dirname, '.'),
         path.resolve(__dirname, './client'),
-        path.resolve(__dirname, './shared')
+        path.resolve(__dirname, './shared'),
       ],
       deny: ['.env', '.env.*', '*.{crt,pem}', '**/.git/**', 'server/**'],
     },
