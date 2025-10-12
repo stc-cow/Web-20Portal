@@ -140,8 +140,8 @@ export default function DriversPage() {
     active: boolean;
   };
   const emptyForm: DriverForm = { name: "", phone: "", zone: "", active: true };
-  const [addOpen] = useState(false);
-  const [addPassword] = useState("");
+  const [addOpen, setAddOpen] = useState(false);
+  const [addPassword, setAddPassword] = useState("");
   const [addForm, setAddForm] = useState<DriverForm>(emptyForm);
   const [addErrors, setAddErrors] = useState<
     Partial<Record<keyof DriverForm, string>>
