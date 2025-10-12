@@ -308,6 +308,7 @@ export default function MissionsPage() {
       new Date().toISOString().slice(0, 10);
     const newRow: Mission = {
       id: Number(data.id),
+      missionId: String(data.id),
       siteName: (data.site_name as string) || "",
       generator: "",
       project: "",
