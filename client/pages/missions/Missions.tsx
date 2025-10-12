@@ -580,23 +580,39 @@ export default function MissionsPage() {
 
   useEffect(() => {
     loadFromDb();
-    const channel = (supabase as any)
-      .channel('missions-realtime')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'driver_tasks' },
-        () => loadFromDb(),
-      )
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'driver_task_entries' },
-        () => loadFromDb(),
-      )
-      .subscribe();
+
+    // Only subscribe to realtime if the Supabase client supports .channel (v2 realtime)
+    const hasRealtime = typeof (supabase as any).channel === 'function';
+    let channel: any = null;
+    if (hasRealtime) {
+      try {
+        channel = (supabase as any)
+          .channel('missions-realtime')
+          .on(
+            'postgres_changes',
+            { event: '*', schema: 'public', table: 'driver_tasks' },
+            () => loadFromDb(),
+          )
+          .on(
+            'postgres_changes',
+            { event: '*', schema: 'public', table: 'driver_task_entries' },
+            () => loadFromDb(),
+          )
+          .subscribe();
+      } catch (e) {
+        console.warn('Realtime subscription failed', e);
+      }
+    } else {
+      // Supabase not configured or realtime not available — skip realtime.
+      console.info('Realtime not available on Supabase client; skipping subscription');
+    }
+
     return () => {
       try {
-        (supabase as any).removeChannel(channel);
-      } catch {}
+        if (channel && typeof (supabase as any).removeChannel === 'function') {
+          (supabase as any).removeChannel(channel);
+        }
+      } catch (e) {}
     };
   }, []);
 
