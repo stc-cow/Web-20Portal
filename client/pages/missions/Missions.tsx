@@ -514,8 +514,12 @@ export default function MissionsPage() {
       console.error('Supabase client error', clientErr);
       // REST fallback to surface CORS/network issues
       try {
-        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;
-        const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
+        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as
+          | string
+          | undefined;
+        const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY as
+          | string
+          | undefined;
         if (!supabaseUrl || !supabaseKey) {
           console.warn('Supabase env vars missing; skipping REST fallback');
           toast({
@@ -532,7 +536,8 @@ export default function MissionsPage() {
           console.error('Invalid VITE_SUPABASE_URL:', supabaseUrl);
           toast({
             title: 'Invalid Supabase URL',
-            description: 'VITE_SUPABASE_URL must start with http:// or https://',
+            description:
+              'VITE_SUPABASE_URL must start with http:// or https://',
           });
           return;
         }
@@ -658,7 +663,9 @@ export default function MissionsPage() {
       }
     } else {
       // Supabase not configured or realtime not available — skip realtime.
-      console.info('Realtime not available on Supabase client; skipping subscription');
+      console.info(
+        'Realtime not available on Supabase client; skipping subscription',
+      );
     }
 
     return () => {
