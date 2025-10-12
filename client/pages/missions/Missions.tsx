@@ -58,13 +58,8 @@ type Mission = {
   quantityAddedLastTask: number;
   city: string;
   notes?: string;
-  missionStatus:
-    | "Creation"
-    | "Finished by Driver"
-    | "Task approved"
-    | "Task returned to the driver"
-    | "Reported by driver"
-    | "Canceled";
+  // accept any string from backend; specific values are still used elsewhere
+  missionStatus: string;
   assignedDriver: string;
   createdBy: string;
 };
