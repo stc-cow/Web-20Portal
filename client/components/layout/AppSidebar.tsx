@@ -88,8 +88,8 @@ function AppSidebar() {
                   asChild
                   isActive={isActive('/')}
                   className={cn(
-                    'hover:bg-[#102B57]',
-                    isActive('/') && 'border-l-4 border-[#E60000]',
+                    'hover:bg-[#002b59]',
+                    isActive('/') && 'border-l-4 border-[#00C853]',
                   )}
                 >
                   <Link to="/" className="flex items-center">
@@ -105,8 +105,8 @@ function AppSidebar() {
                     asChild
                     isActive={isActive('/users')}
                     className={cn(
-                      'hover:bg-[#102B57]',
-                      isActive('/users') && 'border-l-4 border-[#E60000]',
+                      'hover:bg-[#002b59]',
+                      isActive('/users') && 'border-l-4 border-[#00C853]',
                     )}
                   >
                     <Link to="/users" className="flex items-center">
@@ -122,8 +122,8 @@ function AppSidebar() {
                   asChild
                   isActive={isActive('/missions')}
                   className={cn(
-                    'hover:bg-[#102B57]',
-                    isActive('/missions') && 'border-l-4 border-[#E60000]',
+                    'hover:bg-[#002b59]',
+                    isActive('/missions') && 'border-l-4 border-[#00C853]',
                   )}
                 >
                   <Link to="/missions" className="flex items-center">
@@ -138,8 +138,8 @@ function AppSidebar() {
                   asChild
                   isActive={isActive('/employees')}
                   className={cn(
-                    'hover:bg-[#102B57]',
-                    isActive('/employees') && 'border-l-4 border-[#E60000]',
+                    'hover:bg-[#002b59]',
+                    isActive('/employees') && 'border-l-4 border-[#00C853]',
                   )}
                 >
                   <Link to="/employees" className="flex items-center">
@@ -154,8 +154,8 @@ function AppSidebar() {
                   asChild
                   isActive={isActive('/sites')}
                   className={cn(
-                    'hover:bg-[#102B57]',
-                    isActive('/sites') && 'border-l-4 border-[#E60000]',
+                    'hover:bg-[#002b59]',
+                    isActive('/sites') && 'border-l-4 border-[#00C853]',
                   )}
                 >
                   <Link to="/sites" className="flex items-center">
@@ -168,8 +168,8 @@ function AppSidebar() {
                   asChild
                   isActive={isActive('/reports')}
                   className={cn(
-                    'hover:bg-[#102B57]',
-                    isActive('/reports') && 'border-l-4 border-[#E60000]',
+                    'hover:bg-[#002b59]',
+                    isActive('/reports') && 'border-l-4 border-[#00C853]',
                   )}
                 >
                   <Link to="/reports" className="flex items-center">
@@ -182,8 +182,8 @@ function AppSidebar() {
                   asChild
                   isActive={isActive('/notifications')}
                   className={cn(
-                    'hover:bg-[#102B57]',
-                    isActive('/notifications') && 'border-l-4 border-[#E60000]',
+                    'hover:bg-[#002b59]',
+                    isActive('/notifications') && 'border-l-4 border-[#00C853]',
                   )}
                 >
                   <Link to="/notifications" className="flex items-center">
@@ -198,8 +198,8 @@ function AppSidebar() {
                   asChild
                   isActive={isActive('/settings')}
                   className={cn(
-                    'hover:bg-[#102B57]',
-                    isActive('/settings') && 'border-l-4 border-[#E60000]',
+                    'hover:bg-[#002b59]',
+                    isActive('/settings') && 'border-l-4 border-[#00C853]',
                   )}
                 >
                   <Link to="/settings" className="flex items-center">
