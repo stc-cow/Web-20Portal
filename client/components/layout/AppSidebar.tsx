@@ -31,15 +31,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 }
 
 function AppSidebar() {
-  const [pathname, setPathname] = useState(() =>
-    typeof window !== 'undefined' ? window.location.pathname : '/',
-  );
-
-  useEffect(() => {
-    const onPop = () => setPathname(window.location.pathname);
-    window.addEventListener('popstate', onPop);
-    return () => window.removeEventListener('popstate', onPop);
-  }, []);
+  const { pathname } = useLocation();
 
   const isActive = (p: string) => pathname === p;
   const [openUsers, setOpenUsers] = useState(pathname.startsWith('/users'));
