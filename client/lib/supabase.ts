@@ -11,28 +11,26 @@ const runtimeAnon =
   '';
 
 function failingResponse() {
-  return Promise.resolve({
-    data: null,
-    error: new Error(
-      'Supabase not configured. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY',
-    ),
-  });
+  // When Supabase isn't configured, return a neutral response and warn instead of throwing.
+  // This avoids runtime exceptions on pages while allowing the UI to handle empty data gracefully.
+  console.warn('Supabase not configured. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY');
+  return Promise.resolve({ data: null, error: null });
 }
 
 function mockFrom() {
   return {
     select: () => ({
-      order: () => failingResponse(),
-      maybeSingle: () => failingResponse(),
-      single: () => failingResponse(),
+      order: () => Promise.resolve({ data: [], error: null }),
+      maybeSingle: () => Promise.resolve({ data: null, error: null }),
+      single: () => Promise.resolve({ data: null, error: null }),
       eq: () => ({
-        maybeSingle: () => failingResponse(),
-        single: () => failingResponse(),
+        maybeSingle: () => Promise.resolve({ data: null, error: null }),
+        single: () => Promise.resolve({ data: null, error: null }),
       }),
     }),
-    insert: () => failingResponse(),
-    update: () => ({ eq: () => failingResponse() }),
-    delete: () => ({ eq: () => failingResponse() }),
+    insert: () => Promise.resolve({ data: null, error: null }),
+    update: () => ({ eq: () => Promise.resolve({ data: null, error: null }) }),
+    delete: () => ({ eq: () => Promise.resolve({ data: null, error: null }) }),
   } as any;
 }
 
