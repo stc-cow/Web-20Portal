@@ -57,7 +57,7 @@ export default function Index() {
 
         {/* Donut charts */}
         <div className="mt-8 grid gap-8 md:grid-cols-2">
-          <Card className="rounded-2xl shadow-md">
+          <Card className="rounded-2xl shadow-[0_2px_6px_rgba(0,45,98,0.1)]">
             <CardHeader className="p-6">
               <CardTitle className="text-[#003366]">
                 Fuel Added by Region
@@ -86,7 +86,7 @@ export default function Index() {
             </CardContent>
           </Card>
 
-          <Card className="rounded-2xl shadow-md">
+          <Card className="rounded-2xl shadow-[0_2px_6px_rgba(0,45,98,0.1)]">
             <CardHeader className="p-6">
               <CardTitle className="text-[#003366]">
                 Fuel Added by Mission Category
@@ -132,7 +132,7 @@ function MetricCard({
   suffix?: string;
 }) {
   return (
-    <Card className="rounded-2xl shadow-md">
+    <Card className="rounded-2xl shadow-[0_2px_6px_rgba(0,45,98,0.1)]">
       <CardHeader className="p-6 pb-3">
         <CardTitle className="text-[#003366] text-base">{title}</CardTitle>
       </CardHeader>
