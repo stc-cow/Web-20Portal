@@ -5,6 +5,8 @@ import { createServer } from './server';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
+  // Use relative asset paths so GitHub Pages works under a subpath (e.g. /Web-20Portal/)
+  base: './',
   server: {
     host: '::',
     port: 8080,
