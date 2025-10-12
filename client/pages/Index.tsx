@@ -32,7 +32,7 @@ export default function Index() {
           <MetricCard
             title="Total Liters Added Today"
             value={kpis?.litersToday}
-            color="#00C853"
+            color="#E30613"
             suffix=" L"
           />
           <MetricCard
