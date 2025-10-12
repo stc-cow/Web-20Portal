@@ -40,7 +40,6 @@ export default function Login3DBackground({ logoUrl }: { logoUrl: string }) {
       <Canvas dpr={[1, 2]} camera={{ position: [0, 0, 8], fov: 50 }}>
         <color attach="background" args={["#0B1220"]} />
         {/* Depth fog for contrast */}
-        {/* @ts-expect-error three-stdlib fog attach typing */}
         <fog attach="fog" args={["#0B1220", 10, 25]} />
 
         <ambientLight intensity={0.4} />
