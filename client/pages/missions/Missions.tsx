@@ -514,20 +514,52 @@ export default function MissionsPage() {
       console.error('Supabase client error', clientErr);
       // REST fallback to surface CORS/network issues
       try {
-        const url = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/driver_tasks?select=id,mission_id,site_name,driver_name,status,admin_status,required_liters,notes,created_at`;
+        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;
+        const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
+        if (!supabaseUrl || !supabaseKey) {
+          console.warn('Supabase env vars missing; skipping REST fallback');
+          toast({
+            title: 'Supabase not configured',
+            description:
+              'Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your environment to enable REST fallback.',
+          });
+          setRows([]);
+          return;
+        }
+
+        // Basic validation: ensure URL looks like an absolute http(s) URL
+        if (!/^https?:\/\//i.test(supabaseUrl)) {
+          console.error('Invalid VITE_SUPABASE_URL:', supabaseUrl);
+          toast({
+            title: 'Invalid Supabase URL',
+            description: 'VITE_SUPABASE_URL must start with http:// or https://',
+          });
+          return;
+        }
+
+        const url = `${supabaseUrl.replace(/\/$/, '')}/rest/v1/driver_tasks?select=id,mission_id,site_name,driver_name,status,admin_status,required_liters,notes,created_at`;
         const res = await fetch(url, {
           headers: {
-            apikey: import.meta.env.VITE_SUPABASE_ANON_KEY as string,
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY as string}`,
+            apikey: supabaseKey,
+            Authorization: `Bearer ${supabaseKey}`,
           },
         });
         if (!res.ok) {
           const text = await res.text();
           console.error('REST fetch failed', res.status, text);
-          toast({
-            title: 'Failed to load missions',
-            description: `REST ${res.status}: ${text}`,
-          });
+          // If HTML returned (vite index.html) it's likely the URL was proxied to the app — show a clearer message
+          if (text && text.trim().startsWith('<!doctype')) {
+            toast({
+              title: 'Supabase REST returned HTML',
+              description:
+                'The REST URL returned HTML (likely your app index). Check VITE_SUPABASE_URL value and that the Supabase project is reachable.',
+            });
+          } else {
+            toast({
+              title: 'Failed to load missions',
+              description: `REST ${res.status}: ${text}`,
+            });
+          }
           return;
         }
         let json: any;
@@ -537,12 +569,19 @@ export default function MissionsPage() {
           else {
             const text = await res.text();
             console.error('REST returned non-JSON', text);
-            toast({ title: 'Failed to load missions', description: 'Supabase returned an unexpected response (non-JSON).' });
+            toast({
+              title: 'Failed to load missions',
+              description:
+                'Supabase returned an unexpected response (non-JSON). Verify your Supabase REST endpoint and project URL.',
+            });
             return;
           }
         } catch (parseErr) {
           console.error('Failed parsing REST response', parseErr);
-          toast({ title: 'Failed to load missions', description: 'Invalid JSON from Supabase REST endpoint.' });
+          toast({
+            title: 'Failed to load missions',
+            description: 'Invalid JSON from Supabase REST endpoint.',
+          });
           return;
         }
 
