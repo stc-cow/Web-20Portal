@@ -170,7 +170,7 @@ export default function Login() {
                 Sign in to ACES MSD Fuel Portal
               </h1>
               <p className="mt-2 text-xs md:text-sm text-black/60 text-center">
-                {t('signInSubtitle')}
+                <br />
               </p>
               <div className="border-t border-black/10 my-4" />
             </div>
