@@ -1,8 +1,8 @@
-import { DemoResponse } from "@shared/api";
-import { useEffect, useState } from "react";
+import { DemoResponse } from '@shared/api';
+import { useEffect, useState } from 'react';
 
 export default function Index() {
-  const [exampleFromServer, setExampleFromServer] = useState("");
+  const [exampleFromServer, setExampleFromServer] = useState('');
   // Fetch users on component mount
   useEffect(() => {
     fetchDemo();
@@ -11,11 +11,11 @@ export default function Index() {
   // Example of how to fetch data from the server (if needed)
   const fetchDemo = async () => {
     try {
-      const response = await fetch("/api/demo");
+      const response = await fetch('/api/demo');
       const data = (await response.json()) as DemoResponse;
       setExampleFromServer(data.message);
     } catch (error) {
-      console.error("Error fetching hello:", error);
+      console.error('Error fetching hello:', error);
     }
   };
 
