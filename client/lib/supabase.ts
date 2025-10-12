@@ -36,12 +36,29 @@ function mockFrom() {
   } as any;
 }
 
+function createMockRealtime() {
+  let subs: any[] = [];
+  return {
+    channel: (_name: string) => {
+      const ch: any = {
+        _name: _name,
+        on: (_evt: string, _filter: any, _cb: any) => ch,
+        subscribe: () => ({ id: _name }),
+      };
+      subs.push(ch);
+      return ch;
+    },
+    removeChannel: (_ch: any) => {},
+  } as any;
+}
+
 let supabase: any;
 if (runtimeUrl && runtimeAnon) {
   supabase = createClient(runtimeUrl, runtimeAnon);
 } else {
   // provide a minimal mock to avoid runtime constructor errors; methods return a rejection-like response
-  supabase = { from: () => mockFrom() } as any;
+  const realtime = createMockRealtime();
+  supabase = { from: () => mockFrom(), ...realtime } as any;
 }
 
 export { supabase };
