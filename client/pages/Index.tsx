@@ -44,7 +44,7 @@ export default function Index() {
           <MetricCard
             title="Central"
             value={regionTotals?.central}
-            color="#00C853"
+            color="#0070C0"
             suffix=" L"
           />
           <MetricCard
