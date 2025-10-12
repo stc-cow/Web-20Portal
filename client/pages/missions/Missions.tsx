@@ -67,6 +67,7 @@ type Mission = {
 const initialRows: Mission[] = [
   {
     id: 1,
+    missionId: "M-1",
     siteName: "C700 COW312",
     generator: "GEN-02",
     project: "stc-cow",
@@ -84,6 +85,7 @@ const initialRows: Mission[] = [
   },
   {
     id: 2,
+    missionId: "M-2",
     siteName: "L6999 COW6048",
     generator: "GEN-01",
     project: "stc-cow",
@@ -101,6 +103,7 @@ const initialRows: Mission[] = [
   },
   {
     id: 3,
+    missionId: "M-3",
     siteName: "L6699 COW6148",
     generator: "GEN-02",
     project: "stc-cow",
@@ -118,6 +121,7 @@ const initialRows: Mission[] = [
   },
   {
     id: 4,
+    missionId: "M-4",
     siteName: "L6699 COW6149",
     generator: "GEN-03",
     project: "stc-cow",
@@ -134,6 +138,8 @@ const initialRows: Mission[] = [
     createdBy: "System",
   },
 ];
+
+// ... later in handleAdd newRow assignment ...
 
 const STATUS_ORDER: Mission["missionStatus"][] = [
   "Creation",
