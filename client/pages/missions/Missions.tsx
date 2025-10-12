@@ -189,6 +189,7 @@ export default function MissionsPage() {
     "All" | Mission["missionStatus"]
   >("All");
   const [cols, setCols] = useState<Record<ColumnKey, boolean>>({
+    missionId: true,
     siteName: true,
     generator: true,
     project: true,
