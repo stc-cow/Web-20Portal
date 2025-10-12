@@ -68,4 +68,12 @@ const App = () => (
   </QueryClientProvider>
 );
 
-createRoot(document.getElementById('root')!).render(<App />);
+const container = document.getElementById('root')!;
+// Reuse existing root if present (prevents React warning during HMR or double script loads)
+if ((window as any).__app_root) {
+  (window as any).__app_root.render(<App />);
+} else {
+  const root = createRoot(container);
+  (window as any).__app_root = root;
+  root.render(<App />);
+}
