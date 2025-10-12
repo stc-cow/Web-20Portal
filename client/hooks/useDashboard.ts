@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from '@/lib/supabase';
 
 function num(n: any): number {
@@ -83,6 +83,56 @@ export function useRegionLitersTotal() {
         if (z === 'East') east += num((r as any).liters);
       }
       return { central, east };
+    },
+  });
+}
+
+export function useRegionLitersPie() {
+  return useQuery({
+    queryKey: ['regionLitersPie'],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('v_liters_by_zone_total')
+        .select('zone, liters');
+      const rows = Array.isArray(data) ? data : [];
+      const central = rows
+        .filter((r: any) => String(r.zone || '') === 'Central')
+        .reduce((s: number, r: any) => s + num(r.liters), 0);
+      const east = rows
+        .filter((r: any) => String(r.zone || '') === 'East')
+        .reduce((s: number, r: any) => s + num(r.liters), 0);
+      const result = [
+        { name: 'Central', value: central },
+        { name: 'East', value: east },
+      ];
+      return result.filter((r) => num(r.value) > 0);
+    },
+  });
+}
+
+export function useMissionCategoryPie() {
+  return useQuery({
+    queryKey: ['missionCategoryPie'],
+    queryFn: async () => {
+      const view = await supabase
+        .from('v_liters_by_category')
+        .select('category, liters');
+      if (!view.error && Array.isArray(view.data) && view.data.length) {
+        return view.data.map((r: any) => ({
+          name: r.category ?? 'Unknown',
+          value: num(r.liters),
+        }));
+      }
+      const { data } = await supabase
+        .from('driver_tasks')
+        .select('admin_status, required_liters');
+      const rows = Array.isArray(data) ? data : [];
+      const agg: Record<string, number> = {};
+      for (const r of rows) {
+        const k = String((r as any).admin_status || 'Unknown');
+        agg[k] = (agg[k] || 0) + num((r as any).required_liters);
+      }
+      return Object.entries(agg).map(([name, value]) => ({ name, value }));
     },
   });
 }
