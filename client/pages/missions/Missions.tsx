@@ -86,7 +86,6 @@ const VISIBLE_COLUMNS = [
     label: 'Quantity Added (Last Task)',
   },
   { key: 'city', label: 'City' },
-  { key: 'notes', label: 'Notes' },
   { key: 'missionStatus', label: 'Mission Status' },
 ] as const;
 
@@ -658,11 +657,6 @@ export default function MissionsPage() {
         (filters.city
           ? String(r.city).toLowerCase().includes(filters.city.toLowerCase())
           : true) &&
-        (filters.notes
-          ? String(r.notes || '')
-              .toLowerCase()
-              .includes(filters.notes.toLowerCase())
-          : true) &&
         (filters.missionStatus
           ? String(r.missionStatus) === filters.missionStatus
           : true)
@@ -687,7 +681,6 @@ export default function MissionsPage() {
       r.actualInTank,
       r.quantityAddedLastTask,
       r.city,
-      r.notes || '',
       r.missionStatus,
     ]);
     const sheet = XLSX.utils.aoa_to_sheet([headers, ...data]);
@@ -902,7 +895,6 @@ export default function MissionsPage() {
                       Quantity Added (Last Task)
                     </TableHead>
                     <TableHead className="text-white">City</TableHead>
-                    <TableHead className="text-white">Notes</TableHead>
                     <TableHead className="text-white">Mission Status</TableHead>
                   </TableRow>
                   {/* Filter row */}
@@ -1006,17 +998,6 @@ export default function MissionsPage() {
                       />
                     </TableHead>
                     <TableHead>
-                      <Input
-                        placeholder="Filter"
-                        className="h-8"
-                        value={filters.notes || ''}
-                        onChange={(e) => {
-                          setPage(1);
-                          setFilters((f) => ({ ...f, notes: e.target.value }));
-                        }}
-                      />
-                    </TableHead>
-                    <TableHead>
                       <Select
                         value={filters.missionStatus || '__ALL__'}
                         onValueChange={(v) => {
@@ -1068,9 +1049,6 @@ export default function MissionsPage() {
                         {r.quantityAddedLastTask}
                       </TableCell>
                       <TableCell className="break-words">{r.city}</TableCell>
-                      <TableCell className="break-words">
-                        {r.notes || ''}
-                      </TableCell>
                       <TableCell>
                         <span
                           className={`rounded px-2 py-0.5 text-xs text-white ${statusColor[r.missionStatus]}`}
