@@ -50,9 +50,6 @@ export default function Header() {
         <SidebarTrigger />
         <div className="ml-1 text-lg font-semibold">{t('dashboard')}</div>
         <div className="ml-auto flex items-center gap-3">
-          <div className="hidden md:block">
-            <Input placeholder={t('searchPlaceholder')} className="h-9 w-64" />
-          </div>
           <Button
             variant="outline"
             size="sm"
