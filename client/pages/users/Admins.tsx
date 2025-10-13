@@ -247,19 +247,7 @@ export default function AdminUsersPage() {
       setAddOpen(false);
       return;
     }
-    // Fallback: save locally if Supabase unavailable
-    const nextId = rows.reduce((m, r) => Math.max(m, r.id), 0) + 1;
-    const localRow: Admin = { id: nextId, ...addForm };
-    setRows((r) => [localRow, ...r]);
-    try {
-      const raw = localStorage.getItem('app.admins');
-      const arr = raw ? (JSON.parse(raw) as Admin[]) : [];
-      arr.unshift(localRow);
-      localStorage.setItem('app.admins', JSON.stringify(arr));
-    } catch {}
-    toast({ title: 'Saved locally (Supabase unavailable)' });
-    setAddForm(emptyForm);
-    setAddOpen(false);
+    toast({ title: 'Supabase unavailable', description: 'Could not save. Try again later.' });
   };
 
   const openEdit = (row: Admin, index: number) => {
@@ -317,41 +305,6 @@ export default function AdminUsersPage() {
         .select('id, name, username, email, password, position')
         .order('id', { ascending: false });
       if (!error && data) {
-        // If Supabase is empty, migrate any locally stored admins once
-        if (data.length === 0) {
-          try {
-            const raw = localStorage.getItem('app.admins');
-            if (raw) {
-              const arr = JSON.parse(raw) as Admin[];
-              if (Array.isArray(arr) && arr.length > 0) {
-                const payload = arr.map((a) => ({
-                  name: a.name,
-                  username: a.username,
-                  email: a.email,
-                  password: a.password,
-                  position: a.position,
-                }));
-                const { data: inserted, error: insErr } = await supabase
-                  .from('admins')
-                  .insert(payload)
-                  .select('id, name, username, email, password, position');
-                if (!insErr && inserted) {
-                  setRows(
-                    inserted.map((d) => ({
-                      id: d.id as number,
-                      name: d.name as string,
-                      username: d.username as string,
-                      email: d.email as string,
-                      password: d.password as string,
-                      position: d.position as any,
-                    })),
-                  );
-                  return;
-                }
-              }
-            }
-          } catch {}
-        }
         setRows(
           data.map((d) => ({
             id: d.id as number,
@@ -362,6 +315,8 @@ export default function AdminUsersPage() {
             position: d.position as any,
           })),
         );
+      } else {
+        setRows([]);
       }
     })();
   }, []);
