@@ -23,8 +23,14 @@ export default function Index() {
     <AppShell>
       <Header />
       <div className="px-6 pb-10 pt-4">
-        <div className="mb-4 text-sm text-muted-foreground">
-          {t('dashboard')}
+        <div className="mb-4 flex items-center justify-center">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets%2Fbd65b3cd7a86452e803a3d7dc7a3d048%2F88c65af5aa594e4eb74b03e70886ef92?format=webp&width=1200"
+            alt="ACES Managed Services"
+            className="h-auto w-[180px] drop-shadow-[0_0_10px_rgba(0,0,0,0.12)]"
+            loading="eager"
+            decoding="async"
+          />
         </div>
 
         {/* Cards */}
