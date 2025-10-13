@@ -32,7 +32,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Download, Plus, Trash2 } from 'lucide-react';
+import { Download, Plus } from 'lucide-react';
 import * as XLSX from 'xlsx';
 
 // Mission type
