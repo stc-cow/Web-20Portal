@@ -23,41 +23,29 @@ export default function Index() {
     <AppShell>
       <Header />
       <div className="px-6 pb-10 pt-4">
-        <div className="mb-4 flex items-center justify-center">
-          <img
-            src="https://cdn.builder.io/api/v1/image/assets%2Fbd65b3cd7a86452e803a3d7dc7a3d048%2F88c65af5aa594e4eb74b03e70886ef92?format=webp&width=1200"
-            alt="ACES Managed Services"
-            className="h-auto w-[180px] drop-shadow-[0_0_10px_rgba(0,0,0,0.12)]"
-            loading="eager"
-            decoding="async"
-          />
-        </div>
+        <div className="mb-4 flex items-center justify-center" />
 
         {/* Cards */}
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           <MetricCard
-            title="Total Liters Added Today"
+            title="Liters Added Today"
             value={kpis?.litersToday}
             color="#E30613"
-            suffix=" L"
           />
           <MetricCard
-            title="Total Liters Added (30 Days)"
+            title="Liters Added 30 Days"
             value={kpis?.liters30d}
             color="#003366"
-            suffix=" L"
           />
           <MetricCard
             title="Central"
             value={regionTotals?.central}
             color="#0070C0"
-            suffix=" L"
           />
           <MetricCard
             title="East"
             value={regionTotals?.east}
             color="#E30613"
-            suffix=" L"
           />
         </div>
 
