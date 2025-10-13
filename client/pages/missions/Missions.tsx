@@ -1018,17 +1018,17 @@ export default function MissionsPage() {
                     </TableHead>
                     <TableHead>
                       <Select
-                        value={filters.missionStatus || ''}
+                        value={filters.missionStatus || '__ALL__'}
                         onValueChange={(v) => {
                           setPage(1);
-                          setFilters((f) => ({ ...f, missionStatus: v }));
+                          setFilters((f) => ({ ...f, missionStatus: v === '__ALL__' ? '' : v }));
                         }}
                       >
                         <SelectTrigger className="h-8">
                           <SelectValue placeholder="All" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="">All</SelectItem>
+                          <SelectItem value="__ALL__">All</SelectItem>
                           {STATUS_ORDER.map((s) => (
                             <SelectItem key={s} value={s}>
                               {s}
