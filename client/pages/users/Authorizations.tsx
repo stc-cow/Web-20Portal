@@ -228,18 +228,7 @@ export default function AuthorizationsPage() {
       setAddOpen(false);
       return;
     }
-    const nextId = rows.reduce((m, r) => Math.max(m, r.id), 0) + 1;
-    const localRow: AuthUser = { id: nextId, ...addForm } as any;
-    setRows((r) => [localRow, ...r]);
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      const arr = raw ? (JSON.parse(raw) as AuthUser[]) : [];
-      arr.unshift(localRow);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
-    } catch {}
-    toast({ title: 'Saved locally (Supabase unavailable)' });
-    setAddForm(emptyForm);
-    setAddOpen(false);
+    toast({ title: 'Supabase unavailable', description: 'Could not save. Try again later.' });
   };
 
   const openEdit = (row: AuthUser, index: number) => {
@@ -305,38 +294,6 @@ export default function AuthorizationsPage() {
         .select('id, name, username, email, position')
         .order('id', { ascending: false });
       if (!error && data) {
-        if (data.length === 0) {
-          try {
-            const raw = localStorage.getItem(STORAGE_KEY);
-            if (raw) {
-              const arr = JSON.parse(raw) as AuthUser[];
-              if (Array.isArray(arr) && arr.length > 0) {
-                const payload = arr.map((a) => ({
-                  name: a.name,
-                  username: a.username,
-                  email: a.email,
-                  position: a.position,
-                }));
-                const { data: inserted, error: insErr } = await supabase
-                  .from('authorizations')
-                  .insert(payload)
-                  .select('id, name, username, email, position');
-                if (!insErr && inserted) {
-                  setRows(
-                    inserted.map((d) => ({
-                      id: d.id as number,
-                      name: d.name as string,
-                      username: d.username as string,
-                      email: d.email as string,
-                      position: d.position as any,
-                    })),
-                  );
-                  return;
-                }
-              }
-            }
-          } catch {}
-        }
         setRows(
           data.map((d) => ({
             id: d.id as number,
@@ -346,6 +303,8 @@ export default function AuthorizationsPage() {
             position: d.position as any,
           })),
         );
+      } else {
+        setRows([]);
       }
     })();
   }, []);
