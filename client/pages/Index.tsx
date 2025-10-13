@@ -131,9 +131,9 @@ function MetricCard({
         <CardTitle className="text-[#003366] text-base">{title}</CardTitle>
       </CardHeader>
       <CardContent className="p-6 pt-0">
-        <div className="text-3xl font-bold" style={{ color }}>
+        <div className="text-3xl font-bold flex flex-col items-center justify-center" style={{ color }}>
           {formatNum(value)}
-          {suffix || ''}
+          {suffix ? '' : ''}
         </div>
       </CardContent>
     </Card>
