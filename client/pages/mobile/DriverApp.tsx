@@ -187,6 +187,36 @@ export default function DriverApp() {
     if (profile && !demoMode) {
       loadNotifications();
     }
+    const hasRealtime = typeof (supabase as any).channel === 'function';
+    let channel: any = null;
+    if (profile && hasRealtime && !demoMode) {
+      try {
+        channel = (supabase as any)
+          .channel('driver-app-tasks')
+          .on(
+            'postgres_changes',
+            { event: '*', schema: 'public', table: 'driver_tasks' },
+            (payload: any) => {
+              const row = (payload.new as any) || (payload.old as any) || {};
+              if (
+                row &&
+                ((row.driver_name && row.driver_name === profile.name) ||
+                  (row.driver_phone && row.driver_phone === profile.phone))
+              ) {
+                loadTasks();
+              }
+            },
+          )
+          .subscribe();
+      } catch {}
+    }
+    return () => {
+      try {
+        if (channel && typeof (supabase as any).removeChannel === 'function') {
+          (supabase as any).removeChannel(channel);
+        }
+      } catch {}
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile, demoMode]);
 
