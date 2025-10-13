@@ -129,7 +129,6 @@ export default function MissionsPage() {
   const [imagesByTask, setImagesByTask] = useState<Record<number, string[]>>({});
   const [imageOpen, setImageOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
-  const [editing, setEditing] = useState<Record<number, boolean>>({});
   const [editDraft, setEditDraft] = useState<Record<number, { notes: string; added: number; actual: number; qtyLast: number }>>({});
 
   useEffect(() => {
@@ -1023,8 +1022,7 @@ export default function MissionsPage() {
                                 variant="secondary"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  setEditing((ed) => ({ ...ed, [r.id]: !ed[r.id] }));
-                                  if (!editing[r.id]) saveEdit(r);
+                                  // Edit opens inline fields above; make changes then click Save Changes
                                 }}
                               >
                                 Edit
