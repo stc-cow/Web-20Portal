@@ -1021,7 +1021,10 @@ export default function MissionsPage() {
                         value={filters.missionStatus || '__ALL__'}
                         onValueChange={(v) => {
                           setPage(1);
-                          setFilters((f) => ({ ...f, missionStatus: v === '__ALL__' ? '' : v }));
+                          setFilters((f) => ({
+                            ...f,
+                            missionStatus: v === '__ALL__' ? '' : v,
+                          }));
                         }}
                       >
                         <SelectTrigger className="h-8">
