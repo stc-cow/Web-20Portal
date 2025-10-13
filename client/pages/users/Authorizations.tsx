@@ -228,7 +228,10 @@ export default function AuthorizationsPage() {
       setAddOpen(false);
       return;
     }
-    toast({ title: 'Supabase unavailable', description: 'Could not save. Try again later.' });
+    toast({
+      title: 'Supabase unavailable',
+      description: 'Could not save. Try again later.',
+    });
   };
 
   const openEdit = (row: AuthUser, index: number) => {
