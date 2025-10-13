@@ -42,11 +42,7 @@ export default function Index() {
             value={regionTotals?.central}
             color="#0070C0"
           />
-          <MetricCard
-            title="East"
-            value={regionTotals?.east}
-            color="#E30613"
-          />
+          <MetricCard title="East" value={regionTotals?.east} color="#E30613" />
         </div>
 
         {/* Donut charts */}
@@ -131,7 +127,10 @@ function MetricCard({
         <CardTitle className="text-[#003366] text-base">{title}</CardTitle>
       </CardHeader>
       <CardContent className="p-6 pt-0">
-        <div className="text-3xl font-bold flex flex-col items-center justify-center" style={{ color }}>
+        <div
+          className="text-3xl font-bold flex flex-col items-center justify-center"
+          style={{ color }}
+        >
           {formatNum(value)}
           {suffix ? '' : ''}
         </div>
