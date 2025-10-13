@@ -9,7 +9,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { fetchPublishedSheetRows } from '@/lib/sheets';
 import { supabase } from '@/lib/supabase';
 
 export type SiteRow = {
@@ -61,7 +60,7 @@ export function SitesTable({
         )
         .not('region', 'ilike', '%west%')
         .order('created_at', { ascending: false });
-      if (!cancelled && !error && data && data.length > 0) {
+      if (!cancelled && !error && data) {
         const mapped: SiteRow[] = data.map((d: any) => ({
           siteName: d.site_name ?? '',
           vendor: d.vendor ?? '',
@@ -77,62 +76,8 @@ export function SitesTable({
           (m) => !(m.region || '').toLowerCase().includes('west'),
         );
         setRows(limit ? filteredDb.slice(0, limit) : filteredDb);
-        setLoading(false);
-        return;
       }
-      // Fallback: fetch from Google Sheet, then push to Supabase
-      try {
-        const csv = await fetchPublishedSheetRows(sourceUrl);
-        const mapped: SiteRow[] = [];
-        for (let i = 1; i < csv.length; i++) {
-          const r = csv[i];
-          if (!r || r.length === 0) continue;
-          const siteName = (r[COLS.siteName] || '').trim();
-          const vendor = (r[COLS.vendor] || '').trim();
-          const region = (r[COLS.region] || '').trim();
-          const district = (r[COLS.district] || '').trim();
-          const city = (r[COLS.city] || '').trim();
-          const cowStatus = (r[COLS.cowStatus] || '').trim();
-          const latStr = (r[COLS.latitude] || '').trim();
-          const lonStr = (r[COLS.longitude] || '').trim();
-          const latitude = latStr;
-          const longitude = lonStr;
-          const powerSource = (r[COLS.powerSource] || '').trim();
-          if (!siteName && !vendor && !region && !district && !city) continue;
-          mapped.push({
-            siteName,
-            vendor,
-            region,
-            district,
-            city,
-            cowStatus,
-            latitude,
-            longitude,
-            powerSource,
-          });
-        }
-        const filtered = mapped.filter(
-          (m) => !(m.region || '').toLowerCase().includes('west'),
-        );
-        setRows(limit ? filtered.slice(0, limit) : filtered);
-        // Push to Supabase (best-effort)
-        const payload = filtered.map((m) => ({
-          site_name: m.siteName,
-          vendor: m.vendor,
-          region: m.region,
-          district: m.district,
-          city: m.city,
-          cow_status: m.cowStatus,
-          latitude: m.latitude ? parseFloat(m.latitude) : null,
-          longitude: m.longitude ? parseFloat(m.longitude) : null,
-          power_source: m.powerSource,
-        }));
-        await supabase.from('sites').insert(payload);
-      } catch (e: any) {
-        if (!cancelled) setError(e?.message || String(e));
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
+      if (!cancelled) setLoading(false);
     })();
     return () => {
       cancelled = true;
