@@ -23,6 +23,7 @@
     "builder:sync": "pnpm ghpages:prepare"
   },
   "dependencies": {
+    "@builder.io/react": "^8.2.8",
     "@supabase/supabase-js": "^2.75.0",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
