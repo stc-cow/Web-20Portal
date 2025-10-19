@@ -85,8 +85,8 @@ function AppSidebar() {
                   )}
                 >
                   <Link to="/" className="flex items-center">
-                    <span className="font-medium text-white capitalize" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      {t('dashboard')}
+                    <span className="font-medium text-white" style={{ fontFamily: 'Inter, sans-serif' }}>
+                      Dashboard
                     </span>
                   </Link>
                 </SidebarMenuButton>
@@ -102,8 +102,8 @@ function AppSidebar() {
                     )}
                   >
                     <Link to="/users" className="flex items-center">
-                      <span className="font-medium text-white capitalize" style={{ fontFamily: 'Inter, sans-serif' }}>
-                        {t('usersAuth')}
+                      <span className="font-medium text-white" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        Usersauth
                       </span>
                     </Link>
                   </SidebarMenuButton>
@@ -119,8 +119,8 @@ function AppSidebar() {
                   )}
                 >
                   <Link to="/missions" className="flex items-center">
-                    <span className="font-medium text-white capitalize" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      {t('missions')}
+                    <span className="font-medium text-white" style={{ fontFamily: 'Inter, sans-serif' }}>
+                      Missions
                     </span>
                   </Link>
                 </SidebarMenuButton>
@@ -135,8 +135,8 @@ function AppSidebar() {
                   )}
                 >
                   <Link to="/employees" className="flex items-center">
-                    <span className="font-medium text-white capitalize" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      {t('employees')}
+                    <span className="font-medium text-white" style={{ fontFamily: 'Inter, sans-serif' }}>
+                      Employees
                     </span>
                   </Link>
                 </SidebarMenuButton>
@@ -151,7 +151,7 @@ function AppSidebar() {
                   )}
                 >
                   <Link to="/sites" className="flex items-center">
-                    <span className="font-medium text-white capitalize" style={{ fontFamily: 'Inter, sans-serif' }}>{t('sites')}</span>
+                    <span className="font-medium text-white" style={{ fontFamily: 'Inter, sans-serif' }}>Sites</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -165,7 +165,7 @@ function AppSidebar() {
                   )}
                 >
                   <Link to="/reports" className="flex items-center">
-                    <span className="font-medium text-white capitalize" style={{ fontFamily: 'Inter, sans-serif' }}>{t('reports')}</span>
+                    <span className="font-medium text-white" style={{ fontFamily: 'Inter, sans-serif' }}>Reports</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -179,8 +179,8 @@ function AppSidebar() {
                   )}
                 >
                   <Link to="/notifications" className="flex items-center">
-                    <span className="font-medium text-white capitalize" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      {t('notifications')}
+                    <span className="font-medium text-white" style={{ fontFamily: 'Inter, sans-serif' }}>
+                      Notifications
                     </span>
                   </Link>
                 </SidebarMenuButton>
@@ -195,8 +195,8 @@ function AppSidebar() {
                   )}
                 >
                   <Link to="/settings" className="flex items-center">
-                    <span className="font-medium text-white capitalize" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      {t('settings')}
+                    <span className="font-medium text-white" style={{ fontFamily: 'Inter, sans-serif' }}>
+                      Settings
                     </span>
                   </Link>
                 </SidebarMenuButton>
