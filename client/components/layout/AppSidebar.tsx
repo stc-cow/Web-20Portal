@@ -54,7 +54,7 @@ function AppSidebar() {
 
   return (
     <Sidebar
-      className="bg-[hsl(var(--sidebar-background))] text-[hsl(var(--sidebar-foreground))]"
+      className="bg-[#0B1E3E] text-white"
       collapsible="icon"
     >
       <SidebarHeader className="px-4 py-3">
@@ -80,12 +80,12 @@ function AppSidebar() {
                   asChild
                   isActive={isActive('/')}
                   className={cn(
-                    'hover:bg-[#002b59]',
-                    isActive('/') && 'border-l-4 border-[#E30613]',
+                    'hover:bg-[rgba(255,255,255,0.08)]',
+                    isActive('/') && 'border-l-4 border-[#E21E26]',
                   )}
                 >
                   <Link to="/" className="flex items-center">
-                    <span className="font-bold text-white">
+                    <span className="font-medium text-white capitalize" style={{ fontFamily: 'Inter, sans-serif' }}>
                       {t('dashboard')}
                     </span>
                   </Link>
@@ -97,12 +97,12 @@ function AppSidebar() {
                     asChild
                     isActive={isActive('/users')}
                     className={cn(
-                      'hover:bg-[#002b59]',
-                      isActive('/users') && 'border-l-4 border-[#E30613]',
+                      'hover:bg-[rgba(255,255,255,0.08)]',
+                    isActive('/users') && 'border-l-4 border-[#E21E26]',
                     )}
                   >
                     <Link to="/users" className="flex items-center">
-                      <span className="font-bold text-white">
+                      <span className="font-medium text-white capitalize" style={{ fontFamily: 'Inter, sans-serif' }}>
                         {t('usersAuth')}
                       </span>
                     </Link>
@@ -114,12 +114,12 @@ function AppSidebar() {
                   asChild
                   isActive={isActive('/missions')}
                   className={cn(
-                    'hover:bg-[#002b59]',
-                    isActive('/missions') && 'border-l-4 border-[#E30613]',
+                    'hover:bg-[rgba(255,255,255,0.08)]',
+                    isActive('/missions') && 'border-l-4 border-[#E21E26]',
                   )}
                 >
                   <Link to="/missions" className="flex items-center">
-                    <span className="font-bold text-white">
+                    <span className="font-medium text-white capitalize" style={{ fontFamily: 'Inter, sans-serif' }}>
                       {t('missions')}
                     </span>
                   </Link>
@@ -130,12 +130,12 @@ function AppSidebar() {
                   asChild
                   isActive={isActive('/employees')}
                   className={cn(
-                    'hover:bg-[#002b59]',
-                    isActive('/employees') && 'border-l-4 border-[#E30613]',
+                    'hover:bg-[rgba(255,255,255,0.08)]',
+                    isActive('/employees') && 'border-l-4 border-[#E21E26]',
                   )}
                 >
                   <Link to="/employees" className="flex items-center">
-                    <span className="font-bold text-white">
+                    <span className="font-medium text-white capitalize" style={{ fontFamily: 'Inter, sans-serif' }}>
                       {t('employees')}
                     </span>
                   </Link>
@@ -146,12 +146,12 @@ function AppSidebar() {
                   asChild
                   isActive={isActive('/sites')}
                   className={cn(
-                    'hover:bg-[#002b59]',
-                    isActive('/sites') && 'border-l-4 border-[#E30613]',
+                    'hover:bg-[rgba(255,255,255,0.08)]',
+                    isActive('/sites') && 'border-l-4 border-[#E21E26]',
                   )}
                 >
                   <Link to="/sites" className="flex items-center">
-                    <span className="font-bold text-white">{t('sites')}</span>
+                    <span className="font-medium text-white capitalize" style={{ fontFamily: 'Inter, sans-serif' }}>{t('sites')}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -160,12 +160,12 @@ function AppSidebar() {
                   asChild
                   isActive={isActive('/reports')}
                   className={cn(
-                    'hover:bg-[#002b59]',
-                    isActive('/reports') && 'border-l-4 border-[#E30613]',
+                    'hover:bg-[rgba(255,255,255,0.08)]',
+                    isActive('/reports') && 'border-l-4 border-[#E21E26]',
                   )}
                 >
                   <Link to="/reports" className="flex items-center">
-                    <span className="font-bold text-white">{t('reports')}</span>
+                    <span className="font-medium text-white capitalize" style={{ fontFamily: 'Inter, sans-serif' }}>{t('reports')}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -174,12 +174,12 @@ function AppSidebar() {
                   asChild
                   isActive={isActive('/notifications')}
                   className={cn(
-                    'hover:bg-[#002b59]',
-                    isActive('/notifications') && 'border-l-4 border-[#E30613]',
+                    'hover:bg-[rgba(255,255,255,0.08)]',
+                    isActive('/notifications') && 'border-l-4 border-[#E21E26]',
                   )}
                 >
                   <Link to="/notifications" className="flex items-center">
-                    <span className="font-bold text-white">
+                    <span className="font-medium text-white capitalize" style={{ fontFamily: 'Inter, sans-serif' }}>
                       {t('notifications')}
                     </span>
                   </Link>
@@ -190,12 +190,12 @@ function AppSidebar() {
                   asChild
                   isActive={isActive('/settings')}
                   className={cn(
-                    'hover:bg-[#002b59]',
-                    isActive('/settings') && 'border-l-4 border-[#E30613]',
+                    'hover:bg-[rgba(255,255,255,0.08)]',
+                    isActive('/settings') && 'border-l-4 border-[#E21E26]',
                   )}
                 >
                   <Link to="/settings" className="flex items-center">
-                    <span className="font-bold text-white">
+                    <span className="font-medium text-white capitalize" style={{ fontFamily: 'Inter, sans-serif' }}>
                       {t('settings')}
                     </span>
                   </Link>
