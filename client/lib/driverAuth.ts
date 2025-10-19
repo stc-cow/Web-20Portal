@@ -86,10 +86,15 @@ export const driverAuth = {
       const sessionData = JSON.stringify(session);
 
       if (storageMethod === 'capacitor') {
-        await Preferences.set({
-          key: DRIVER_SESSION_KEY,
-          value: sessionData,
-        });
+        const Preferences = await loadPreferences();
+        if (Preferences) {
+          await Preferences.Preferences.set({
+            key: DRIVER_SESSION_KEY,
+            value: sessionData,
+          });
+        } else {
+          localStorage.setItem(DRIVER_SESSION_KEY, sessionData);
+        }
       } else {
         localStorage.setItem(DRIVER_SESSION_KEY, sessionData);
       }
