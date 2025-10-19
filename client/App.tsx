@@ -23,6 +23,11 @@ import GeneralSettings from './pages/settings/General';
 import Notifications from './pages/notifications/Notifications';
 import Generators from './pages/generators/Generators';
 import DriverApp from './pages/mobile/DriverApp';
+import DriverLogin from './pages/driver/DriverLogin';
+import DriverDashboard from './pages/driver/DriverDashboard';
+import DriverMissionDetail from './pages/driver/DriverMissionDetail';
+import DriverNotifications from './pages/driver/DriverNotifications';
+import DriverSettings from './pages/driver/DriverSettings';
 
 const queryClient = new QueryClient();
 
