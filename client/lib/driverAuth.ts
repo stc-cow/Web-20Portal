@@ -13,7 +13,7 @@ export interface DriverSession {
 const DRIVER_SESSION_KEY = 'driver_session';
 const DRIVER_TOKEN_KEY = 'driver_token';
 
-export const driverAuth = {
+class DriverAuth {
   async signIn(email: string, password: string): Promise<DriverSession> {
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -55,7 +55,7 @@ export const driverAuth = {
       console.error('Driver sign in error:', error);
       throw error;
     }
-  },
+  }
 
   async signOut(): Promise<void> {
     try {
@@ -65,7 +65,7 @@ export const driverAuth = {
       console.error('Driver sign out error:', error);
       throw error;
     }
-  },
+  }
 
   async saveSession(session: DriverSession): Promise<void> {
     try {
@@ -79,12 +79,11 @@ export const driverAuth = {
       }
     } catch (error) {
       console.warn('Failed to save driver session:', error);
-      // Fallback to localStorage
       try {
         localStorage.setItem(DRIVER_SESSION_KEY, JSON.stringify(session));
       } catch {}
     }
-  },
+  }
 
   async getSession(): Promise<DriverSession | null> {
     try {
@@ -107,7 +106,7 @@ export const driverAuth = {
       console.warn('Failed to retrieve driver session:', error);
       return null;
     }
-  },
+  }
 
   async clearSession(): Promise<void> {
     try {
@@ -120,12 +119,11 @@ export const driverAuth = {
       }
     } catch (error) {
       console.warn('Failed to clear driver session:', error);
-      // Fallback
       try {
         localStorage.removeItem(DRIVER_SESSION_KEY);
       } catch {}
     }
-  },
+  }
 
   async saveFCMToken(token: string, driverId: string): Promise<void> {
     try {
@@ -138,16 +136,18 @@ export const driverAuth = {
     } catch (error) {
       console.warn('Failed to save FCM token:', error);
     }
-  },
+  }
 
-  private async saveToCapacitorStorage(key: string, value: string): Promise<void> {
+  private async saveToCapacitorStorage(
+    key: string,
+    value: string
+  ): Promise<void> {
     try {
       const Capacitor = (window as any).Capacitor;
       if (!Capacitor) {
         throw new Error('Capacitor not available');
       }
 
-      // Capacitor.Plugins.Preferences is lazy-loaded
       const { Preferences } = Capacitor.Plugins;
       if (!Preferences) {
         throw new Error('Preferences plugin not available');
@@ -158,9 +158,11 @@ export const driverAuth = {
       console.warn('Capacitor storage unavailable, using localStorage:', error);
       localStorage.setItem(key, value);
     }
-  },
+  }
 
-  private async getFromCapacitorStorage(key: string): Promise<string | null> {
+  private async getFromCapacitorStorage(
+    key: string
+  ): Promise<string | null> {
     try {
       const Capacitor = (window as any).Capacitor;
       if (!Capacitor) {
@@ -178,7 +180,7 @@ export const driverAuth = {
       console.warn('Capacitor storage unavailable, using localStorage:', error);
       return localStorage.getItem(key);
     }
-  },
+  }
 
   private async removeFromCapacitorStorage(key: string): Promise<void> {
     try {
@@ -197,14 +199,14 @@ export const driverAuth = {
       console.warn('Capacitor storage unavailable, using localStorage:', error);
       localStorage.removeItem(key);
     }
-  },
+  }
 
   private getStorageMethod(): 'capacitor' | 'localStorage' {
     if (typeof window !== 'undefined' && (window as any).Capacitor) {
       return 'capacitor';
     }
     return 'localStorage';
-  },
+  }
 
   private getPlatform(): 'web' | 'ios' | 'android' {
     const capacitor = (window as any).Capacitor;
@@ -217,10 +219,15 @@ export const driverAuth = {
     } catch {}
 
     return 'web';
-  },
-};
+  }
+}
 
-export async function setupDriverRealtime(driverId: string, onUpdate: () => void) {
+export const driverAuth = new DriverAuth();
+
+export async function setupDriverRealtime(
+  driverId: string,
+  onUpdate: () => void
+) {
   if (typeof (supabase as any).channel !== 'function') {
     return null;
   }
