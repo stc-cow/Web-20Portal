@@ -8,7 +8,7 @@ export const MobileGuard: React.FC<{
   children: React.ReactNode;
 }> = ({ mode = 'block', redirectTo = '/#/', children }) => {
   const [w, setW] = React.useState<number>(
-    typeof window !== 'undefined' ? window.innerWidth : 375
+    typeof window !== 'undefined' ? window.innerWidth : 375,
   );
 
   React.useEffect(() => {
@@ -39,7 +39,10 @@ export const MobileGuard: React.FC<{
       >
         <div>
           <h2 style={{ marginBottom: '12px' }}>Mobile App Only</h2>
-          <p>This app is designed for mobile and tablet devices. Please use a mobile or tablet device.</p>
+          <p>
+            This app is designed for mobile and tablet devices. Please use a
+            mobile or tablet device.
+          </p>
         </div>
       </div>
     );
