@@ -8,9 +8,9 @@ import {
   useRegionLitersPie,
   useMissionCategoryPie,
 } from '@/hooks/useDashboard';
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Label } from 'recharts';
 
-const COLORS = ['#002D62', '#E30613', '#0070C0', '#6C757D'];
+const COLORS = ['#E21E26', '#004AAD', '#A5B4FC', '#C2C8CF'];
 
 export default function Index() {
   const { t } = useI18n();
@@ -47,7 +47,7 @@ export default function Index() {
 
         {/* Donut charts */}
         <div className="mt-8 grid gap-8 md:grid-cols-2">
-          <Card className="rounded-2xl shadow-[0_2px_6px_rgba(0,45,98,0.1)]">
+          <Card className="rounded-[12px] bg-[#F7F8FC] shadow-[0_2px_8px_rgba(0,0,0,0.1)] border-0">
             <CardHeader className="p-6">
               <CardTitle className="text-[#002D62]">
                 Fuel Added by Region
@@ -62,12 +62,14 @@ export default function Index() {
                       dataKey="value"
                       cx="50%"
                       cy="50%"
+                      innerRadius={70}
                       outerRadius={120}
                       label={(e: any) => `${e.name} (${formatNum(e.value)}L)`}
                     >
                       {(regionPie || []).map((_: any, i: number) => (
                         <Cell key={i} fill={COLORS[i % COLORS.length]} />
                       ))}
+                      <Label value="Fuel Distribution" position="center" fill="#0B1E3E" />
                     </Pie>
                     <Tooltip formatter={(v: any) => `${formatNum(v)} L`} />
                   </PieChart>
@@ -76,7 +78,7 @@ export default function Index() {
             </CardContent>
           </Card>
 
-          <Card className="rounded-2xl shadow-[0_2px_6px_rgba(0,45,98,0.1)]">
+          <Card className="rounded-[12px] bg-[#F7F8FC] shadow-[0_2px_8px_rgba(0,0,0,0.1)] border-0">
             <CardHeader className="p-6">
               <CardTitle className="text-[#002D62]">
                 Fuel Added by Mission Category
@@ -91,12 +93,14 @@ export default function Index() {
                       dataKey="value"
                       cx="50%"
                       cy="50%"
+                      innerRadius={70}
                       outerRadius={120}
                       label={(e: any) => `${e.name} (${formatNum(e.value)}L)`}
                     >
                       {(missionPie || []).map((_: any, i: number) => (
                         <Cell key={i} fill={COLORS[i % COLORS.length]} />
                       ))}
+                      <Label value="Diesel %" position="center" fill="#0B1E3E" />
                     </Pie>
                     <Tooltip formatter={(v: any) => `${formatNum(v)} L`} />
                   </PieChart>
@@ -122,7 +126,7 @@ function MetricCard({
   suffix?: string;
 }) {
   return (
-    <Card className="rounded-2xl shadow-[0_2px_6px_rgba(0,45,98,0.1)]">
+    <Card className="rounded-[12px] bg-[#F7F8FC] shadow-[0_2px_8px_rgba(0,0,0,0.1)] border-0">
       <CardHeader className="p-6 pb-3">
         <CardTitle className="text-[#003366] text-base">{title}</CardTitle>
       </CardHeader>
