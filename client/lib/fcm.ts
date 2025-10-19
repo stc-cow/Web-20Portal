@@ -5,15 +5,6 @@ interface FCMConfig {
   serviceWorkerPath?: string;
 }
 
-// Lazy load Capacitor if available
-const loadCapacitor = async () => {
-  try {
-    return (window as any).Capacitor;
-  } catch {
-    return null;
-  }
-};
-
 export class FCMManager {
   private config: FCMConfig;
   private tokenRefreshInterval: NodeJS.Timeout | null = null;
@@ -24,7 +15,7 @@ export class FCMManager {
 
   async initializeFCM(): Promise<void> {
     if (!this.isPushNotificationsSupported()) {
-      console.warn('Push notifications not supported');
+      console.warn('Push notifications not supported in this environment');
       return;
     }
 
@@ -40,14 +31,13 @@ export class FCMManager {
   private isPushNotificationsSupported(): boolean {
     if (typeof window === 'undefined') return false;
 
-    // Check if running in Capacitor environment
-    const isCapacitor = !!(window as any).Capacitor;
-
     // Check if running in web environment with service worker support
     const isWeb = 'serviceWorker' in navigator && 'PushManager' in window;
 
-    // If neither available, we can still run in limited mode
-    return true; // Always return true to allow graceful degradation
+    // Check if running in Capacitor environment
+    const isCapacitor = !!(window as any).Capacitor;
+
+    return isWeb || isCapacitor;
   }
 
   private async registerServiceWorker(): Promise<void> {
@@ -97,15 +87,9 @@ export class FCMManager {
 
   private async getCapacitorFCMToken(driverId: string): Promise<string | null> {
     try {
-      const Capacitor = await loadCapacitor();
-      if (!Capacitor) {
-        console.warn('Capacitor not available');
-        return null;
-      }
-
       const FCM = (window as any).FCM;
       if (!FCM) {
-        console.warn('FCM plugin not available');
+        console.warn('FCM plugin not available on this device');
         return null;
       }
 
