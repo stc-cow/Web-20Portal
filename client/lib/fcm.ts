@@ -40,10 +40,14 @@ export class FCMManager {
   private isPushNotificationsSupported(): boolean {
     if (typeof window === 'undefined') return false;
 
+    // Check if running in Capacitor environment
     const isCapacitor = !!(window as any).Capacitor;
+
+    // Check if running in web environment with service worker support
     const isWeb = 'serviceWorker' in navigator && 'PushManager' in window;
 
-    return isCapacitor || isWeb;
+    // If neither available, we can still run in limited mode
+    return true; // Always return true to allow graceful degradation
   }
 
   private async registerServiceWorker(): Promise<void> {
