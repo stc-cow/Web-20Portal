@@ -65,6 +65,13 @@ const App = () => (
           {/* Mobile */}
           <Route path="/mobile/driver" element={<DriverApp />} />
 
+          {/* Driver App Routes */}
+          <Route path="/driver/login" element={<DriverLogin />} />
+          <Route path="/driver/dashboard" element={<DriverDashboard />} />
+          <Route path="/driver/mission/:taskId" element={<DriverMissionDetail />} />
+          <Route path="/driver/notifications" element={<DriverNotifications />} />
+          <Route path="/driver/settings" element={<DriverSettings />} />
+
           {/* Catch-all */}
           <Route path="*" element={<NotFound />} />
         </Routes>
