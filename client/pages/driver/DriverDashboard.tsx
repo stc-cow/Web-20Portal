@@ -42,6 +42,14 @@ export default function DriverDashboard() {
         await loadTasks(currentSession.id);
         loadUnreadNotifications(currentSession.id);
         setupRealtimeListeners(currentSession.id);
+
+        // Initialize FCM for push notifications
+        try {
+          await fcmManager.initializeFCM();
+          await fcmManager.getOrCreateFCMToken(currentSession.id);
+        } catch (error) {
+          console.warn('FCM initialization failed:', error);
+        }
       } catch (error) {
         console.error('Session initialization error:', error);
         navigate('/driver/login');
@@ -51,6 +59,10 @@ export default function DriverDashboard() {
     };
 
     initializeSession();
+
+    return () => {
+      fcmManager.destroy();
+    };
   }, [navigate]);
 
   const loadTasks = async (driverId: string) => {
