@@ -64,7 +64,7 @@ export default function Index() {
                       cy="50%"
                       innerRadius={70}
                       outerRadius={120}
-                      label={(e: any) => `${e.name} (${formatNum(e.value)}L)`}
+                      labelLine={false} label={(e: any) => `${e.name} ${Math.round((e.percent || 0) * 100)}%`}
                     >
                       {(regionPie || []).map((_: any, i: number) => (
                         <Cell key={i} fill={COLORS[i % COLORS.length]} />
@@ -95,7 +95,7 @@ export default function Index() {
                       cy="50%"
                       innerRadius={70}
                       outerRadius={120}
-                      label={(e: any) => `${e.name} (${formatNum(e.value)}L)`}
+                      labelLine={false} label={(e: any) => `${e.name} ${Math.round((e.percent || 0) * 100)}%`}
                     >
                       {(missionPie || []).map((_: any, i: number) => (
                         <Cell key={i} fill={COLORS[i % COLORS.length]} />
