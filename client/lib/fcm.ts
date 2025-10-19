@@ -93,6 +93,12 @@ export class FCMManager {
 
   private async getCapacitorFCMToken(driverId: string): Promise<string | null> {
     try {
+      const Capacitor = await loadCapacitor();
+      if (!Capacitor) {
+        console.warn('Capacitor not available');
+        return null;
+      }
+
       const FCM = (window as any).FCM;
       if (!FCM) {
         console.warn('FCM plugin not available');
