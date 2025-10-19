@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { driverAuth, setupDriverRealtime, DriverSession } from '@/lib/driverAuth';
 import { supabase } from '@/lib/supabase';
+import { fcmManager } from '@/lib/fcm';
 import { toast } from '@/hooks/use-toast';
 import { Bell, LogOut, Settings, RefreshCw } from 'lucide-react';
 
