@@ -109,10 +109,15 @@ export const driverAuth = {
       let sessionData: string | null = null;
 
       if (storageMethod === 'capacitor') {
-        const { value } = await Preferences.get({
-          key: DRIVER_SESSION_KEY,
-        });
-        sessionData = value;
+        const Preferences = await loadPreferences();
+        if (Preferences) {
+          const { value } = await Preferences.Preferences.get({
+            key: DRIVER_SESSION_KEY,
+          });
+          sessionData = value;
+        } else {
+          sessionData = localStorage.getItem(DRIVER_SESSION_KEY);
+        }
       } else {
         sessionData = localStorage.getItem(DRIVER_SESSION_KEY);
       }
