@@ -139,9 +139,14 @@ export const driverAuth = {
       const storageMethod = this.getStorageMethod();
 
       if (storageMethod === 'capacitor') {
-        await Preferences.remove({
-          key: DRIVER_SESSION_KEY,
-        });
+        const Preferences = await loadPreferences();
+        if (Preferences) {
+          await Preferences.Preferences.remove({
+            key: DRIVER_SESSION_KEY,
+          });
+        } else {
+          localStorage.removeItem(DRIVER_SESSION_KEY);
+        }
       } else {
         localStorage.removeItem(DRIVER_SESSION_KEY);
       }
