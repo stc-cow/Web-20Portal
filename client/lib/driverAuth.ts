@@ -13,19 +13,6 @@ export interface DriverSession {
 const DRIVER_SESSION_KEY = 'driver_session';
 const DRIVER_TOKEN_KEY = 'driver_token';
 
-// Lazy load Capacitor Preferences if available
-let PreferencesModule: typeof import('@capacitor/preferences') | null = null;
-
-const loadPreferences = async () => {
-  if (PreferencesModule) return PreferencesModule;
-  try {
-    PreferencesModule = await import('@capacitor/preferences');
-    return PreferencesModule;
-  } catch {
-    return null;
-  }
-};
-
 export const driverAuth = {
   async signIn(email: string, password: string): Promise<DriverSession> {
     try {
@@ -86,20 +73,16 @@ export const driverAuth = {
       const sessionData = JSON.stringify(session);
 
       if (storageMethod === 'capacitor') {
-        const Preferences = await loadPreferences();
-        if (Preferences) {
-          await Preferences.Preferences.set({
-            key: DRIVER_SESSION_KEY,
-            value: sessionData,
-          });
-        } else {
-          localStorage.setItem(DRIVER_SESSION_KEY, sessionData);
-        }
+        await this.saveToCapacitorStorage(DRIVER_SESSION_KEY, sessionData);
       } else {
         localStorage.setItem(DRIVER_SESSION_KEY, sessionData);
       }
     } catch (error) {
       console.warn('Failed to save driver session:', error);
+      // Fallback to localStorage
+      try {
+        localStorage.setItem(DRIVER_SESSION_KEY, JSON.stringify(session));
+      } catch {}
     }
   },
 
@@ -109,15 +92,7 @@ export const driverAuth = {
       let sessionData: string | null = null;
 
       if (storageMethod === 'capacitor') {
-        const Preferences = await loadPreferences();
-        if (Preferences) {
-          const { value } = await Preferences.Preferences.get({
-            key: DRIVER_SESSION_KEY,
-          });
-          sessionData = value;
-        } else {
-          sessionData = localStorage.getItem(DRIVER_SESSION_KEY);
-        }
+        sessionData = await this.getFromCapacitorStorage(DRIVER_SESSION_KEY);
       } else {
         sessionData = localStorage.getItem(DRIVER_SESSION_KEY);
       }
@@ -139,19 +114,16 @@ export const driverAuth = {
       const storageMethod = this.getStorageMethod();
 
       if (storageMethod === 'capacitor') {
-        const Preferences = await loadPreferences();
-        if (Preferences) {
-          await Preferences.Preferences.remove({
-            key: DRIVER_SESSION_KEY,
-          });
-        } else {
-          localStorage.removeItem(DRIVER_SESSION_KEY);
-        }
+        await this.removeFromCapacitorStorage(DRIVER_SESSION_KEY);
       } else {
         localStorage.removeItem(DRIVER_SESSION_KEY);
       }
     } catch (error) {
       console.warn('Failed to clear driver session:', error);
+      // Fallback
+      try {
+        localStorage.removeItem(DRIVER_SESSION_KEY);
+      } catch {}
     }
   },
 
@@ -168,8 +140,67 @@ export const driverAuth = {
     }
   },
 
+  private async saveToCapacitorStorage(key: string, value: string): Promise<void> {
+    try {
+      const Capacitor = (window as any).Capacitor;
+      if (!Capacitor) {
+        throw new Error('Capacitor not available');
+      }
+
+      // Capacitor.Plugins.Preferences is lazy-loaded
+      const { Preferences } = Capacitor.Plugins;
+      if (!Preferences) {
+        throw new Error('Preferences plugin not available');
+      }
+
+      await Preferences.set({ key, value });
+    } catch (error) {
+      console.warn('Capacitor storage unavailable, using localStorage:', error);
+      localStorage.setItem(key, value);
+    }
+  },
+
+  private async getFromCapacitorStorage(key: string): Promise<string | null> {
+    try {
+      const Capacitor = (window as any).Capacitor;
+      if (!Capacitor) {
+        throw new Error('Capacitor not available');
+      }
+
+      const { Preferences } = Capacitor.Plugins;
+      if (!Preferences) {
+        throw new Error('Preferences plugin not available');
+      }
+
+      const { value } = await Preferences.get({ key });
+      return value;
+    } catch (error) {
+      console.warn('Capacitor storage unavailable, using localStorage:', error);
+      return localStorage.getItem(key);
+    }
+  },
+
+  private async removeFromCapacitorStorage(key: string): Promise<void> {
+    try {
+      const Capacitor = (window as any).Capacitor;
+      if (!Capacitor) {
+        throw new Error('Capacitor not available');
+      }
+
+      const { Preferences } = Capacitor.Plugins;
+      if (!Preferences) {
+        throw new Error('Preferences plugin not available');
+      }
+
+      await Preferences.remove({ key });
+    } catch (error) {
+      console.warn('Capacitor storage unavailable, using localStorage:', error);
+      localStorage.removeItem(key);
+    }
+  },
+
   private getStorageMethod(): 'capacitor' | 'localStorage' {
-    if (typeof window !== 'undefined' && (window as any).cordova) {
+    if (typeof window !== 'undefined' && (window as any).Capacitor) {
       return 'capacitor';
     }
     return 'localStorage';
@@ -179,9 +210,12 @@ export const driverAuth = {
     const capacitor = (window as any).Capacitor;
     if (!capacitor) return 'web';
 
-    const platform = capacitor.getPlatform();
-    if (platform === 'ios') return 'ios';
-    if (platform === 'android') return 'android';
+    try {
+      const platform = capacitor.getPlatform();
+      if (platform === 'ios') return 'ios';
+      if (platform === 'android') return 'android';
+    } catch {}
+
     return 'web';
   },
 };
