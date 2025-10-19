@@ -1,5 +1,4 @@
 import { supabase } from './supabase';
-import { Preferences } from '@capacitor/preferences';
 
 export interface DriverSession {
   id: string;
@@ -13,6 +12,19 @@ export interface DriverSession {
 
 const DRIVER_SESSION_KEY = 'driver_session';
 const DRIVER_TOKEN_KEY = 'driver_token';
+
+// Lazy load Capacitor Preferences if available
+let PreferencesModule: typeof import('@capacitor/preferences') | null = null;
+
+const loadPreferences = async () => {
+  if (PreferencesModule) return PreferencesModule;
+  try {
+    PreferencesModule = await import('@capacitor/preferences');
+    return PreferencesModule;
+  } catch {
+    return null;
+  }
+};
 
 export const driverAuth = {
   async signIn(email: string, password: string): Promise<DriverSession> {
