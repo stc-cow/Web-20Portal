@@ -6,6 +6,7 @@ import { Toaster as Sonner } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HashRouter, Routes, Route } from 'react-router-dom';
+import { MobileGuard } from '@/components/MobileGuard';
 import Index from './pages/Index';
 import NotFound from './pages/NotFound';
 import Login from './pages/Login';
@@ -66,17 +67,46 @@ const App = () => (
           <Route path="/mobile/driver" element={<DriverApp />} />
 
           {/* Driver App Routes */}
-          <Route path="/driver/login" element={<DriverLogin />} />
-          <Route path="/driver/dashboard" element={<DriverDashboard />} />
+          <Route
+            path="/driver/login"
+            element={
+              <MobileGuard mode="block">
+                <DriverLogin />
+              </MobileGuard>
+            }
+          />
+          <Route
+            path="/driver/dashboard"
+            element={
+              <MobileGuard mode="block">
+                <DriverDashboard />
+              </MobileGuard>
+            }
+          />
           <Route
             path="/driver/mission/:taskId"
-            element={<DriverMissionDetail />}
+            element={
+              <MobileGuard mode="block">
+                <DriverMissionDetail />
+              </MobileGuard>
+            }
           />
           <Route
             path="/driver/notifications"
-            element={<DriverNotifications />}
+            element={
+              <MobileGuard mode="block">
+                <DriverNotifications />
+              </MobileGuard>
+            }
           />
-          <Route path="/driver/settings" element={<DriverSettings />} />
+          <Route
+            path="/driver/settings"
+            element={
+              <MobileGuard mode="block">
+                <DriverSettings />
+              </MobileGuard>
+            }
+          />
 
           {/* Catch-all */}
           <Route path="*" element={<NotFound />} />
