@@ -5,6 +5,15 @@ interface FCMConfig {
   serviceWorkerPath?: string;
 }
 
+// Lazy load Capacitor if available
+const loadCapacitor = async () => {
+  try {
+    return (window as any).Capacitor;
+  } catch {
+    return null;
+  }
+};
+
 export class FCMManager {
   private config: FCMConfig;
   private tokenRefreshInterval: NodeJS.Timeout | null = null;
