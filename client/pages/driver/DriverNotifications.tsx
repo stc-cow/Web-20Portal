@@ -81,7 +81,7 @@ export default function DriverNotifications() {
         },
         () => {
           loadNotifications(driverId);
-        }
+        },
       )
       .subscribe();
 
@@ -102,9 +102,7 @@ export default function DriverNotifications() {
       if (error) throw error;
 
       setNotifications((prev) =>
-        prev.map((n) =>
-          n.id === notificationId ? { ...n, read: true } : n
-        )
+        prev.map((n) => (n.id === notificationId ? { ...n, read: true } : n)),
       );
     } catch (error) {
       console.error('Failed to mark as read:', error);
@@ -206,13 +204,9 @@ export default function DriverNotifications() {
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <div>
-                <h1 className="font-semibold text-gray-900">
-                  Notifications
-                </h1>
+                <h1 className="font-semibold text-gray-900">Notifications</h1>
                 <p className="text-sm text-gray-600">
-                  {unreadCount > 0
-                    ? `${unreadCount} unread`
-                    : 'All caught up'}
+                  {unreadCount > 0 ? `${unreadCount} unread` : 'All caught up'}
                 </p>
               </div>
             </div>
@@ -304,9 +298,7 @@ export default function DriverNotifications() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() =>
-                            handleMarkAsRead(notification.id)
-                          }
+                          onClick={() => handleMarkAsRead(notification.id)}
                         >
                           Mark as Read
                         </Button>

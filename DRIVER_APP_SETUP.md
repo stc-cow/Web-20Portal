@@ -5,6 +5,7 @@ This document outlines the complete implementation of the ACES Driver App for An
 ## Overview
 
 The Driver App allows drivers to:
+
 - Log in with Supabase credentials
 - View assigned fuel delivery missions
 - Submit fuel entries with photo evidence
@@ -50,6 +51,7 @@ npm install @capacitor/android @capacitor/ios --save-dev
 ### 2. Configure Environment Variables
 
 Add these to your `.env` file:
+
 ```
 VITE_SUPABASE_URL=https://qpnpqudrrrzgvfwdkljo.supabase.co
 VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
@@ -63,6 +65,7 @@ VITE_PUSH_NOTIFICATIONS_ENABLED=true
 Ensure the following tables exist in Supabase:
 
 #### `drivers`
+
 ```sql
 CREATE TABLE drivers (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -77,6 +80,7 @@ CREATE TABLE drivers (
 ```
 
 #### `driver_tasks`
+
 ```sql
 CREATE TABLE driver_tasks (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -93,6 +97,7 @@ CREATE TABLE driver_tasks (
 ```
 
 #### `driver_task_entries`
+
 ```sql
 CREATE TABLE driver_task_entries (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -111,6 +116,7 @@ CREATE TABLE driver_task_entries (
 ```
 
 #### `driver_notifications`
+
 ```sql
 CREATE TABLE driver_notifications (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -124,6 +130,7 @@ CREATE TABLE driver_notifications (
 ```
 
 #### `driver_push_tokens`
+
 ```sql
 CREATE TABLE driver_push_tokens (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -179,12 +186,14 @@ npx cap open ios
 ## Features Implemented
 
 ### Authentication
+
 - ✅ Email/password login with Supabase Auth
 - ✅ Session persistence using Capacitor Storage
 - ✅ Auto-redirect to login if session expired
 - ✅ Logout with session cleanup
 
 ### Driver Dashboard
+
 - ✅ List of assigned missions with real-time sync
 - ✅ Filter by status (pending, in progress, completed)
 - ✅ Search tasks by site name
@@ -192,6 +201,7 @@ npx cap open ios
 - ✅ Real-time task updates via Supabase Realtime
 
 ### Mission Details & Fuel Entry
+
 - ✅ Mission information display
 - ✅ Fuel quantity form fields
 - ✅ Evidence photo capture (4 images: counter before/after, tank before/after)
@@ -201,6 +211,7 @@ npx cap open ios
 - ✅ Automatic task status update to "completed"
 
 ### Notifications
+
 - ✅ List of driver notifications
 - ✅ Mark individual notifications as read
 - ✅ Delete notifications
@@ -208,12 +219,14 @@ npx cap open ios
 - ✅ Real-time notification sync from Supabase
 
 ### Settings & Profile
+
 - ✅ Display driver profile information
 - ✅ Device information (platform, app version)
 - ✅ Password change functionality
 - ✅ Logout button
 
 ### Push Notifications
+
 - ✅ Service Worker registration
 - ✅ FCM token management
 - ✅ Automatic token refresh every 24 hours
@@ -251,6 +264,7 @@ npx cap open ios
 ### For Admins
 
 The admin dashboard (existing web portal) can:
+
 - Create and assign driver tasks
 - View fuel entry submissions
 - Send notifications to drivers
@@ -258,17 +272,18 @@ The admin dashboard (existing web portal) can:
 
 ## Environment Variables Reference
 
-| Variable | Description |
-|----------|-------------|
-| `VITE_SUPABASE_URL` | Supabase project URL |
-| `VITE_SUPABASE_ANON_KEY` | Supabase anonymous key |
-| `FCM_SENDER_ID` | Firebase Cloud Messaging Sender ID |
-| `FCM_SERVER_KEY` | Firebase Cloud Messaging Server Key |
+| Variable                          | Description                            |
+| --------------------------------- | -------------------------------------- |
+| `VITE_SUPABASE_URL`               | Supabase project URL                   |
+| `VITE_SUPABASE_ANON_KEY`          | Supabase anonymous key                 |
+| `FCM_SENDER_ID`                   | Firebase Cloud Messaging Sender ID     |
+| `FCM_SERVER_KEY`                  | Firebase Cloud Messaging Server Key    |
 | `VITE_PUSH_NOTIFICATIONS_ENABLED` | Enable push notifications (true/false) |
 
 ## Testing
 
 ### Web Testing
+
 ```bash
 npm run dev
 # Navigate to http://localhost:5173/#/driver/login
@@ -277,6 +292,7 @@ npm run dev
 ### Mobile Testing
 
 #### Android Emulator
+
 ```bash
 npm run build:client
 npx cap sync android
@@ -285,6 +301,7 @@ npx cap open android
 ```
 
 #### iOS Simulator
+
 ```bash
 npm run build:client
 npx cap sync ios
@@ -295,24 +312,28 @@ npx cap open ios
 ## Troubleshooting
 
 ### FCM Token Not Registering
+
 1. Ensure `VITE_PUSH_NOTIFICATIONS_ENABLED=true`
 2. Check browser notification permissions
 3. Verify Service Worker is registered
 4. Check browser console for FCM errors
 
 ### Session Not Persisting
+
 1. Check if Capacitor Storage is available
 2. Verify `@capacitor/preferences` is installed
 3. Check browser localStorage as fallback
 4. Inspect DevTools > Application > Storage
 
 ### Realtime Updates Not Working
+
 1. Verify Supabase realtime is enabled
 2. Check database RLS policies
 3. Inspect browser DevTools > Network for WebSocket connections
 4. Verify `postgres_changes` subscription filter matches table structure
 
 ### Image Upload Fails
+
 1. Check `driver-uploads` bucket exists in Supabase Storage
 2. Verify bucket is public (authenticated access)
 3. Ensure file size < 10MB
@@ -349,6 +370,7 @@ npx cap open ios
 ## Support & Documentation
 
 For more information:
+
 - Supabase Docs: https://supabase.com/docs
 - Capacitor Docs: https://capacitorjs.com/docs
 - Firebase Docs: https://firebase.google.com/docs

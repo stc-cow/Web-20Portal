@@ -100,10 +100,7 @@ export default function DriverMissionDetail() {
     }
   };
 
-  const handleFileUpload = async (
-    fieldKey: keyof FuelEntry,
-    file: File
-  ) => {
+  const handleFileUpload = async (fieldKey: keyof FuelEntry, file: File) => {
     if (file.size > 10 * 1024 * 1024) {
       toast({
         title: 'File too large',
@@ -264,9 +261,7 @@ export default function DriverMissionDetail() {
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div>
-              <h1 className="font-semibold text-gray-900">
-                Mission Details
-              </h1>
+              <h1 className="font-semibold text-gray-900">Mission Details</h1>
               <p className="text-sm text-gray-600">{task.site_name}</p>
             </div>
           </div>
@@ -283,22 +278,32 @@ export default function DriverMissionDetail() {
           <CardContent className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2">
               <div>
-                <Label className="text-xs text-gray-600 uppercase">Site Name</Label>
+                <Label className="text-xs text-gray-600 uppercase">
+                  Site Name
+                </Label>
                 <p className="font-semibold text-gray-900">{task.site_name}</p>
               </div>
               <div>
-                <Label className="text-xs text-gray-600 uppercase">Site ID</Label>
+                <Label className="text-xs text-gray-600 uppercase">
+                  Site ID
+                </Label>
                 <p className="font-semibold text-gray-900">{task.site_id}</p>
               </div>
               <div>
-                <Label className="text-xs text-gray-600 uppercase">Scheduled Date</Label>
+                <Label className="text-xs text-gray-600 uppercase">
+                  Scheduled Date
+                </Label>
                 <p className="font-semibold text-gray-900">
                   {new Date(task.scheduled_at).toLocaleString()}
                 </p>
               </div>
               <div>
-                <Label className="text-xs text-gray-600 uppercase">Required Liters</Label>
-                <p className="font-semibold text-gray-900">{task.required_liters}L</p>
+                <Label className="text-xs text-gray-600 uppercase">
+                  Required Liters
+                </Label>
+                <p className="font-semibold text-gray-900">
+                  {task.required_liters}L
+                </p>
               </div>
             </div>
             {task.notes && (
@@ -319,7 +324,9 @@ export default function DriverMissionDetail() {
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Fuel Quantities */}
               <div>
-                <h3 className="font-semibold text-gray-900 mb-4">Fuel Quantities</h3>
+                <h3 className="font-semibold text-gray-900 mb-4">
+                  Fuel Quantities
+                </h3>
                 <div className="grid gap-4 md:grid-cols-2">
                   <div>
                     <Label htmlFor="actual_liters">
@@ -364,14 +371,24 @@ export default function DriverMissionDetail() {
 
               {/* Images */}
               <div>
-                <h3 className="font-semibold text-gray-900 mb-4">Evidence Photos</h3>
+                <h3 className="font-semibold text-gray-900 mb-4">
+                  Evidence Photos
+                </h3>
                 <div className="grid gap-4 md:grid-cols-2">
-                  {([
-                    { key: 'counter_before_url' as const, label: 'Counter Before' },
-                    { key: 'tank_before_url' as const, label: 'Tank Before' },
-                    { key: 'counter_after_url' as const, label: 'Counter After' },
-                    { key: 'tank_after_url' as const, label: 'Tank After' },
-                  ] as const).map(({ key, label }) => (
+                  {(
+                    [
+                      {
+                        key: 'counter_before_url' as const,
+                        label: 'Counter Before',
+                      },
+                      { key: 'tank_before_url' as const, label: 'Tank Before' },
+                      {
+                        key: 'counter_after_url' as const,
+                        label: 'Counter After',
+                      },
+                      { key: 'tank_after_url' as const, label: 'Tank After' },
+                    ] as const
+                  ).map(({ key, label }) => (
                     <div key={key}>
                       <Label className="text-sm">{label}</Label>
                       <div className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-4">
@@ -389,7 +406,10 @@ export default function DriverMissionDetail() {
                           className="hidden"
                           id={key}
                         />
-                        <label htmlFor={key} className="flex flex-col items-center gap-2 cursor-pointer">
+                        <label
+                          htmlFor={key}
+                          className="flex flex-col items-center gap-2 cursor-pointer"
+                        >
                           {previews[key] || entry[key] ? (
                             <div className="w-full">
                               <img
@@ -398,14 +418,18 @@ export default function DriverMissionDetail() {
                                 className="h-32 w-full object-cover rounded"
                               />
                               {uploading[key] && (
-                                <p className="text-xs text-gray-600 mt-2">Uploading...</p>
+                                <p className="text-xs text-gray-600 mt-2">
+                                  Uploading...
+                                </p>
                               )}
                             </div>
                           ) : (
                             <>
                               <Upload className="h-6 w-6 text-gray-400" />
                               <span className="text-sm text-gray-600">
-                                {uploading[key] ? 'Uploading...' : 'Click to upload'}
+                                {uploading[key]
+                                  ? 'Uploading...'
+                                  : 'Click to upload'}
                               </span>
                             </>
                           )}

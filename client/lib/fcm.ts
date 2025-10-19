@@ -43,7 +43,8 @@ export class FCMManager {
   private async registerServiceWorker(): Promise<void> {
     if ('serviceWorker' in navigator) {
       try {
-        const scriptPath = this.config.serviceWorkerPath || '/service-worker.js';
+        const scriptPath =
+          this.config.serviceWorkerPath || '/service-worker.js';
         await navigator.serviceWorker.register(scriptPath, {
           scope: '/',
         });
@@ -141,12 +142,14 @@ export class FCMManager {
   }
 
   private extractTokenFromSubscription(
-    subscription: PushSubscription
+    subscription: PushSubscription,
   ): string | null {
     try {
       const key = subscription.getKey('p256dh');
       if (key) {
-        return btoa(String.fromCharCode.apply(null, new Uint8Array(key) as any));
+        return btoa(
+          String.fromCharCode.apply(null, new Uint8Array(key) as any),
+        );
       }
       return subscription.endpoint;
     } catch {
@@ -159,21 +162,24 @@ export class FCMManager {
       clearInterval(this.tokenRefreshInterval);
     }
 
-    this.tokenRefreshInterval = setInterval(async () => {
-      try {
-        const session = await driverAuth.getSession();
-        if (session) {
-          await this.getOrCreateFCMToken(session.id);
+    this.tokenRefreshInterval = setInterval(
+      async () => {
+        try {
+          const session = await driverAuth.getSession();
+          if (session) {
+            await this.getOrCreateFCMToken(session.id);
+          }
+        } catch (error) {
+          console.warn('Token refresh failed:', error);
         }
-      } catch (error) {
-        console.warn('Token refresh failed:', error);
-      }
-    }, 24 * 60 * 60 * 1000);
+      },
+      24 * 60 * 60 * 1000,
+    );
   }
 
   async handleNotificationMessage(
     title: string,
-    options: NotificationOptions = {}
+    options: NotificationOptions = {},
   ): Promise<void> {
     try {
       const permission = await this.requestNotificationPermission();
@@ -187,7 +193,8 @@ export class FCMManager {
         const registration = await navigator.serviceWorker.ready;
         await registration.showNotification(title, {
           icon: 'https://cdn.builder.io/api/v1/image/assets%2Fbd65b3cd7a86452e803a3d7dc7a3d048%2Fdab107460bc24c05b37400810c2b1332?format=webp&width=800',
-          badge: 'https://cdn.builder.io/api/v1/image/assets%2Fbd65b3cd7a86452e803a3d7dc7a3d048%2Fdab107460bc24c05b37400810c2b1332?format=webp&width=800',
+          badge:
+            'https://cdn.builder.io/api/v1/image/assets%2Fbd65b3cd7a86452e803a3d7dc7a3d048%2Fdab107460bc24c05b37400810c2b1332?format=webp&width=800',
           ...options,
         });
       }

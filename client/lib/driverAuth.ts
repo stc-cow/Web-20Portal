@@ -140,7 +140,7 @@ class DriverAuth {
 
   private async saveToCapacitorStorage(
     key: string,
-    value: string
+    value: string,
   ): Promise<void> {
     try {
       const Capacitor = (window as any).Capacitor;
@@ -160,9 +160,7 @@ class DriverAuth {
     }
   }
 
-  private async getFromCapacitorStorage(
-    key: string
-  ): Promise<string | null> {
+  private async getFromCapacitorStorage(key: string): Promise<string | null> {
     try {
       const Capacitor = (window as any).Capacitor;
       if (!Capacitor) {
@@ -226,7 +224,7 @@ export const driverAuth = new DriverAuth();
 
 export async function setupDriverRealtime(
   driverId: string,
-  onUpdate: () => void
+  onUpdate: () => void,
 ) {
   if (typeof (supabase as any).channel !== 'function') {
     return null;
@@ -242,7 +240,7 @@ export async function setupDriverRealtime(
         table: 'driver_tasks',
         filter: `driver_id=eq.${driverId}`,
       },
-      () => onUpdate()
+      () => onUpdate(),
     )
     .on(
       'postgres_changes',
@@ -252,7 +250,7 @@ export async function setupDriverRealtime(
         table: 'driver_notifications',
         filter: `driver_id=eq.${driverId}`,
       },
-      () => onUpdate()
+      () => onUpdate(),
     )
     .subscribe();
 

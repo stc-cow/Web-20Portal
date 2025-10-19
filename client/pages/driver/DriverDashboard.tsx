@@ -3,7 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { driverAuth, setupDriverRealtime, DriverSession } from '@/lib/driverAuth';
+import {
+  driverAuth,
+  setupDriverRealtime,
+  DriverSession,
+} from '@/lib/driverAuth';
 import { supabase } from '@/lib/supabase';
 import { fcmManager } from '@/lib/fcm';
 import { toast } from '@/hooks/use-toast';
@@ -26,7 +30,9 @@ export default function DriverDashboard() {
   const [tasks, setTasks] = useState<DriverTask[]>([]);
   const [filteredTasks, setFilteredTasks] = useState<DriverTask[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filterStatus, setFilterStatus] = useState<'all' | 'pending' | 'in_progress' | 'completed'>('all');
+  const [filterStatus, setFilterStatus] = useState<
+    'all' | 'pending' | 'in_progress' | 'completed'
+  >('all');
   const [isLoading, setIsLoading] = useState(true);
   const [unreadNotifications, setUnreadNotifications] = useState(0);
 
@@ -125,7 +131,7 @@ export default function DriverDashboard() {
       filtered = filtered.filter(
         (t) =>
           t.site_name?.toLowerCase().includes(query) ||
-          t.notes?.toLowerCase().includes(query)
+          t.notes?.toLowerCase().includes(query),
       );
     }
 
@@ -187,7 +193,9 @@ export default function DriverDashboard() {
                 className="h-8 w-auto"
               />
               <div>
-                <h1 className="font-semibold text-gray-900">Driver Dashboard</h1>
+                <h1 className="font-semibold text-gray-900">
+                  Driver Dashboard
+                </h1>
                 <p className="text-sm text-gray-600">{session?.name}</p>
               </div>
             </div>
@@ -295,7 +303,7 @@ export default function DriverDashboard() {
                       ? 'Active'
                       : status.charAt(0).toUpperCase() + status.slice(1)}
                 </Button>
-              )
+              ),
             )}
           </div>
         </div>
@@ -321,11 +329,15 @@ export default function DriverDashboard() {
                         {new Date(task.scheduled_at).toLocaleString()}
                       </p>
                       <p className="text-sm text-gray-600 mt-1">
-                        Required: <span className="font-medium">{task.required_liters}L</span>
+                        Required:{' '}
+                        <span className="font-medium">
+                          {task.required_liters}L
+                        </span>
                       </p>
                       {task.notes && (
                         <p className="text-sm text-gray-600 mt-2">
-                          <span className="font-medium">Notes:</span> {task.notes}
+                          <span className="font-medium">Notes:</span>{' '}
+                          {task.notes}
                         </p>
                       )}
                     </div>

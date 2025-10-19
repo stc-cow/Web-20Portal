@@ -60,7 +60,12 @@ export default function DriverSettings() {
       const platform = capacitor.getPlatform();
       setDeviceInfo((prev) => ({
         ...prev,
-        platform: platform === 'ios' ? 'iOS' : platform === 'android' ? 'Android' : 'Web',
+        platform:
+          platform === 'ios'
+            ? 'iOS'
+            : platform === 'android'
+              ? 'Android'
+              : 'Web',
       }));
     }
   };
@@ -213,7 +218,9 @@ export default function DriverSettings() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <Label className="text-xs text-gray-600 uppercase">Full Name</Label>
+              <Label className="text-xs text-gray-600 uppercase">
+                Full Name
+              </Label>
               <p className="font-semibold text-gray-900">{session.name}</p>
             </div>
             <div>
@@ -228,7 +235,9 @@ export default function DriverSettings() {
             )}
             {session.assigned_site && (
               <div>
-                <Label className="text-xs text-gray-600 uppercase">Assigned Site</Label>
+                <Label className="text-xs text-gray-600 uppercase">
+                  Assigned Site
+                </Label>
                 <p className="font-semibold text-gray-900">
                   {session.assigned_site}
                 </p>
@@ -247,11 +256,17 @@ export default function DriverSettings() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <Label className="text-xs text-gray-600 uppercase">Platform</Label>
-              <p className="font-semibold text-gray-900">{deviceInfo.platform}</p>
+              <Label className="text-xs text-gray-600 uppercase">
+                Platform
+              </Label>
+              <p className="font-semibold text-gray-900">
+                {deviceInfo.platform}
+              </p>
             </div>
             <div>
-              <Label className="text-xs text-gray-600 uppercase">App Version</Label>
+              <Label className="text-xs text-gray-600 uppercase">
+                App Version
+              </Label>
               <p className="font-semibold text-gray-900">
                 {deviceInfo.appVersion}
               </p>
@@ -289,7 +304,10 @@ export default function DriverSettings() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <Dialog open={passwordDialogOpen} onOpenChange={setPasswordDialogOpen}>
+            <Dialog
+              open={passwordDialogOpen}
+              onOpenChange={setPasswordDialogOpen}
+            >
               <DialogTrigger asChild>
                 <Button variant="outline" className="w-full">
                   Change Password
@@ -347,10 +365,7 @@ export default function DriverSettings() {
                     >
                       Cancel
                     </Button>
-                    <Button
-                      type="submit"
-                      disabled={isChangingPassword}
-                    >
+                    <Button type="submit" disabled={isChangingPassword}>
                       {isChangingPassword ? 'Updating...' : 'Update Password'}
                     </Button>
                   </DialogFooter>
