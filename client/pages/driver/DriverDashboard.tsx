@@ -11,7 +11,7 @@ import {
 import { supabase } from '@/lib/supabase';
 import { fcmManager } from '@/lib/fcm';
 import { toast } from '@/hooks/use-toast';
-import { Bell, LogOut, Settings, RefreshCw } from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
 
 interface DriverTask {
   id: string;
@@ -34,7 +34,6 @@ export default function DriverDashboard() {
     'all' | 'pending' | 'in_progress' | 'completed'
   >('all');
   const [isLoading, setIsLoading] = useState(true);
-  const [unreadNotifications, setUnreadNotifications] = useState(0);
 
   useEffect(() => {
     const initializeSession = async () => {
@@ -46,10 +45,8 @@ export default function DriverDashboard() {
         }
         setSession(currentSession);
         await loadTasks(currentSession.id);
-        loadUnreadNotifications(currentSession.id);
         setupRealtimeListeners(currentSession.id);
 
-        // Initialize FCM for push notifications
         try {
           await fcmManager.initializeFCM();
           await fcmManager.getOrCreateFCMToken(currentSession.id);
@@ -90,26 +87,9 @@ export default function DriverDashboard() {
     }
   };
 
-  const loadUnreadNotifications = async (driverId: string) => {
-    try {
-      const { data, error } = await supabase
-        .from('driver_notifications')
-        .select('id')
-        .eq('driver_id', driverId)
-        .eq('read', false);
-
-      if (!error) {
-        setUnreadNotifications((data || []).length);
-      }
-    } catch (error) {
-      console.error('Failed to load notifications:', error);
-    }
-  };
-
   const setupRealtimeListeners = (driverId: string) => {
     const channel = setupDriverRealtime(driverId, async () => {
       await loadTasks(driverId);
-      await loadUnreadNotifications(driverId);
     });
 
     return () => {
@@ -147,31 +127,16 @@ export default function DriverDashboard() {
     };
   }, [tasks]);
 
-  const handleLogout = async () => {
-    try {
-      await driverAuth.signOut();
-      toast({ title: 'Logged out successfully' });
-      navigate('/driver/login');
-    } catch (error) {
-      toast({
-        title: 'Logout failed',
-        description: 'Please try again',
-        variant: 'destructive',
-      });
-    }
-  };
-
   const handleRefresh = async () => {
     if (session) {
       await loadTasks(session.id);
-      await loadUnreadNotifications(session.id);
       toast({ title: 'Tasks refreshed' });
     }
   };
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex items-center justify-center py-12">
         <div className="text-center">
           <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600 mx-auto mb-4" />
           <p className="text-gray-600">Loading...</p>
@@ -181,192 +146,148 @@ export default function DriverDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      {/* Header */}
-      <div className="sticky top-0 z-20 border-b bg-white shadow-sm">
-        <div className="mx-auto max-w-6xl px-4 py-4">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <img
-                src="https://cdn.builder.io/api/v1/image/assets%2Fbd65b3cd7a86452e803a3d7dc7a3d048%2Fdab107460bc24c05b37400810c2b1332?format=webp&width=800"
-                alt="ACES"
-                className="h-8 w-auto"
-              />
-              <div>
-                <h1 className="font-semibold text-gray-900">
-                  Driver Dashboard
-                </h1>
-                <p className="text-sm text-gray-600">{session?.name}</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleRefresh}
-                className="relative"
-              >
-                <RefreshCw className="h-5 w-5" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => navigate('/driver/notifications')}
-                className="relative"
-              >
-                <Bell className="h-5 w-5" />
-                {unreadNotifications > 0 && (
-                  <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs text-white font-bold">
-                    {unreadNotifications > 9 ? '9+' : unreadNotifications}
-                  </span>
-                )}
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => navigate('/driver/settings')}
-              >
-                <Settings className="h-5 w-5" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleLogout}
-                className="text-red-600 hover:text-red-700"
-              >
-                <LogOut className="h-5 w-5" />
-              </Button>
-            </div>
-          </div>
+    <div className="w-full">
+      {/* Page Title */}
+      <div className="px-4 pt-4 pb-2">
+        <div className="flex items-center justify-between gap-2">
+          <h1 className="text-xl font-bold text-gray-900">Dashboard</h1>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleRefresh}
+            className="h-10 w-10"
+          >
+            <RefreshCw className="h-5 w-5" />
+          </Button>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="mx-auto max-w-6xl px-4 py-8">
-        {/* Stats */}
-        <div className="mb-8 grid gap-4 grid-cols-2 md:grid-cols-4">
-          <Card>
-            <CardContent className="p-4">
-              <div className="text-3xl font-bold text-gray-900">
-                {stats.total}
-              </div>
-              <p className="text-sm text-gray-600">Total Tasks</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4">
-              <div className="text-3xl font-bold text-blue-600">
-                {stats.pending}
-              </div>
-              <p className="text-sm text-gray-600">Pending</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4">
-              <div className="text-3xl font-bold text-amber-600">
-                {stats.inProgress}
-              </div>
-              <p className="text-sm text-gray-600">In Progress</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4">
-              <div className="text-3xl font-bold text-green-600">
-                {stats.completed}
-              </div>
-              <p className="text-sm text-gray-600">Completed</p>
-            </CardContent>
-          </Card>
+      {/* Quick Stats */}
+      <div className="px-4 py-4 grid grid-cols-2 gap-3">
+        <div className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
+          <div className="text-2xl font-bold text-gray-900">{stats.total}</div>
+          <p className="text-xs text-gray-600 mt-1">Total Tasks</p>
         </div>
-
-        {/* Filters */}
-        <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <Input
-            placeholder="Search tasks by site name..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="md:max-w-xs"
-          />
-          <div className="flex gap-2">
-            {(['all', 'pending', 'in_progress', 'completed'] as const).map(
-              (status) => (
-                <Button
-                  key={status}
-                  variant={filterStatus === status ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setFilterStatus(status)}
-                >
-                  {status === 'all'
-                    ? 'All'
-                    : status === 'in_progress'
-                      ? 'Active'
-                      : status.charAt(0).toUpperCase() + status.slice(1)}
-                </Button>
-              ),
-            )}
+        <div className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
+          <div className="text-2xl font-bold text-green-600">
+            {stats.completed}
           </div>
+          <p className="text-xs text-gray-600 mt-1">Completed</p>
         </div>
+        <div className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
+          <div className="text-2xl font-bold text-blue-600">
+            {stats.pending}
+          </div>
+          <p className="text-xs text-gray-600 mt-1">Pending</p>
+        </div>
+        <div className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
+          <div className="text-2xl font-bold text-amber-600">
+            {stats.inProgress}
+          </div>
+          <p className="text-xs text-gray-600 mt-1">Active</p>
+        </div>
+      </div>
 
-        {/* Tasks List */}
-        <div className="space-y-4">
-          {filteredTasks.length === 0 ? (
-            <Card>
-              <CardContent className="flex flex-col items-center justify-center py-12">
-                <p className="text-gray-600">No tasks found</p>
-              </CardContent>
-            </Card>
-          ) : (
-            filteredTasks.map((task) => (
-              <Card key={task.id} className="hover:shadow-md transition-shadow">
-                <CardContent className="p-4">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-gray-900">
-                        {task.site_name}
-                      </h3>
-                      <p className="text-sm text-gray-600 mt-1">
-                        {new Date(task.scheduled_at).toLocaleString()}
-                      </p>
-                      <p className="text-sm text-gray-600 mt-1">
-                        Required:{' '}
-                        <span className="font-medium">
-                          {task.required_liters}L
-                        </span>
-                      </p>
-                      {task.notes && (
-                        <p className="text-sm text-gray-600 mt-2">
-                          <span className="font-medium">Notes:</span>{' '}
-                          {task.notes}
-                        </p>
-                      )}
-                    </div>
-                    <div className="flex flex-col items-end gap-2">
-                      <span
-                        className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                          task.status === 'pending'
-                            ? 'bg-blue-100 text-blue-800'
-                            : task.status === 'in_progress'
-                              ? 'bg-amber-100 text-amber-800'
-                              : 'bg-green-100 text-green-800'
-                        }`}
-                      >
-                        {task.status === 'in_progress' ? 'Active' : task.status}
-                      </span>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => navigate(`/driver/mission/${task.id}`)}
-                      >
-                        View Details
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))
+      {/* Search and Filter */}
+      <div className="px-4 py-3 space-y-3">
+        <Input
+          placeholder="Search by site..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="text-sm"
+        />
+        <div className="flex gap-2 overflow-x-auto pb-2">
+          {(['all', 'pending', 'in_progress', 'completed'] as const).map(
+            (status) => (
+              <Button
+                key={status}
+                variant={filterStatus === status ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setFilterStatus(status)}
+                className="whitespace-nowrap text-xs"
+              >
+                {status === 'all'
+                  ? 'All'
+                  : status === 'in_progress'
+                    ? 'Active'
+                    : status.charAt(0).toUpperCase() + status.slice(1)}
+              </Button>
+            ),
           )}
         </div>
+      </div>
+
+      {/* Tasks List */}
+      <div className="px-4 py-4 space-y-3">
+        {filteredTasks.length === 0 ? (
+          <Card>
+            <CardContent className="flex flex-col items-center justify-center py-12">
+              <p className="text-gray-600 text-center text-sm">
+                No tasks found
+              </p>
+            </CardContent>
+          </Card>
+        ) : (
+          filteredTasks.map((task) => (
+            <Card
+              key={task.id}
+              className="hover:shadow-md transition-shadow cursor-pointer overflow-hidden"
+              onClick={() => navigate(`/driver/mission/${task.id}`)}
+            >
+              <CardContent className="p-4">
+                <div className="space-y-2">
+                  <div className="flex items-start justify-between gap-2">
+                    <h3 className="font-semibold text-gray-900 text-sm flex-1">
+                      {task.site_name}
+                    </h3>
+                    <span
+                      className={`rounded-full px-2 py-1 text-xs font-semibold whitespace-nowrap ${
+                        task.status === 'pending'
+                          ? 'bg-blue-100 text-blue-800'
+                          : task.status === 'in_progress'
+                            ? 'bg-amber-100 text-amber-800'
+                            : 'bg-green-100 text-green-800'
+                      }`}
+                    >
+                      {task.status === 'in_progress' ? 'Active' : task.status}
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-gray-600">
+                    {new Date(task.scheduled_at).toLocaleDateString()} at{' '}
+                    {new Date(task.scheduled_at).toLocaleTimeString([], {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
+                  </p>
+
+                  <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+                    <span className="text-xs text-gray-600">
+                      Required: <span className="font-medium">{task.required_liters}L</span>
+                    </span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-xs h-auto py-1"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/driver/mission/${task.id}`);
+                      }}
+                    >
+                      View Details →
+                    </Button>
+                  </div>
+
+                  {task.notes && (
+                    <p className="text-xs text-gray-600 pt-2 border-t border-gray-100">
+                      <span className="font-medium">Notes:</span> {task.notes}
+                    </p>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
       </div>
     </div>
   );
