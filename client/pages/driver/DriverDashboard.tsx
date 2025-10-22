@@ -263,7 +263,10 @@ export default function DriverDashboard() {
 
                   <div className="flex items-center justify-between pt-2 border-t border-gray-100">
                     <span className="text-xs text-gray-600">
-                      Required: <span className="font-medium">{task.required_liters}L</span>
+                      Required:{' '}
+                      <span className="font-medium">
+                        {task.required_liters}L
+                      </span>
                     </span>
                     <Button
                       variant="ghost"

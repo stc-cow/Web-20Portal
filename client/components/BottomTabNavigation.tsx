@@ -1,12 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import {
-  Home,
-  CheckCircle2,
-  Bell,
-  Settings,
-  LogOut,
-  Menu,
-} from 'lucide-react';
+import { Home, CheckCircle2, Bell, Settings, LogOut, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import {

@@ -1,6 +1,7 @@
 # Driver App - Bottom Tab Navigation Design
 
 ## Overview
+
 The Driver App has been completely redesigned with a modern **bottom tab navigation** layout that provides an intuitive mobile-first experience. This follows iOS/Android app conventions for better user familiarity.
 
 ---
@@ -8,6 +9,7 @@ The Driver App has been completely redesigned with a modern **bottom tab navigat
 ## Design Components
 
 ### 1. **Bottom Tab Navigation** (`BottomTabNavigation.tsx`)
+
 A persistent navigation bar at the bottom of the screen with 4 main tabs:
 
 - **Dashboard** (Home Icon)
@@ -34,6 +36,7 @@ A persistent navigation bar at the bottom of the screen with 4 main tabs:
   - Logout button
 
 ### 2. **Header Area**
+
 - Fixed top header (height: 64px / h-16)
 - ACES branding logo
 - Driver name and "Driver App" subtitle
@@ -41,6 +44,7 @@ A persistent navigation bar at the bottom of the screen with 4 main tabs:
 - Notification badge showing unread count
 
 ### 3. **Content Area**
+
 - Full-width scrollable content between header and bottom tabs
 - Padding adjustment to accommodate the fixed bottom navigation (pb-20)
 - Mobile-optimized spacing and typography
@@ -73,12 +77,14 @@ A persistent navigation bar at the bottom of the screen with 4 main tabs:
 ## Key Features
 
 ### Mobile-First Design
+
 - **Optimized Typography**: Smaller fonts and spacing for mobile screens
 - **Touch-Friendly Buttons**: Minimum 44px height for easy interaction
 - **Responsive Cards**: 2-column grid for stats, full-width for lists
 - **Safe Area**: Proper padding for bottom tab navigation
 
 ### Dashboard Features
+
 - **Quick Stats Cards** (4-column grid on mobile):
   - Total Tasks
   - Completed Tasks
@@ -97,6 +103,7 @@ A persistent navigation bar at the bottom of the screen with 4 main tabs:
   - Shows required liters and notes
 
 ### Notifications Page
+
 - **Unread Notification Counter**: Top badge with count
 - **Notification List**:
   - Color-coded badges (success, warning, error, info)
@@ -110,6 +117,7 @@ A persistent navigation bar at the bottom of the screen with 4 main tabs:
   - Clear all button (when notifications exist)
 
 ### Settings Page
+
 - **Profile Information Section**:
   - Full name, email, phone, assigned site
   - Read-only display format
@@ -133,6 +141,7 @@ A persistent navigation bar at the bottom of the screen with 4 main tabs:
   - Clears session and returns to login
 
 ### Mission Detail Page
+
 - **Task Information Card**:
   - Site name, scheduled date/time
   - Required liters, notes
@@ -154,17 +163,20 @@ A persistent navigation bar at the bottom of the screen with 4 main tabs:
 ## Color Scheme
 
 ### Status Badges
+
 - **Pending**: Blue (bg-blue-100, text-blue-800)
 - **Active**: Amber (bg-amber-100, text-amber-800)
 - **Completed**: Green (bg-green-100, text-green-800)
 
 ### Notification Types
+
 - **Success**: Green
 - **Warning**: Amber
 - **Error**: Red
 - **Info**: Blue
 
 ### General
+
 - **Background**: Gray-50 gradient (from-gray-50 to-gray-100)
 - **Cards**: White with subtle borders
 - **Active Tab**: Blue text with blue-50 background
@@ -175,10 +187,12 @@ A persistent navigation bar at the bottom of the screen with 4 main tabs:
 ## Component Architecture
 
 ### New Components Created
+
 1. **`BottomTabNavigation.tsx`** - Main navigation wrapper
 2. **`DriverAppLayout.tsx`** - Layout wrapper with session management
 
 ### Updated Components
+
 1. **`DriverDashboard.tsx`** - Redesigned dashboard layout
 2. **`DriverNotifications.tsx`** - Redesigned notifications layout
 3. **`DriverSettings.tsx`** - Redesigned settings layout
@@ -190,17 +204,20 @@ A persistent navigation bar at the bottom of the screen with 4 main tabs:
 ## Responsive Features
 
 ### For Mobile (375px width)
+
 - Single column layouts for stats
 - Full-width buttons and inputs
 - Compact text sizes
 - Touch-optimized spacing
 
 ### For Tablet (600px+ width, if accessed)
+
 - Multi-column grid layouts
 - Optimized font sizes
 - Expanded card widths
 
 ### Navigation Behavior
+
 - MobileGuard component ensures mobile/tablet only access
 - Desktop users (≥1024px) see "Mobile App Only" message
 - Seamless routing between dashboard, missions, notifications, and settings
@@ -220,17 +237,20 @@ A persistent navigation bar at the bottom of the screen with 4 main tabs:
 ## Integration Points
 
 ### Supabase Integration
+
 - Real-time task updates via realtime subscriptions
 - Driver notifications with read/unread status
 - Task entry submissions with image uploads
 - Session management via driverAuth
 
 ### Firebase Cloud Messaging (FCM)
+
 - Push notifications for new task assignments
 - Notification badge updates
 - Real-time notification count
 
 ### Storage
+
 - Driver-specific image uploads to Supabase Storage
 - Automatic public URL generation
 - Organized folder structure: `drivers/{name}/{taskId}/{type}_{timestamp}`
