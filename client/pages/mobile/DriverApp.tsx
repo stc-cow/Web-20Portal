@@ -590,8 +590,10 @@ export default function DriverApp() {
   }
 
   return null;
+}
 
-  // Notification and completion dialogs rendered globally
+function RenderDialogsDisabled() {
+  // Dialogs are now rendered inline in each screen state
   function renderDialogs() {
     return (
       <>
