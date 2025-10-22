@@ -16,7 +16,7 @@ import {
 import { driverAuth, DriverSession } from '@/lib/driverAuth';
 import { supabase } from '@/lib/supabase';
 import { toast } from '@/hooks/use-toast';
-import { ArrowLeft, LogOut, Lock, Bell, Smartphone } from 'lucide-react';
+import { LogOut, Lock, Bell, Smartphone } from 'lucide-react';
 
 export default function DriverSettings() {
   const navigate = useNavigate();
@@ -162,10 +162,10 @@ export default function DriverSettings() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex items-center justify-center py-12">
         <div className="text-center">
           <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600 mx-auto mb-4" />
-          <p className="text-gray-600">Loading...</p>
+          <p className="text-gray-600 text-sm">Loading...</p>
         </div>
       </div>
     );
@@ -173,11 +173,14 @@ export default function DriverSettings() {
 
   if (!session) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex items-center justify-center py-12">
         <Card>
           <CardContent className="p-6">
-            <p className="text-gray-600 mb-4">Session not found</p>
-            <Button onClick={() => navigate('/driver/login')}>
+            <p className="text-gray-600 mb-4 text-sm">Session not found</p>
+            <Button
+              onClick={() => navigate('/driver/login')}
+              className="w-full"
+            >
               Back to Login
             </Button>
           </CardContent>
@@ -187,50 +190,41 @@ export default function DriverSettings() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      {/* Header */}
-      <div className="border-b bg-white shadow-sm sticky top-0 z-10">
-        <div className="mx-auto max-w-4xl px-4 py-4">
-          <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => navigate('/driver/dashboard')}
-            >
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-            <div>
-              <h1 className="font-semibold text-gray-900">Settings</h1>
-              <p className="text-sm text-gray-600">Manage your account</p>
-            </div>
-          </div>
-        </div>
+    <div className="w-full">
+      {/* Page Title */}
+      <div className="px-4 pt-4 pb-3 border-b border-gray-200">
+        <h1 className="text-xl font-bold text-gray-900">Settings</h1>
+        <p className="text-xs text-gray-600 mt-1">Manage your account</p>
       </div>
 
       {/* Content */}
-      <div className="mx-auto max-w-4xl px-4 py-8">
+      <div className="px-4 py-4 space-y-4">
         {/* Profile Section */}
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <span>Profile Information</span>
-            </CardTitle>
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base">Profile Information</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-3">
             <div>
               <Label className="text-xs text-gray-600 uppercase">
                 Full Name
               </Label>
-              <p className="font-semibold text-gray-900">{session.name}</p>
+              <p className="font-semibold text-gray-900 text-sm mt-1">
+                {session.name}
+              </p>
             </div>
             <div>
               <Label className="text-xs text-gray-600 uppercase">Email</Label>
-              <p className="font-semibold text-gray-900">{session.email}</p>
+              <p className="font-semibold text-gray-900 text-sm mt-1">
+                {session.email}
+              </p>
             </div>
             {session.phone && (
               <div>
                 <Label className="text-xs text-gray-600 uppercase">Phone</Label>
-                <p className="font-semibold text-gray-900">{session.phone}</p>
+                <p className="font-semibold text-gray-900 text-sm mt-1">
+                  {session.phone}
+                </p>
               </div>
             )}
             {session.assigned_site && (
@@ -238,7 +232,7 @@ export default function DriverSettings() {
                 <Label className="text-xs text-gray-600 uppercase">
                   Assigned Site
                 </Label>
-                <p className="font-semibold text-gray-900">
+                <p className="font-semibold text-gray-900 text-sm mt-1">
                   {session.assigned_site}
                 </p>
               </div>
@@ -247,19 +241,19 @@ export default function DriverSettings() {
         </Card>
 
         {/* Device Information */}
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Smartphone className="h-5 w-5" />
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Smartphone className="h-4 w-4" />
               <span>Device Information</span>
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-3">
             <div>
               <Label className="text-xs text-gray-600 uppercase">
                 Platform
               </Label>
-              <p className="font-semibold text-gray-900">
+              <p className="font-semibold text-gray-900 text-sm mt-1">
                 {deviceInfo.platform}
               </p>
             </div>
@@ -267,7 +261,7 @@ export default function DriverSettings() {
               <Label className="text-xs text-gray-600 uppercase">
                 App Version
               </Label>
-              <p className="font-semibold text-gray-900">
+              <p className="font-semibold text-gray-900 text-sm mt-1">
                 {deviceInfo.appVersion}
               </p>
             </div>
@@ -275,18 +269,18 @@ export default function DriverSettings() {
         </Card>
 
         {/* Notifications Settings */}
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Bell className="h-5 w-5" />
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Bell className="h-4 w-4" />
               <span>Notification Settings</span>
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-sm text-gray-600">
+          <CardContent className="space-y-2">
+            <p className="text-xs text-gray-600">
               Push notifications are enabled. You'll receive alerts for:
             </p>
-            <ul className="space-y-2 text-sm text-gray-700 list-disc list-inside">
+            <ul className="space-y-1 text-xs text-gray-700 list-disc list-inside">
               <li>New task assignments</li>
               <li>Task deadline reminders</li>
               <li>System updates</li>
@@ -296,10 +290,10 @@ export default function DriverSettings() {
         </Card>
 
         {/* Security Section */}
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Lock className="h-5 w-5" />
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Lock className="h-4 w-4" />
               <span>Security</span>
             </CardTitle>
           </CardHeader>
@@ -309,11 +303,11 @@ export default function DriverSettings() {
               onOpenChange={setPasswordDialogOpen}
             >
               <DialogTrigger asChild>
-                <Button variant="outline" className="w-full">
+                <Button variant="outline" className="w-full text-sm">
                   Change Password
                 </Button>
               </DialogTrigger>
-              <DialogContent>
+              <DialogContent className="w-[90vw] max-w-sm">
                 <DialogHeader>
                   <DialogTitle>Change Password</DialogTitle>
                   <DialogDescription>
@@ -322,29 +316,33 @@ export default function DriverSettings() {
                 </DialogHeader>
                 <form onSubmit={handleChangePassword} className="space-y-4">
                   <div>
-                    <Label htmlFor="current-password">Current Password</Label>
+                    <Label htmlFor="current-password" className="text-sm">
+                      Current Password
+                    </Label>
                     <Input
                       id="current-password"
                       type="password"
                       value={currentPassword}
                       onChange={(e) => setCurrentPassword(e.target.value)}
                       disabled={isChangingPassword}
-                      className="mt-2"
+                      className="mt-2 text-sm"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="new-password">New Password</Label>
+                    <Label htmlFor="new-password" className="text-sm">
+                      New Password
+                    </Label>
                     <Input
                       id="new-password"
                       type="password"
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
                       disabled={isChangingPassword}
-                      className="mt-2"
+                      className="mt-2 text-sm"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="confirm-password">
+                    <Label htmlFor="confirm-password" className="text-sm">
                       Confirm New Password
                     </Label>
                     <Input
@@ -353,19 +351,24 @@ export default function DriverSettings() {
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       disabled={isChangingPassword}
-                      className="mt-2"
+                      className="mt-2 text-sm"
                     />
                   </div>
-                  <DialogFooter className="gap-2 sm:gap-2">
+                  <DialogFooter className="gap-2 pt-4">
                     <Button
                       type="button"
                       variant="outline"
                       onClick={() => setPasswordDialogOpen(false)}
                       disabled={isChangingPassword}
+                      className="text-sm"
                     >
                       Cancel
                     </Button>
-                    <Button type="submit" disabled={isChangingPassword}>
+                    <Button
+                      type="submit"
+                      disabled={isChangingPassword}
+                      className="text-sm"
+                    >
                       {isChangingPassword ? 'Updating...' : 'Update Password'}
                     </Button>
                   </DialogFooter>
@@ -378,16 +381,8 @@ export default function DriverSettings() {
         {/* Logout */}
         <div className="flex gap-3">
           <Button
-            variant="outline"
-            className="flex-1"
-            onClick={() => navigate('/driver/dashboard')}
-            disabled={isLoggingOut}
-          >
-            Back to Dashboard
-          </Button>
-          <Button
             variant="destructive"
-            className="flex-1"
+            className="flex-1 text-sm"
             onClick={handleLogout}
             disabled={isLoggingOut}
           >
