@@ -678,8 +678,8 @@ function LoginScreen({
         <div className="text-center space-y-4">
           <div className="flex justify-center">
             <img
-              src="https://cdn.builder.io/api/v1/image/assets%2Fbd65b3cd7a86452e803a3d7dc7a3d048%2Fcd98ef7f68c4407db7e0dfbb4230e3df?format=webp&width=800"
-              alt="ACES MSD Fuel"
+              src="https://cdn.builder.io/api/v1/image/assets%2Fbd65b3cd7a86452e803a3d7dc7a3d048%2F024d1e9b8e7144cd8fd4c3edfc34981b?format=webp&width=800"
+              alt="ACES Managed Services"
               className="h-32 w-auto"
               loading="eager"
               decoding="async"
