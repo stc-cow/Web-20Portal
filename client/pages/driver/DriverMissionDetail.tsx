@@ -223,10 +223,10 @@ export default function DriverMissionDetail() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex items-center justify-center py-12">
         <div className="text-center">
           <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600 mx-auto mb-4" />
-          <p className="text-gray-600">Loading...</p>
+          <p className="text-gray-600 text-sm">Loading...</p>
         </div>
       </div>
     );
@@ -234,11 +234,14 @@ export default function DriverMissionDetail() {
 
   if (!task) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex items-center justify-center py-12">
         <Card>
           <CardContent className="p-6">
-            <p className="text-gray-600 mb-4">Task not found</p>
-            <Button onClick={() => navigate('/driver/dashboard')}>
+            <p className="text-gray-600 mb-4 text-sm">Task not found</p>
+            <Button
+              onClick={() => navigate('/driver/dashboard')}
+              className="w-full"
+            >
               Back to Dashboard
             </Button>
           </CardContent>
@@ -248,68 +251,63 @@ export default function DriverMissionDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="w-full">
       {/* Header */}
-      <div className="border-b bg-white shadow-sm sticky top-0 z-10">
-        <div className="mx-auto max-w-4xl px-4 py-4">
-          <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => navigate('/driver/dashboard')}
-            >
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-            <div>
-              <h1 className="font-semibold text-gray-900">Mission Details</h1>
-              <p className="text-sm text-gray-600">{task.site_name}</p>
-            </div>
-          </div>
+      <div className="px-4 pt-4 pb-3 border-b border-gray-200 flex items-center gap-3">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => navigate('/driver/dashboard')}
+          className="h-10 w-10"
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </Button>
+        <div className="min-w-0">
+          <h1 className="text-lg font-bold text-gray-900">Mission Details</h1>
+          <p className="text-xs text-gray-600 truncate">{task.site_name}</p>
         </div>
       </div>
 
       {/* Content */}
-      <div className="mx-auto max-w-4xl px-4 py-8">
+      <div className="px-4 py-4 space-y-4">
         {/* Task Info */}
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle>Task Information</CardTitle>
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base">Task Information</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2">
-              <div>
-                <Label className="text-xs text-gray-600 uppercase">
-                  Site Name
-                </Label>
-                <p className="font-semibold text-gray-900">{task.site_name}</p>
-              </div>
-              <div>
-                <Label className="text-xs text-gray-600 uppercase">
-                  Site ID
-                </Label>
-                <p className="font-semibold text-gray-900">{task.site_id}</p>
-              </div>
-              <div>
-                <Label className="text-xs text-gray-600 uppercase">
-                  Scheduled Date
-                </Label>
-                <p className="font-semibold text-gray-900">
-                  {new Date(task.scheduled_at).toLocaleString()}
-                </p>
-              </div>
-              <div>
-                <Label className="text-xs text-gray-600 uppercase">
-                  Required Liters
-                </Label>
-                <p className="font-semibold text-gray-900">
-                  {task.required_liters}L
-                </p>
-              </div>
+          <CardContent className="space-y-3">
+            <div>
+              <Label className="text-xs text-gray-600 uppercase">
+                Site Name
+              </Label>
+              <p className="font-semibold text-gray-900 text-sm mt-1">
+                {task.site_name}
+              </p>
+            </div>
+            <div>
+              <Label className="text-xs text-gray-600 uppercase">
+                Scheduled Date
+              </Label>
+              <p className="text-sm text-gray-900 mt-1">
+                {new Date(task.scheduled_at).toLocaleDateString()} at{' '}
+                {new Date(task.scheduled_at).toLocaleTimeString([], {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
+              </p>
+            </div>
+            <div>
+              <Label className="text-xs text-gray-600 uppercase">
+                Required Liters
+              </Label>
+              <p className="font-semibold text-gray-900 text-sm mt-1">
+                {task.required_liters}L
+              </p>
             </div>
             {task.notes && (
               <div>
                 <Label className="text-xs text-gray-600 uppercase">Notes</Label>
-                <p className="text-gray-900">{task.notes}</p>
+                <p className="text-sm text-gray-900 mt-1">{task.notes}</p>
               </div>
             )}
           </CardContent>
@@ -317,19 +315,19 @@ export default function DriverMissionDetail() {
 
         {/* Fuel Entry Form */}
         <Card>
-          <CardHeader>
-            <CardTitle>Fuel Entry</CardTitle>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base">Fuel Entry</CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-4">
               {/* Fuel Quantities */}
               <div>
-                <h3 className="font-semibold text-gray-900 mb-4">
+                <h3 className="font-semibold text-gray-900 mb-3 text-sm">
                   Fuel Quantities
                 </h3>
-                <div className="grid gap-4 md:grid-cols-2">
+                <div className="space-y-3">
                   <div>
-                    <Label htmlFor="actual_liters">
+                    <Label htmlFor="actual_liters" className="text-sm">
                       Actual Liters in Tank *
                     </Label>
                     <Input
@@ -345,11 +343,13 @@ export default function DriverMissionDetail() {
                         }))
                       }
                       disabled={isSubmitting}
-                      className="mt-2"
+                      className="mt-1 text-sm"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="quantity_added">Quantity Added *</Label>
+                    <Label htmlFor="quantity_added" className="text-sm">
+                      Quantity Added *
+                    </Label>
                     <Input
                       id="quantity_added"
                       type="number"
@@ -363,7 +363,7 @@ export default function DriverMissionDetail() {
                         }))
                       }
                       disabled={isSubmitting}
-                      className="mt-2"
+                      className="mt-1 text-sm"
                     />
                   </div>
                 </div>
@@ -371,10 +371,10 @@ export default function DriverMissionDetail() {
 
               {/* Images */}
               <div>
-                <h3 className="font-semibold text-gray-900 mb-4">
+                <h3 className="font-semibold text-gray-900 mb-3 text-sm">
                   Evidence Photos
                 </h3>
-                <div className="grid gap-4 md:grid-cols-2">
+                <div className="space-y-3">
                   {(
                     [
                       {
@@ -391,7 +391,7 @@ export default function DriverMissionDetail() {
                   ).map(({ key, label }) => (
                     <div key={key}>
                       <Label className="text-sm">{label}</Label>
-                      <div className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-4">
+                      <div className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-3">
                         <Input
                           type="file"
                           accept="image/*"
@@ -415,7 +415,7 @@ export default function DriverMissionDetail() {
                               <img
                                 src={previews[key] || entry[key]}
                                 alt={label}
-                                className="h-32 w-full object-cover rounded"
+                                className="h-24 w-full object-cover rounded"
                               />
                               {uploading[key] && (
                                 <p className="text-xs text-gray-600 mt-2">
@@ -425,8 +425,8 @@ export default function DriverMissionDetail() {
                             </div>
                           ) : (
                             <>
-                              <Upload className="h-6 w-6 text-gray-400" />
-                              <span className="text-sm text-gray-600">
+                              <Upload className="h-5 w-5 text-gray-400" />
+                              <span className="text-xs text-gray-600">
                                 {uploading[key]
                                   ? 'Uploading...'
                                   : 'Click to upload'}
@@ -442,7 +442,9 @@ export default function DriverMissionDetail() {
 
               {/* Observations */}
               <div>
-                <Label htmlFor="observations">Observations</Label>
+                <Label htmlFor="observations" className="text-sm">
+                  Observations
+                </Label>
                 <Textarea
                   id="observations"
                   placeholder="Add any observations or notes..."
@@ -454,25 +456,26 @@ export default function DriverMissionDetail() {
                     }))
                   }
                   disabled={isSubmitting}
-                  className="mt-2"
-                  rows={4}
+                  className="mt-1 text-sm"
+                  rows={3}
                 />
               </div>
 
               {/* Action Buttons */}
-              <div className="flex gap-3 pt-4 border-t">
+              <div className="flex gap-3 pt-4 border-t border-gray-200">
                 <Button
                   type="button"
                   variant="outline"
                   onClick={() => navigate('/driver/dashboard')}
                   disabled={isSubmitting}
+                  className="flex-1 text-sm"
                 >
                   Cancel
                 </Button>
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-1"
+                  className="flex-1 text-sm"
                 >
                   {isSubmitting && (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
