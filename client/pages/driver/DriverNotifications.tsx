@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { driverAuth, DriverSession } from '@/lib/driverAuth';
 import { supabase } from '@/lib/supabase';
 import { toast } from '@/hooks/use-toast';
-import { ArrowLeft, Trash2 } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 
 interface Notification {
   id: string;
@@ -180,144 +180,127 @@ export default function DriverNotifications() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex items-center justify-center py-12">
         <div className="text-center">
           <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600 mx-auto mb-4" />
-          <p className="text-gray-600">Loading...</p>
+          <p className="text-gray-600 text-sm">Loading...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      {/* Header */}
-      <div className="border-b bg-white shadow-sm sticky top-0 z-10">
-        <div className="mx-auto max-w-4xl px-4 py-4">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
+    <div className="w-full">
+      {/* Page Title */}
+      <div className="px-4 pt-4 pb-3 border-b border-gray-200">
+        <h1 className="text-xl font-bold text-gray-900 mb-1">Notifications</h1>
+        <p className="text-xs text-gray-600">
+          {unreadCount > 0 ? `${unreadCount} unread` : 'All caught up'}
+        </p>
+
+        {(unreadCount > 0 || notifications.length > 0) && (
+          <div className="flex gap-2 mt-3">
+            {unreadCount > 0 && (
               <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => navigate('/driver/dashboard')}
+                variant="outline"
+                size="sm"
+                onClick={handleMarkAllAsRead}
+                className="text-xs"
               >
-                <ArrowLeft className="h-5 w-5" />
+                Mark All Read
               </Button>
-              <div>
-                <h1 className="font-semibold text-gray-900">Notifications</h1>
-                <p className="text-sm text-gray-600">
-                  {unreadCount > 0 ? `${unreadCount} unread` : 'All caught up'}
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-2">
-              {unreadCount > 0 && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleMarkAllAsRead}
-                >
-                  Mark All as Read
-                </Button>
-              )}
-              {notifications.length > 0 && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleDeleteAll}
-                  disabled={isDeleting !== null}
-                >
-                  Clear All
-                </Button>
-              )}
-            </div>
+            )}
+            {notifications.length > 0 && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleDeleteAll}
+                disabled={isDeleting !== null}
+                className="text-xs"
+              >
+                Clear All
+              </Button>
+            )}
           </div>
-        </div>
+        )}
       </div>
 
       {/* Content */}
-      <div className="mx-auto max-w-4xl px-4 py-8">
+      <div className="px-4 py-4 space-y-3">
         {notifications.length === 0 ? (
           <Card>
             <CardContent className="flex flex-col items-center justify-center py-12">
-              <p className="text-gray-600 text-center">
+              <p className="text-gray-600 text-center text-sm">
                 No notifications yet. You're all caught up!
               </p>
-              <Button
-                variant="outline"
-                className="mt-4"
-                onClick={() => navigate('/driver/dashboard')}
-              >
-                Back to Dashboard
-              </Button>
             </CardContent>
           </Card>
         ) : (
-          <div className="space-y-3">
-            {notifications.map((notification) => (
-              <Card
-                key={notification.id}
-                className={`transition-colors ${
-                  !notification.read ? 'bg-blue-50 border-blue-200' : ''
-                }`}
-              >
-                <CardContent className="p-4">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-semibold text-gray-900">
-                          {notification.title}
-                        </h3>
-                        <span
-                          className={`rounded-full px-2 py-0.5 text-xs font-semibold ${
-                            notification.type === 'success'
-                              ? 'bg-green-100 text-green-800'
-                              : notification.type === 'warning'
-                                ? 'bg-amber-100 text-amber-800'
-                                : notification.type === 'error'
-                                  ? 'bg-red-100 text-red-800'
-                                  : 'bg-blue-100 text-blue-800'
-                          }`}
-                        >
-                          {notification.type}
-                        </span>
-                        {!notification.read && (
-                          <span className="h-2 w-2 rounded-full bg-blue-600" />
-                        )}
-                      </div>
-                      <p className="text-gray-700 text-sm leading-relaxed">
-                        {notification.message}
-                      </p>
-                      <p className="text-xs text-gray-500 mt-2">
-                        {new Date(notification.created_at).toLocaleString()}
-                      </p>
-                    </div>
-
-                    <div className="flex flex-col gap-2">
-                      {!notification.read && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleMarkAsRead(notification.id)}
-                        >
-                          Mark as Read
-                        </Button>
-                      )}
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                        onClick={() => handleDelete(notification.id)}
-                        disabled={isDeleting === notification.id}
+          notifications.map((notification) => (
+            <div
+              key={notification.id}
+              className={`rounded-lg border p-4 transition-colors ${
+                !notification.read
+                  ? 'bg-blue-50 border-blue-200'
+                  : 'bg-white border-gray-200'
+              }`}
+            >
+              <div className="space-y-2">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3 className="font-semibold text-gray-900 text-sm">
+                        {notification.title}
+                      </h3>
+                      <span
+                        className={`rounded-full px-2 py-0.5 text-xs font-semibold whitespace-nowrap ${
+                          notification.type === 'success'
+                            ? 'bg-green-100 text-green-800'
+                            : notification.type === 'warning'
+                              ? 'bg-amber-100 text-amber-800'
+                              : notification.type === 'error'
+                                ? 'bg-red-100 text-red-800'
+                                : 'bg-blue-100 text-blue-800'
+                        }`}
                       >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                        {notification.type}
+                      </span>
+                      {!notification.read && (
+                        <span className="h-2 w-2 rounded-full bg-blue-600" />
+                      )}
                     </div>
+                    <p className="text-gray-700 text-sm leading-relaxed mt-1">
+                      {notification.message}
+                    </p>
+                    <p className="text-xs text-gray-500 mt-2">
+                      {new Date(notification.created_at).toLocaleString()}
+                    </p>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-red-600 hover:text-red-700 hover:bg-red-50 h-8 w-8 p-0 flex-shrink-0"
+                    onClick={() => handleDelete(notification.id)}
+                    disabled={isDeleting === notification.id}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+
+                {!notification.read && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleMarkAsRead(notification.id)}
+                    className="text-xs w-full"
+                  >
+                    Mark as Read
+                  </Button>
+                )}
+              </div>
+            </div>
+          ))
         )}
       </div>
     </div>
