@@ -121,7 +121,7 @@ export default function DriverApp() {
         setUploading((u) => ({ ...u, [tag]: false }));
       }
     },
-    [DRIVER_BUCKET, activeTask?.id, profile?.name]
+    [DRIVER_BUCKET, activeTask?.id, profile?.name],
   );
 
   useEffect(() => {
@@ -215,7 +215,7 @@ export default function DriverApp() {
               ) {
                 loadTasks();
               }
-            }
+            },
           )
           .subscribe();
       } catch {}
@@ -234,19 +234,19 @@ export default function DriverApp() {
       tasks.filter(
         (t) =>
           t.status !== 'completed' &&
-          t.admin_status !== 'Task returned to the driver'
+          t.admin_status !== 'Task returned to the driver',
       ).length,
-    [tasks]
+    [tasks],
   );
   const completedCount = useMemo(
     () => tasks.filter((t) => t.status === 'completed').length,
-    [tasks]
+    [tasks],
   );
   const returnedCount = useMemo(
     () =>
       tasks.filter((t) => t.admin_status === 'Task returned to the driver')
         .length,
-    [tasks]
+    [tasks],
   );
 
   const loadNotifications = async () => {
@@ -268,9 +268,7 @@ export default function DriverApp() {
       .select('notification_id')
       .eq('driver_name', profile.name)
       .in('notification_id', ids);
-    const readSet = new Set(
-      (reads || []).map((r: any) => r.notification_id)
-    );
+    const readSet = new Set((reads || []).map((r: any) => r.notification_id));
     const unread = ids.filter((id: number) => !readSet.has(id)).length;
     setUnreadCount(unread);
   };
@@ -283,11 +281,11 @@ export default function DriverApp() {
       base = base.filter((t) => t.status !== 'completed');
       if (filterMode === 'active')
         base = base.filter(
-          (t) => t.status === 'in_progress' || t.status === 'pending'
+          (t) => t.status === 'in_progress' || t.status === 'pending',
         );
       if (filterMode === 'returned')
         base = base.filter(
-          (t) => t.admin_status === 'Task returned to the driver'
+          (t) => t.admin_status === 'Task returned to the driver',
         );
     }
     if (!query) return base;
@@ -296,8 +294,8 @@ export default function DriverApp() {
       [t.site_name, t.status, t.notes].some((v: any) =>
         String(v || '')
           .toLowerCase()
-          .includes(q)
-      )
+          .includes(q),
+      ),
     );
   }, [tasks, query, filterMode]);
 
@@ -368,9 +366,7 @@ export default function DriverApp() {
       .eq('id', t.id);
     if (!error)
       setTasks((arr) =>
-        arr.map((x) =>
-          x.id === t.id ? { ...x, status: 'in_progress' } : x
-        )
+        arr.map((x) => (x.id === t.id ? { ...x, status: 'in_progress' } : x)),
       );
   };
 
@@ -428,8 +424,8 @@ export default function DriverApp() {
       .eq('id', activeTask.id);
     setTasks((arr) =>
       arr.map((x) =>
-        x.id === activeTask.id ? { ...x, status: 'completed' } : x
-      )
+        x.id === activeTask.id ? { ...x, status: 'completed' } : x,
+      ),
     );
     setEditOpen(false);
     setActiveTask(null);
@@ -595,10 +591,7 @@ export default function DriverApp() {
                     >
                       {previews[item.key] || entry[`${item.key}_url`] ? (
                         <img
-                          src={
-                            previews[item.key] ||
-                            entry[`${item.key}_url`]
-                          }
+                          src={previews[item.key] || entry[`${item.key}_url`]}
                           alt={item.label}
                           className="w-full h-28 object-cover rounded-lg"
                         />
@@ -624,7 +617,7 @@ export default function DriverApp() {
                             }));
                             await handleFile(
                               item.key as keyof typeof keyMap,
-                              f
+                              f,
                             );
                           }}
                           disabled={uploading[item.key]}
@@ -635,9 +628,7 @@ export default function DriverApp() {
                           className="w-full h-10 rounded-lg text-sm"
                           disabled={uploading[item.key]}
                         >
-                          {uploading[item.key]
-                            ? 'Uploading...'
-                            : 'Add Photo'}
+                          {uploading[item.key] ? 'Uploading...' : 'Add Photo'}
                         </Button>
                       </label>
                     </div>
@@ -778,10 +769,8 @@ function HomeScreen({
 }: any) {
   const nextTask = useMemo(
     () =>
-      tasks.find(
-        (t) => t.status === 'in_progress' || t.status === 'pending'
-      ),
-    [tasks]
+      tasks.find((t) => t.status === 'in_progress' || t.status === 'pending'),
+    [tasks],
   );
 
   return (
@@ -904,9 +893,7 @@ function HomeScreen({
                 <p className="text-3xl font-bold text-green-700">
                   {completedCount}
                 </p>
-                <p className="text-xs font-semibold text-gray-600">
-                  Completed
-                </p>
+                <p className="text-xs font-semibold text-gray-600">Completed</p>
               </div>
               <Button
                 onClick={onRefresh}
