@@ -184,6 +184,7 @@ code/
 ## ✨ Key Features by Component
 
 ### 🏠 Admin Dashboard (`pages/Index.tsx`)
+
 - Quick metrics cards (4 stats)
 - "Fuel Added by Region" chart
 - "Fuel Added by Mission Category" chart
@@ -191,6 +192,7 @@ code/
 - Interactive tooltips
 
 ### 🎯 Missions Management (`pages/missions/Missions.tsx`)
+
 - Advanced data table with pagination
 - Filter by status, site, date range
 - Search functionality
@@ -200,6 +202,7 @@ code/
 - Bulk actions
 
 ### 🚗 Driver App Dashboard (`pages/driver/DriverDashboard.tsx`)
+
 - Bottom tab navigation (4 tabs)
 - Quick stats cards (Total, Completed, Pending, Active)
 - Task list with filters
@@ -208,6 +211,7 @@ code/
 - Real-time updates via Supabase
 
 ### 📋 Driver Missions (`pages/driver/DriverMissionDetail.tsx`)
+
 - Task information display
 - Fuel entry form (2 required fields)
 - Evidence photo uploads (4 images)
@@ -216,6 +220,7 @@ code/
 - Submit with validation
 
 ### 🔔 Driver Notifications (`pages/driver/DriverNotifications.tsx`)
+
 - Real-time notification list
 - Unread counter
 - Mark as read/delete buttons
@@ -224,6 +229,7 @@ code/
 - Empty state message
 
 ### ⚙️ Driver Settings (`pages/driver/DriverSettings.tsx`)
+
 - Profile information display
 - Device information (Platform, Version)
 - Notification preferences
@@ -231,6 +237,7 @@ code/
 - Logout button
 
 ### 📱 Bottom Tab Navigation
+
 - Fixed at bottom of screen
 - 4 main tabs: Dashboard, Missions, Notifications, Settings
 - Active tab highlighting
@@ -243,12 +250,14 @@ code/
 ## 🔑 Key Libraries & Technologies
 
 ### Frontend Framework
+
 - **React 18.3** - UI framework
 - **React Router 6.30** - Client-side routing
 - **TypeScript 5.9** - Type safety
 - **Vite 7.1** - Build tool
 
 ### UI & Styling
+
 - **Radix UI** - Accessible component library (40+ components)
 - **Tailwind CSS 3.4** - Utility-first CSS
 - **Tailwind Merge** - CSS class merging
@@ -256,11 +265,13 @@ code/
 - **Lucide React** - Icon library (modern SVG icons)
 
 ### State & Data
+
 - **React Query (TanStack) 5.84** - Server state management
 - **React Hook Form 7.62** - Form handling
 - **Zod 3.25** - Schema validation
 
 ### Backend & Auth
+
 - **Supabase JS 2.75** - Backend as a service
   - Authentication
   - Real-time updates
@@ -269,12 +280,14 @@ code/
 - **Firebase Cloud Messaging (FCM)** - Push notifications
 
 ### Mobile
+
 - **Capacitor** - Native mobile wrapper
 - **Capacitor Preferences** - Storage
 - **Capacitor Camera** - Photo capture
 - **Capacitor Filesystem** - File operations
 
 ### Utilities
+
 - **XLSX 0.18** - Excel export
 - **Date-fns 4.1** - Date manipulation
 - **Sonner 1.7** - Toast notifications
@@ -285,33 +298,40 @@ code/
 ## 🚀 How to Use
 
 ### Install Dependencies
+
 ```bash
 cd code
 pnpm install
 ```
 
 ### Development Server
+
 ```bash
 pnpm dev
 ```
+
 Runs on `http://localhost:5173` (or shown in terminal)
 
 ### Build for Production
+
 ```bash
 pnpm build
 ```
 
 ### Preview Build
+
 ```bash
 pnpm preview
 ```
 
 ### Type Check
+
 ```bash
 pnpm typecheck
 ```
 
 ### Format Code
+
 ```bash
 pnpm format.fix
 ```
@@ -321,6 +341,7 @@ pnpm format.fix
 ## 🔗 Route Structure
 
 ### Admin Routes
+
 ```
 /                        Admin Dashboard
 /login                   Admin Login
@@ -340,6 +361,7 @@ pnpm format.fix
 ```
 
 ### Driver App Routes
+
 ```
 /driver/login                  Driver Login
 /driver/dashboard              Driver Dashboard (with bottom tabs)
@@ -349,6 +371,7 @@ pnpm format.fix
 ```
 
 ### Mobile Routes
+
 ```
 /mobile/driver                 Driver App Preview
 ```
@@ -358,11 +381,13 @@ pnpm format.fix
 ## 🔐 Authentication
 
 ### Admin Auth
+
 - Email/password login via Supabase
 - Session stored in browser
 - Protected routes with MobileGuard
 
 ### Driver Auth
+
 - Email/password via `driverAuth.ts`
 - Stored in localStorage + Capacitor Preferences
 - Real-time session sync
@@ -373,6 +398,7 @@ pnpm format.fix
 ## 💾 Database (Supabase)
 
 ### Tables Used
+
 - `users` - Admin accounts
 - `drivers` - Driver accounts
 - `driver_tasks` - Task assignments
@@ -382,6 +408,7 @@ pnpm format.fix
 - `missions` - Fuel missions
 
 ### Storage Buckets
+
 - `driver-uploads` - Evidence photos and documents
 
 ---
@@ -389,6 +416,7 @@ pnpm format.fix
 ## 📧 Push Notifications
 
 ### Firebase Cloud Messaging (FCM)
+
 - **Sender ID**: 874270110177
 - **Service Worker**: `public/service-worker.js`
 - **Topics**: Driver task assignments, notifications
@@ -409,12 +437,14 @@ Mobile-only guard redirects desktop users (≥1024px) with message on driver rou
 ## 🎨 Color Scheme
 
 ### Status Colors
+
 - **Pending**: Blue (#0066cc)
 - **In Progress**: Amber (#f59e0b)
 - **Completed**: Green (#10b981)
 - **Deleted**: Red (#ef4444)
 
 ### UI Colors
+
 - **Primary**: Blue
 - **Success**: Green
 - **Warning**: Amber
@@ -464,11 +494,13 @@ FCM_SERVER_KEY=ceUStHy-_lvdizGfxYtaHhhJWzh5RovRwOxeir8L6z4
 ## 🆘 Troubleshooting
 
 ### Port Already in Use
+
 ```bash
 pnpm dev -- --host localhost --port 5174
 ```
 
 ### Build Fails
+
 ```bash
 rm -rf node_modules pnpm-lock.yaml
 pnpm install
@@ -476,11 +508,13 @@ pnpm build
 ```
 
 ### TypeScript Errors
+
 ```bash
 pnpm typecheck
 ```
 
 ### Components Not Found
+
 Check the import paths use `@/` alias which points to `code/client/`.
 
 ---
@@ -498,6 +532,7 @@ Check the import paths use `@/` alias which points to `code/client/`.
 ## 🎉 You're Ready!
 
 Download the `code/` folder and start building! The application is fully functional and production-ready with:
+
 - ✅ Admin web portal
 - ✅ Driver mobile app with bottom tab navigation
 - ✅ Real-time features
