@@ -449,50 +449,143 @@ export default function DriverApp() {
 
   if (screen === 'home') {
     return (
-      <HomeScreen
-        profile={profile}
-        tasks={tasks}
-        activeCount={activeCount}
-        completedCount={completedCount}
-        unreadCount={unreadCount}
-        onOpenTasks={() => setScreen('tasks')}
-        onOpenNotifications={() => setNotifOpen(true)}
-        onLogout={logout}
-        onRefresh={loadTasks}
-      />
+      <>
+        <HomeScreen
+          profile={profile}
+          tasks={tasks}
+          activeCount={activeCount}
+          completedCount={completedCount}
+          unreadCount={unreadCount}
+          onOpenTasks={() => setScreen('tasks')}
+          onOpenNotifications={() => setNotifOpen(true)}
+          onLogout={logout}
+          onRefresh={loadTasks}
+        />
+        <Dialog open={notifOpen} onOpenChange={setNotifOpen}>
+          <DialogContent className="max-w-sm rounded-3xl">
+            <DialogHeader>
+              <DialogTitle className="text-2xl text-[#202B6D]">
+                Notifications
+              </DialogTitle>
+            </DialogHeader>
+            <div className="space-y-2 max-h-96 overflow-y-auto">
+              {notifications.length === 0 ? (
+                <div className="text-center py-8 text-gray-500">
+                  <Bell className="w-12 h-12 mx-auto text-gray-300 mb-2" />
+                  <p className="text-sm">No notifications</p>
+                </div>
+              ) : (
+                notifications.map((n) => (
+                  <Card key={n.id} className="rounded-2xl border-0 shadow-sm">
+                    <CardContent className="p-4 space-y-2">
+                      <h4 className="font-bold text-gray-900">{n.title}</h4>
+                      <p className="text-sm text-gray-600">{n.message}</p>
+                      <p className="text-xs text-gray-400">
+                        {new Date(n.created_at).toLocaleString()}
+                      </p>
+                    </CardContent>
+                  </Card>
+                ))
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
+      </>
     );
   }
 
   if (screen === 'tasks') {
     return (
-      <TasksScreen
-        filtered={filtered}
-        filterMode={filterMode}
-        onFilterChange={setFilterMode}
-        query={query}
-        onQueryChange={setQuery}
-        onTaskClick={(t) => {
-          setActiveTask(t);
-          setScreen('detail');
-        }}
-        onBack={() => setScreen('home')}
-        onStartTask={startTask}
-        onCompleteTask={openComplete}
-      />
+      <>
+        <TasksScreen
+          filtered={filtered}
+          filterMode={filterMode}
+          onFilterChange={setFilterMode}
+          query={query}
+          onQueryChange={setQuery}
+          onTaskClick={(t) => {
+            setActiveTask(t);
+            setScreen('detail');
+          }}
+          onBack={() => setScreen('home')}
+          onStartTask={startTask}
+          onCompleteTask={openComplete}
+        />
+        <Dialog open={notifOpen} onOpenChange={setNotifOpen}>
+          <DialogContent className="max-w-sm rounded-3xl">
+            <DialogHeader>
+              <DialogTitle className="text-2xl text-[#202B6D]">
+                Notifications
+              </DialogTitle>
+            </DialogHeader>
+            <div className="space-y-2 max-h-96 overflow-y-auto">
+              {notifications.length === 0 ? (
+                <div className="text-center py-8 text-gray-500">
+                  <Bell className="w-12 h-12 mx-auto text-gray-300 mb-2" />
+                  <p className="text-sm">No notifications</p>
+                </div>
+              ) : (
+                notifications.map((n) => (
+                  <Card key={n.id} className="rounded-2xl border-0 shadow-sm">
+                    <CardContent className="p-4 space-y-2">
+                      <h4 className="font-bold text-gray-900">{n.title}</h4>
+                      <p className="text-sm text-gray-600">{n.message}</p>
+                      <p className="text-xs text-gray-400">
+                        {new Date(n.created_at).toLocaleString()}
+                      </p>
+                    </CardContent>
+                  </Card>
+                ))
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
+      </>
     );
   }
 
   if (screen === 'detail' && activeTask) {
     return (
-      <TaskDetailScreen
-        task={activeTask}
-        onBack={() => setScreen('tasks')}
-        onOpenDirections={() => openDirections(activeTask)}
-        onStartTask={() => {
-          startTask(activeTask);
-        }}
-        onComplete={() => openComplete(activeTask)}
-      />
+      <>
+        <TaskDetailScreen
+          task={activeTask}
+          onBack={() => setScreen('tasks')}
+          onOpenDirections={() => openDirections(activeTask)}
+          onStartTask={() => {
+            startTask(activeTask);
+          }}
+          onComplete={() => openComplete(activeTask)}
+        />
+        <Dialog open={notifOpen} onOpenChange={setNotifOpen}>
+          <DialogContent className="max-w-sm rounded-3xl">
+            <DialogHeader>
+              <DialogTitle className="text-2xl text-[#202B6D]">
+                Notifications
+              </DialogTitle>
+            </DialogHeader>
+            <div className="space-y-2 max-h-96 overflow-y-auto">
+              {notifications.length === 0 ? (
+                <div className="text-center py-8 text-gray-500">
+                  <Bell className="w-12 h-12 mx-auto text-gray-300 mb-2" />
+                  <p className="text-sm">No notifications</p>
+                </div>
+              ) : (
+                notifications.map((n) => (
+                  <Card key={n.id} className="rounded-2xl border-0 shadow-sm">
+                    <CardContent className="p-4 space-y-2">
+                      <h4 className="font-bold text-gray-900">{n.title}</h4>
+                      <p className="text-sm text-gray-600">{n.message}</p>
+                      <p className="text-xs text-gray-400">
+                        {new Date(n.created_at).toLocaleString()}
+                      </p>
+                    </CardContent>
+                  </Card>
+                ))
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
+      </>
     );
   }
 
