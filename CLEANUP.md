@@ -1,6 +1,7 @@
 # ACES MSD Fuel Driver App - Cleanup Guide
 
 ## Overview
+
 This project has been cleaned to focus exclusively on the mobile driver application. This document lists the files and directories that should be removed to complete the cleanup.
 
 ## Directories to Delete
@@ -44,6 +45,7 @@ rm client/pages/Placeholder.tsx
 ## Cleanup UI Components (Optional)
 
 Keep these essential UI components:
+
 - ✅ `components/ui/button.tsx` - Used by mobile app
 - ✅ `components/ui/card.tsx` - Used by mobile app
 - ✅ `components/ui/input.tsx` - Used by mobile app
@@ -55,6 +57,7 @@ Keep these essential UI components:
 - ✅ `components/ui/sonner.tsx` - Used by notifications
 
 Delete unused UI components (old dashboard features):
+
 ```bash
 rm client/components/ui/accordion.tsx
 rm client/components/ui/alert-dialog.tsx
