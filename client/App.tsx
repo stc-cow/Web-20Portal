@@ -80,7 +80,9 @@ const App = () => (
             path="/driver/dashboard"
             element={
               <MobileGuard mode="block">
-                <DriverDashboard />
+                <DriverAppLayout>
+                  <DriverDashboard />
+                </DriverAppLayout>
               </MobileGuard>
             }
           />
@@ -88,7 +90,9 @@ const App = () => (
             path="/driver/mission/:taskId"
             element={
               <MobileGuard mode="block">
-                <DriverMissionDetail />
+                <DriverAppLayout>
+                  <DriverMissionDetail />
+                </DriverAppLayout>
               </MobileGuard>
             }
           />
@@ -96,7 +100,9 @@ const App = () => (
             path="/driver/notifications"
             element={
               <MobileGuard mode="block">
-                <DriverNotifications />
+                <DriverAppLayout>
+                  <DriverNotifications />
+                </DriverAppLayout>
               </MobileGuard>
             }
           />
@@ -104,7 +110,9 @@ const App = () => (
             path="/driver/settings"
             element={
               <MobileGuard mode="block">
-                <DriverSettings />
+                <DriverAppLayout>
+                  <DriverSettings />
+                </DriverAppLayout>
               </MobileGuard>
             }
           />
