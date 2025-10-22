@@ -592,7 +592,8 @@ export default function DriverApp() {
   return null;
 }
 
-function RenderDialogsDisabled() {
+// TODO: Remove old renderDialogs code - dialogs now rendered inline in screen states
+function _RenderDialogsDisabled() {
   // Dialogs are now rendered inline in each screen state
   function renderDialogs() {
     return (
