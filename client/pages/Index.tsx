@@ -5,7 +5,7 @@ export default function Index() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    navigate('/driver');
+    navigate('/mobile/driver');
   }, [navigate]);
 
   return null;
