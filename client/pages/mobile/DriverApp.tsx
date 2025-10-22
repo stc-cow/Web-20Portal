@@ -677,11 +677,15 @@ function LoginScreen({
       <div className="w-full max-w-sm space-y-8">
         <div className="text-center space-y-4">
           <div className="flex justify-center">
-            <div className="w-24 h-24 bg-white/10 rounded-full flex items-center justify-center">
-              <Fuel className="w-12 h-12 text-white" />
-            </div>
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets%2Fbd65b3cd7a86452e803a3d7dc7a3d048%2Fcd98ef7f68c4407db7e0dfbb4230e3df?format=webp&width=800"
+              alt="ACES MSD Fuel"
+              className="h-32 w-auto"
+              loading="eager"
+              decoding="async"
+            />
           </div>
-          <h1 className="text-4xl font-bold text-white">ACES Fuel</h1>
+          <p className="text-4xl font-bold text-white">ACES MSD Fuel</p>
           <p className="text-blue-100 text-lg">Driver Application</p>
         </div>
 
