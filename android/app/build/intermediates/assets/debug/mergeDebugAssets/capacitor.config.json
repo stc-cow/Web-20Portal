@@ -1,0 +1,6 @@
+{
+	"appId": "com.aces.fueldriver",
+	"appName": "Fuel Driver App",
+	"webDir": "docs",
+	"bundledWebRuntime": false
+}
