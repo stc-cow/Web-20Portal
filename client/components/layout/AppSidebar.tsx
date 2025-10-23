@@ -15,11 +15,11 @@ import {
   SidebarProvider,
   SidebarRail,
   SidebarSeparator,
-} from '@/components/ui/sidebar';
-import { Link, useLocation } from 'react-router-dom';
-import { useI18n } from '@/i18n';
-import { useEffect, useState } from 'react';
-import { cn } from '@/lib/utils';
+} from "@/components/ui/sidebar";
+import { Link, useLocation } from "react-router-dom";
+import { useI18n } from "@/i18n";
+import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
@@ -31,26 +31,31 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 }
 
 function AppSidebar() {
-  const { pathname } = useLocation();
+  const [pathname, setPathname] = useState(() =>
+    typeof window !== "undefined" ? window.location.pathname : "/",
+  );
+
+  useEffect(() => {
+    const onPop = () => setPathname(window.location.pathname);
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
 
   const isActive = (p: string) => pathname === p;
-  const [openUsers, setOpenUsers] = useState(pathname.startsWith('/users'));
+  const [openUsers, setOpenUsers] = useState(pathname.startsWith("/users"));
   const [openEmployees, setOpenEmployees] = useState(
-    pathname.startsWith('/employees'),
+    pathname.startsWith("/employees"),
   );
   const [openSettings, setOpenSettings] = useState(
-    pathname.startsWith('/settings'),
+    pathname.startsWith("/settings"),
   );
   useEffect(() => {
-    if (pathname.startsWith('/users')) setOpenUsers(true);
-    if (pathname.startsWith('/employees')) setOpenEmployees(true);
-    if (pathname.startsWith('/settings')) setOpenSettings(true);
+    if (pathname.startsWith("/users")) setOpenUsers(true);
+    if (pathname.startsWith("/employees")) setOpenEmployees(true);
+    if (pathname.startsWith("/settings")) setOpenSettings(true);
   }, [pathname]);
 
   const { t } = useI18n();
-  const role =
-    typeof window !== 'undefined' ? localStorage.getItem('auth.role') : null;
-  const isAdmin = role === 'superadmin';
 
   return (
     <Sidebar
@@ -58,12 +63,12 @@ function AppSidebar() {
       collapsible="icon"
     >
       <SidebarHeader className="px-4 py-3">
-        <div className="flex items-center justify-center">
+        <div className="flex items-center">
           <Link to="/" className="select-none">
             <img
-              src="https://cdn.builder.io/api/v1/image/assets%2Fbd65b3cd7a86452e803a3d7dc7a3d048%2F88c65af5aa594e4eb74b03e70886ef92?format=webp&width=1200"
-              alt="ACES Managed Services"
-              className="h-auto w-[140px] mx-auto drop-shadow-[0_0_10px_rgba(255,255,255,0.18)]"
+              src="https://cdn.builder.io/api/v1/image/assets%2Fbd65b3cd7a86452e803a3d7dc7a3d048%2Fdf60032fd7d44277b7f568b8478ff12e?format=webp&width=800"
+              alt="ACES"
+              className="h-12 w-auto"
               loading="eager"
               decoding="async"
             />
@@ -76,127 +81,72 @@ function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  isActive={isActive('/')}
-                  className={cn(
-                    'hover:bg-[#002b59]',
-                    isActive('/') && 'border-l-4 border-[#E30613]',
-                  )}
-                >
+                <SidebarMenuButton asChild isActive={isActive("/")}>
                   <Link to="/" className="flex items-center">
                     <span className="font-bold text-white">
-                      {t('dashboard')}
+                      {t("dashboard")}
                     </span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-              {isAdmin && (
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={isActive('/users')}
-                    className={cn(
-                      'hover:bg-[#002b59]',
-                      isActive('/users') && 'border-l-4 border-[#E30613]',
-                    )}
-                  >
-                    <Link to="/users" className="flex items-center">
-                      <span className="font-bold text-white">
-                        {t('usersAuth')}
-                      </span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              )}
               <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  isActive={isActive('/missions')}
-                  className={cn(
-                    'hover:bg-[#002b59]',
-                    isActive('/missions') && 'border-l-4 border-[#E30613]',
-                  )}
-                >
+                <SidebarMenuButton asChild isActive={isActive("/users")}>
+                  <Link to="/users" className="flex items-center">
+                    <span className="font-bold text-white">
+                      {t("usersAuth")}
+                    </span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={isActive("/missions")}>
                   <Link to="/missions" className="flex items-center">
                     <span className="font-bold text-white">
-                      {t('missions')}
+                      {t("missions")}
                     </span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  isActive={isActive('/employees')}
-                  className={cn(
-                    'hover:bg-[#002b59]',
-                    isActive('/employees') && 'border-l-4 border-[#E30613]',
-                  )}
-                >
+                <SidebarMenuButton asChild isActive={isActive("/employees")}>
                   <Link to="/employees" className="flex items-center">
                     <span className="font-bold text-white">
-                      {t('employees')}
+                      {t("employees")}
                     </span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  isActive={isActive('/sites')}
-                  className={cn(
-                    'hover:bg-[#002b59]',
-                    isActive('/sites') && 'border-l-4 border-[#E30613]',
-                  )}
-                >
+                <SidebarMenuButton asChild isActive={isActive("/sites")}>
                   <Link to="/sites" className="flex items-center">
-                    <span className="font-bold text-white">{t('sites')}</span>
+                    <span className="font-bold text-white">{t("sites")}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  isActive={isActive('/reports')}
-                  className={cn(
-                    'hover:bg-[#002b59]',
-                    isActive('/reports') && 'border-l-4 border-[#E30613]',
-                  )}
-                >
+                <SidebarMenuButton asChild isActive={isActive("/reports")}>
                   <Link to="/reports" className="flex items-center">
-                    <span className="font-bold text-white">{t('reports')}</span>
+                    <span className="font-bold text-white">{t("reports")}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  isActive={isActive('/notifications')}
-                  className={cn(
-                    'hover:bg-[#002b59]',
-                    isActive('/notifications') && 'border-l-4 border-[#E30613]',
-                  )}
+                  isActive={isActive("/notifications")}
                 >
                   <Link to="/notifications" className="flex items-center">
                     <span className="font-bold text-white">
-                      {t('notifications')}
+                      {t("notifications")}
                     </span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  isActive={isActive('/settings')}
-                  className={cn(
-                    'hover:bg-[#002b59]',
-                    isActive('/settings') && 'border-l-4 border-[#E30613]',
-                  )}
-                >
+                <SidebarMenuButton asChild isActive={isActive("/settings")}>
                   <Link to="/settings" className="flex items-center">
                     <span className="font-bold text-white">
-                      {t('settings')}
+                      {t("settings")}
                     </span>
                   </Link>
                 </SidebarMenuButton>

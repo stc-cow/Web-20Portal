@@ -1,62 +1,55 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from "@supabase/supabase-js";
 
 const runtimeUrl =
   (import.meta.env.VITE_SUPABASE_URL as string) ||
-  (typeof window !== 'undefined' && (window as any).__env?.VITE_SUPABASE_URL) ||
-  '';
+  (typeof window !== "undefined" && (window as any).__env?.VITE_SUPABASE_URL) ||
+  "";
 const runtimeAnon =
   (import.meta.env.VITE_SUPABASE_ANON_KEY as string) ||
-  (typeof window !== 'undefined' &&
+  (typeof window !== "undefined" &&
     (window as any).__env?.VITE_SUPABASE_ANON_KEY) ||
-  '';
+  "";
 
 function failingResponse() {
-  // When Supabase isn't configured, return a neutral response and warn instead of throwing.
-  // This avoids runtime exceptions on pages while allowing the UI to handle empty data gracefully.
-  console.warn('Supabase not configured. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY');
-  return Promise.resolve({ data: null, error: null });
+  return Promise.resolve({
+    data: null,
+    error: new Error(
+      "Supabase not configured. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY",
+    ),
+  });
 }
 
 function mockFrom() {
+  const chainObj: any = {
+    maybeSingle: () => failingResponse(),
+    single: () => failingResponse(),
+  };
+  const chainable = () => chainObj;
+  chainObj.ilike = chainable;
+  chainObj.eq = chainable;
+  chainObj.order = chainable;
+  chainObj.filter = chainable;
+  chainObj.limit = chainable;
+  chainObj.match = chainable;
+  chainObj.not = chainable;
+  chainObj.is = chainable;
+
   return {
-    select: () => ({
-      order: () => Promise.resolve({ data: [], error: null }),
-      maybeSingle: () => Promise.resolve({ data: null, error: null }),
-      single: () => Promise.resolve({ data: null, error: null }),
-      eq: () => ({
-        maybeSingle: () => Promise.resolve({ data: null, error: null }),
-        single: () => Promise.resolve({ data: null, error: null }),
-      }),
-    }),
-    insert: () => Promise.resolve({ data: null, error: null }),
-    update: () => ({ eq: () => Promise.resolve({ data: null, error: null }) }),
-    delete: () => ({ eq: () => Promise.resolve({ data: null, error: null }) }),
+    select: () => chainObj,
+    insert: () => failingResponse(),
+    update: () => ({ eq: () => failingResponse() }),
+    delete: () => ({ eq: () => failingResponse() }),
+    upsert: () => failingResponse(),
   } as any;
 }
 
-function createMockRealtime() {
-  let subs: any[] = [];
-  return {
-    channel: (_name: string) => {
-      const ch: any = {
-        _name: _name,
-        on: (_evt: string, _filter: any, _cb: any) => ch,
-        subscribe: () => ({ id: _name }),
-      };
-      subs.push(ch);
-      return ch;
-    },
-    removeChannel: (_ch: any) => {},
-  } as any;
-}
-
+const SUPABASE_CONFIGURED = Boolean(runtimeUrl && runtimeAnon);
 let supabase: any;
-if (runtimeUrl && runtimeAnon) {
+if (SUPABASE_CONFIGURED) {
   supabase = createClient(runtimeUrl, runtimeAnon);
 } else {
   // provide a minimal mock to avoid runtime constructor errors; methods return a rejection-like response
-  const realtime = createMockRealtime();
-  supabase = { from: () => mockFrom(), ...realtime } as any;
+  supabase = { from: () => mockFrom() } as any;
 }
 
-export { supabase };
+export { supabase, SUPABASE_CONFIGURED };

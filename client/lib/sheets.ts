@@ -1,8 +1,6 @@
-export async function fetchPublishedSheetRows(
-  pubhtmlUrl: string,
-): Promise<string[][]> {
+export async function fetchPublishedSheetRows(pubhtmlUrl: string): Promise<string[][]> {
   const csvUrl = toCsvUrl(pubhtmlUrl);
-  const res = await fetch(csvUrl, { cache: 'no-store' });
+  const res = await fetch(csvUrl, { cache: "no-store" });
   if (!res.ok) throw new Error(`Failed to fetch sheet: ${res.status}`);
   const text = await res.text();
   return parseCsv(text);
@@ -12,14 +10,14 @@ function toCsvUrl(url: string): string {
   try {
     const u = new URL(url);
     // Replace "/pubhtml" with "/pub" and ensure output=csv
-    u.pathname = u.pathname.replace(/\/pubhtml$/, '/pub');
-    u.searchParams.set('output', 'csv');
+    u.pathname = u.pathname.replace(/\/pubhtml$/, "/pub");
+    u.searchParams.set("output", "csv");
     return u.toString();
   } catch {
     // Fallback simple replace
-    if (url.includes('pubhtml')) {
-      const base = url.replace('pubhtml', 'pub');
-      return base + (base.includes('?') ? '&' : '?') + 'output=csv';
+    if (url.includes("pubhtml")) {
+      const base = url.replace("pubhtml", "pub");
+      return base + (base.includes("?") ? "&" : "?") + "output=csv";
     }
     return url;
   }
@@ -30,7 +28,7 @@ function parseCsv(input: string): string[][] {
   let i = 0;
   const len = input.length;
   let row: string[] = [];
-  let field = '';
+  let field = "";
   let inQuotes = false;
 
   while (i < len) {
@@ -59,7 +57,7 @@ function parseCsv(input: string): string[][] {
       }
       if (ch === ',') {
         row.push(field);
-        field = '';
+        field = "";
         i++;
         continue;
       }
@@ -67,14 +65,11 @@ function parseCsv(input: string): string[][] {
         row.push(field);
         rows.push(row);
         row = [];
-        field = '';
+        field = "";
         i++;
         continue;
       }
-      if (ch === '\r') {
-        i++;
-        continue;
-      }
+      if (ch === '\r') { i++; continue; }
       field += ch;
       i++;
     }

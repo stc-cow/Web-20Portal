@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useI18n } from '@/i18n';
-import { Card, CardContent } from '@/components/ui/card';
+import { useEffect, useMemo, useState } from "react";
+import { useI18n } from "@/i18n";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -8,8 +8,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { supabase } from '@/lib/supabase';
+} from "@/components/ui/table";
+import { fetchPublishedSheetRows } from "@/lib/sheets";
+import { supabase } from "@/lib/supabase";
 
 export type SiteRow = {
   siteName: string;
@@ -54,30 +55,84 @@ export function SitesTable({
     (async () => {
       // Try Supabase first
       const { data, error } = await supabase
-        .from('sites')
+        .from("sites")
         .select(
-          'site_name, vendor, region, district, city, cow_status, latitude, longitude, power_source',
+          "site_name, vendor, region, district, city, cow_status, latitude, longitude, power_source",
         )
-        .not('region', 'ilike', '%west%')
-        .order('created_at', { ascending: false });
-      if (!cancelled && !error && data) {
+        .not("region", "ilike", "%west%")
+        .order("created_at", { ascending: false });
+      if (!cancelled && !error && data && data.length > 0) {
         const mapped: SiteRow[] = data.map((d: any) => ({
-          siteName: d.site_name ?? '',
-          vendor: d.vendor ?? '',
-          region: d.region ?? '',
-          district: d.district ?? '',
-          city: d.city ?? '',
-          cowStatus: d.cow_status ?? '',
-          latitude: d.latitude != null ? String(d.latitude) : '',
-          longitude: d.longitude != null ? String(d.longitude) : '',
-          powerSource: d.power_source ?? '',
+          siteName: d.site_name ?? "",
+          vendor: d.vendor ?? "",
+          region: d.region ?? "",
+          district: d.district ?? "",
+          city: d.city ?? "",
+          cowStatus: d.cow_status ?? "",
+          latitude: d.latitude != null ? String(d.latitude) : "",
+          longitude: d.longitude != null ? String(d.longitude) : "",
+          powerSource: d.power_source ?? "",
         }));
         const filteredDb = mapped.filter(
-          (m) => !(m.region || '').toLowerCase().includes('west'),
+          (m) => !(m.region || "").toLowerCase().includes("west"),
         );
         setRows(limit ? filteredDb.slice(0, limit) : filteredDb);
+        setLoading(false);
+        return;
       }
-      if (!cancelled) setLoading(false);
+      // Fallback: fetch from Google Sheet, then push to Supabase
+      try {
+        const csv = await fetchPublishedSheetRows(sourceUrl);
+        const mapped: SiteRow[] = [];
+        for (let i = 1; i < csv.length; i++) {
+          const r = csv[i];
+          if (!r || r.length === 0) continue;
+          const siteName = (r[COLS.siteName] || "").trim();
+          const vendor = (r[COLS.vendor] || "").trim();
+          const region = (r[COLS.region] || "").trim();
+          const district = (r[COLS.district] || "").trim();
+          const city = (r[COLS.city] || "").trim();
+          const cowStatus = (r[COLS.cowStatus] || "").trim();
+          const latStr = (r[COLS.latitude] || "").trim();
+          const lonStr = (r[COLS.longitude] || "").trim();
+          const latitude = latStr;
+          const longitude = lonStr;
+          const powerSource = (r[COLS.powerSource] || "").trim();
+          if (!siteName && !vendor && !region && !district && !city) continue;
+          mapped.push({
+            siteName,
+            vendor,
+            region,
+            district,
+            city,
+            cowStatus,
+            latitude,
+            longitude,
+            powerSource,
+          });
+        }
+        const filtered = mapped.filter(
+          (m) => !(m.region || "").toLowerCase().includes("west"),
+        );
+        setRows(limit ? filtered.slice(0, limit) : filtered);
+        // Push to Supabase (best-effort)
+        const payload = filtered.map((m) => ({
+          site_name: m.siteName,
+          vendor: m.vendor,
+          region: m.region,
+          district: m.district,
+          city: m.city,
+          cow_status: m.cowStatus,
+          latitude: m.latitude ? parseFloat(m.latitude) : null,
+          longitude: m.longitude ? parseFloat(m.longitude) : null,
+          power_source: m.powerSource,
+        }));
+        await supabase.from("sites").insert(payload);
+      } catch (e: any) {
+        if (!cancelled) setError(e?.message || String(e));
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
     })();
     return () => {
       cancelled = true;
@@ -88,20 +143,20 @@ export function SitesTable({
     <Card>
       <CardContent className="p-0">
         <div className="px-6 pt-6 text-base font-medium">
-          {t('sitesOverview')}
+          {t("sitesOverview")}
         </div>
         <Table>
           <TableHeader>
-            <TableRow className="bg-[#0C2340] text-white hover:bg-[#0C2340]">
-              <TableHead className="text-white">{t('siteName')}</TableHead>
-              <TableHead className="text-white">{t('vendor')}</TableHead>
-              <TableHead className="text-white">{t('region')}</TableHead>
-              <TableHead className="text-white">{t('district')}</TableHead>
-              <TableHead className="text-white">{t('city')}</TableHead>
-              <TableHead className="text-white">{t('cowStatus')}</TableHead>
-              <TableHead className="text-white">{t('latitude')}</TableHead>
-              <TableHead className="text-white">{t('longitude')}</TableHead>
-              <TableHead className="text-white">{t('powerSource')}</TableHead>
+            <TableRow className="bg-[hsl(var(--primary))] text-white hover:bg-[hsl(var(--primary))]">
+              <TableHead className="text-white">{t("siteName")}</TableHead>
+              <TableHead className="text-white">{t("vendor")}</TableHead>
+              <TableHead className="text-white">{t("region")}</TableHead>
+              <TableHead className="text-white">{t("district")}</TableHead>
+              <TableHead className="text-white">{t("city")}</TableHead>
+              <TableHead className="text-white">{t("cowStatus")}</TableHead>
+              <TableHead className="text-white">{t("latitude")}</TableHead>
+              <TableHead className="text-white">{t("longitude")}</TableHead>
+              <TableHead className="text-white">{t("powerSource")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -111,7 +166,7 @@ export function SitesTable({
                   colSpan={9}
                   className="text-center text-sm text-muted-foreground"
                 >
-                  {t('loading')}
+                  {t("loading")}
                 </TableCell>
               </TableRow>
             )}
@@ -121,7 +176,7 @@ export function SitesTable({
                   colSpan={9}
                   className="text-center text-sm text-destructive"
                 >
-                  {t('failedToLoad')}
+                  {t("failedToLoad")}
                 </TableCell>
               </TableRow>
             )}
@@ -131,21 +186,14 @@ export function SitesTable({
                   colSpan={9}
                   className="text-center text-sm text-muted-foreground"
                 >
-                  {t('noDataYet')}
+                  {t("noDataYet")}
                 </TableCell>
               </TableRow>
             )}
             {!loading &&
               !error &&
               rows.map((r, idx) => (
-                <TableRow
-                  key={idx}
-                  className={
-                    idx % 2 === 0
-                      ? 'bg-white'
-                      : 'bg-[#F9FAFB] hover:bg-[#EEF2FF]'
-                  }
-                >
+                <TableRow key={idx}>
                   <TableCell className="font-medium">{r.siteName}</TableCell>
                   <TableCell>{r.vendor}</TableCell>
                   <TableCell>{r.region}</TableCell>
