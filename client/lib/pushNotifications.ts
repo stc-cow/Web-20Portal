@@ -1,12 +1,20 @@
-import { Capacitor } from "@capacitor/core";
-import {
-  ActionPerformed,
-  PushNotificationSchema,
-  PushNotifications,
-  Token,
-} from "@capacitor/push-notifications";
-
 import { supabase } from "./supabase";
+
+// Capacitor imports with fallback for web
+let Capacitor: any = null;
+let PushNotifications: any = null;
+
+try {
+  // These are only available in native environments
+  if (typeof window !== "undefined") {
+    const capCore = require("@capacitor/core");
+    const capPN = require("@capacitor/push-notifications");
+    Capacitor = capCore.Capacitor;
+    PushNotifications = capPN.PushNotifications;
+  }
+} catch (e) {
+  // Capacitor not available (web environment)
+}
 
 const pushNotificationsEnabled =
   String(import.meta.env.VITE_PUSH_NOTIFICATIONS_ENABLED ?? "").toLowerCase() ===
