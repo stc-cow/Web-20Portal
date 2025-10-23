@@ -1,6 +1,7 @@
 # ACES MSD Fuel Driver - Mobile App Restructure
 
 ## Strategy
+
 1. **Delete** `code/` folder (consolidating into Driver-20App)
 2. **Clean** `Driver-20App/` - remove all web portal code
 3. **Optimize** dependencies - keep only mobile essentials
@@ -9,6 +10,7 @@
 ## Cleanup Commands
 
 ### Remove Web Pages
+
 ```bash
 rm -rf Driver-20App/client/pages/employees
 rm -rf Driver-20App/client/pages/missions
@@ -23,6 +25,7 @@ rm -f Driver-20App/client/pages/Placeholder.tsx
 ```
 
 ### Remove Web Components
+
 ```bash
 rm -rf Driver-20App/client/components/builder
 rm -rf Driver-20App/client/components/dashboard
@@ -31,6 +34,7 @@ rm -rf Driver-20App/client/components/visual
 ```
 
 ### Remove Unused UI Components (Keep: button, card, input, label, dialog, toast, toaster, sonner, textarea, tooltip)
+
 ```bash
 cd Driver-20App/client/components/ui && \
 rm -f accordion.tsx alert-dialog.tsx alert.tsx aspect-ratio.tsx avatar.tsx badge.tsx \
@@ -43,11 +47,13 @@ toggle.tsx
 ```
 
 ### Delete Old Code Folder
+
 ```bash
 rm -rf code
 ```
 
 ### Clean Install
+
 ```bash
 cd Driver-20App
 rm -rf node_modules pnpm-lock.yaml
@@ -57,7 +63,8 @@ pnpm install
 ## Updated package.json (Replace Driver-20App/package.json)
 
 Dependencies to REMOVE from current package.json:
-- @react-three/* (3D)
+
+- @react-three/\* (3D)
 - framer-motion (animations)
 - embla-carousel-react (carousel)
 - cmdk (command)
@@ -71,9 +78,10 @@ Dependencies to REMOVE from current package.json:
 - input-otp (OTP)
 - react-resizable-panels (panels)
 - vaul (drawer)
-- Unused @radix-ui/* components
+- Unused @radix-ui/\* components
 
 Minimal package.json with only essentials:
+
 ```json
 {
   "name": "aces-fuel-driver-mobile",
@@ -147,6 +155,7 @@ Minimal package.json with only essentials:
 ```
 
 ## Final Structure
+
 ```
 Driver-20App/                      (rename to aces-fuel-driver-mobile)
 ├── client/
@@ -169,6 +178,7 @@ Driver-20App/                      (rename to aces-fuel-driver-mobile)
 ```
 
 ## Next Steps
+
 1. Execute cleanup commands above on your machine
 2. Replace package.json with minimal version
 3. Run `pnpm install`
@@ -176,4 +186,5 @@ Driver-20App/                      (rename to aces-fuel-driver-mobile)
 5. Push to GitHub branch `Driver_App`
 
 ---
+
 **Ready for execution. User to run cleanup commands locally.**
