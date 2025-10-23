@@ -4,8 +4,6 @@ import { useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   HashRouter,
   Routes,
@@ -14,14 +12,11 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-import { I18nProvider } from "./i18n";
 import DriverApp from "./pages/mobile/DriverApp";
 import DriverDashboard from "./pages/mobile/DriverDashboard";
 import DriverTasks from "./pages/mobile/DriverTasks";
 import DriverLogin from "./pages/mobile/DriverLogin";
 import { Capacitor } from "@capacitor/core";
-
-const queryClient = new QueryClient();
 
 const NativeStartRedirect = () => {
   const nav = useNavigate();
@@ -39,25 +34,21 @@ const NativeStartRedirect = () => {
 };
 
 const App = () => (
-  <I18nProvider>
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <HashRouter>
-          <NativeStartRedirect />
-          <Routes>
-            <Route path="/" element={<Navigate to="/driver-login" replace />} />
-            <Route path="/driver" element={<DriverApp />} />
-            <Route path="/driver-dashboard" element={<DriverDashboard />} />
-            <Route path="/driver-tasks" element={<DriverTasks />} />
-            <Route path="/driver-login" element={<DriverLogin />} />
-            <Route path="*" element={<Navigate to="/driver-login" replace />} />
-          </Routes>
-        </HashRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
-  </I18nProvider>
+  <>
+    <Toaster />
+    <Sonner />
+    <HashRouter>
+      <NativeStartRedirect />
+      <Routes>
+        <Route path="/" element={<Navigate to="/driver-login" replace />} />
+        <Route path="/driver" element={<DriverApp />} />
+        <Route path="/driver-dashboard" element={<DriverDashboard />} />
+        <Route path="/driver-tasks" element={<DriverTasks />} />
+        <Route path="/driver-login" element={<DriverLogin />} />
+        <Route path="*" element={<Navigate to="/driver-login" replace />} />
+      </Routes>
+    </HashRouter>
+  </>
 );
 
 // Ensure we only create a single root; reuse across HMR reloads to avoid multiple createRoot warnings
