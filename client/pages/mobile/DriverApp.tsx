@@ -232,7 +232,10 @@ export default function DriverApp() {
 
   const capturePhoto = useCallback(
     async (tag: keyof typeof keyMap) => {
-      if (!isNative) return;
+      if (!isNative || !Camera) {
+        alert("Camera is not available in this environment.");
+        return;
+      }
       try {
         const permissions = await Camera.checkPermissions();
         if (permissions.camera !== "granted") {
