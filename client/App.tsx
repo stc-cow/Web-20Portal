@@ -16,13 +16,20 @@ import DriverApp from "./pages/mobile/DriverApp";
 import DriverDashboard from "./pages/mobile/DriverDashboard";
 import DriverTasks from "./pages/mobile/DriverTasks";
 import DriverLogin from "./pages/mobile/DriverLogin";
-import { Capacitor } from "@capacitor/core";
+
+// Capacitor is only available in native environments
+let Capacitor: any = null;
+try {
+  Capacitor = require("@capacitor/core").Capacitor;
+} catch (e) {
+  // Capacitor not available (web environment)
+}
 
 const NativeStartRedirect = () => {
   const nav = useNavigate();
   const loc = useLocation();
   useEffect(() => {
-    const isNative = (Capacitor as any)?.isNativePlatform?.() ?? false;
+    const isNative = Capacitor?.isNativePlatform?.() ?? false;
     if (isNative) {
       const p = loc.pathname || "/";
       if (p === "/" || p === "/login" || p === "/driver-login") {
