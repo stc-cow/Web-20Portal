@@ -1,14 +1,14 @@
-import { AppShell } from '@/components/layout/AppSidebar';
-import Header from '@/components/layout/Header';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { AppShell } from "@/components/layout/AppSidebar";
+import Header from "@/components/layout/Header";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -16,8 +16,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { useMemo, useState } from 'react';
+} from "@/components/ui/table";
+import { useMemo, useState } from "react";
 import {
   Columns2,
   Download,
@@ -28,7 +28,7 @@ import {
   Trash2,
   CheckCircle2,
   XCircle,
-} from 'lucide-react';
+} from "lucide-react";
 
 type GeneratorRow = {
   id: number;
@@ -43,8 +43,8 @@ type GeneratorRow = {
 const initialRows: GeneratorRow[] = [
   {
     id: 1,
-    name: '3172',
-    site: 'SGD66662',
+    name: "3172",
+    site: "SGD66662",
     dailyVirtual: 100,
     lastAvg: 400,
     rateOk: true,
@@ -52,8 +52,8 @@ const initialRows: GeneratorRow[] = [
   },
   {
     id: 2,
-    name: '2371',
-    site: 'COWM38',
+    name: "2371",
+    site: "COWM38",
     dailyVirtual: 95,
     lastAvg: 0,
     rateOk: false,
@@ -61,8 +61,8 @@ const initialRows: GeneratorRow[] = [
   },
   {
     id: 3,
-    name: '2370',
-    site: 'COW531',
+    name: "2370",
+    site: "COW531",
     dailyVirtual: 100,
     lastAvg: 50,
     rateOk: true,
@@ -70,8 +70,8 @@ const initialRows: GeneratorRow[] = [
   },
   {
     id: 4,
-    name: '2368',
-    site: 'COW591',
+    name: "2368",
+    site: "COW591",
     dailyVirtual: 100,
     lastAvg: 20,
     rateOk: false,
@@ -79,8 +79,8 @@ const initialRows: GeneratorRow[] = [
   },
   {
     id: 5,
-    name: '2367',
-    site: 'A-25462C',
+    name: "2367",
+    site: "A-25462C",
     dailyVirtual: 100,
     lastAvg: 0,
     rateOk: false,
@@ -88,8 +88,8 @@ const initialRows: GeneratorRow[] = [
   },
   {
     id: 6,
-    name: '2366',
-    site: 'COW63',
+    name: "2366",
+    site: "COW63",
     dailyVirtual: 100,
     lastAvg: 100,
     rateOk: true,
@@ -98,19 +98,19 @@ const initialRows: GeneratorRow[] = [
 ];
 
 const allColumns = [
-  { key: 'name', label: 'Name' },
-  { key: 'site', label: 'Site' },
-  { key: 'dailyVirtual', label: 'Daily virtual consumption' },
-  { key: 'lastAvg', label: 'Last average consumption' },
-  { key: 'rateOk', label: 'Rate' },
-  { key: 'active', label: 'Active' },
-  { key: 'settings', label: 'Settings' },
+  { key: "name", label: "Name" },
+  { key: "site", label: "Site" },
+  { key: "dailyVirtual", label: "Daily virtual consumption" },
+  { key: "lastAvg", label: "Last average consumption" },
+  { key: "rateOk", label: "Rate" },
+  { key: "active", label: "Active" },
+  { key: "settings", label: "Settings" },
 ] as const;
 
-type ColumnKey = (typeof allColumns)[number]['key'];
+type ColumnKey = (typeof allColumns)[number]["key"];
 
 export default function GeneratorsPage() {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [rows, setRows] = useState<GeneratorRow[]>(initialRows);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -127,7 +127,7 @@ export default function GeneratorsPage() {
 
   const filtered = useMemo(() => {
     let data = rows;
-    if (onlyWithoutSite) data = data.filter((r) => !r.site || r.site === '-');
+    if (onlyWithoutSite) data = data.filter((r) => !r.site || r.site === "-");
     if (!query) return data;
     const q = query.toLowerCase();
     return data.filter((r) =>
@@ -143,29 +143,29 @@ export default function GeneratorsPage() {
 
   const exportCsv = () => {
     const visible = allColumns.filter(
-      (c) => cols[c.key] && c.key !== 'settings',
+      (c) => cols[c.key] && c.key !== "settings",
     );
-    const head = visible.map((c) => c.label).join(',');
+    const head = visible.map((c) => c.label).join(",");
     const body = filtered
       .map((r) =>
         visible
           .map((c) => {
             const key = c.key as keyof GeneratorRow;
             const v = (r as any)[key];
-            if (key === 'active') return r.active ? 'Yes' : 'No';
-            if (key === 'rateOk') return r.rateOk ? 'OK' : 'Alert';
+            if (key === "active") return r.active ? "Yes" : "No";
+            if (key === "rateOk") return r.rateOk ? "OK" : "Alert";
             return v;
           })
-          .join(','),
+          .join(","),
       )
-      .join('\n');
-    const blob = new Blob([head + '\n' + body], {
-      type: 'text/csv;charset=utf-8;',
+      .join("\n");
+    const blob = new Blob([head + "\n" + body], {
+      type: "text/csv;charset=utf-8;",
     });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = 'generators.csv';
+    a.download = "generators.csv";
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -192,7 +192,7 @@ export default function GeneratorsPage() {
               <Download className="mr-2 h-4 w-4" /> Excel All
             </Button>
             <Button
-              variant={onlyWithoutSite ? 'default' : 'outline'}
+              variant={onlyWithoutSite ? "default" : "outline"}
               className="hidden sm:inline-flex"
               onClick={() => setOnlyWithoutSite((v) => !v)}
             >
@@ -288,7 +288,7 @@ export default function GeneratorsPage() {
                       {cols.name && (
                         <TableCell className="font-medium">{r.name}</TableCell>
                       )}
-                      {cols.site && <TableCell>{r.site || '-'}</TableCell>}
+                      {cols.site && <TableCell>{r.site || "-"}</TableCell>}
                       {cols.dailyVirtual && (
                         <TableCell>{r.dailyVirtual}</TableCell>
                       )}

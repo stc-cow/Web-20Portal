@@ -1,89 +1,63 @@
-import { AppShell } from '@/components/layout/AppSidebar';
-import Header from '@/components/layout/Header';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { useEffect, useState } from 'react';
-import { toast } from '@/hooks/use-toast';
-import { useI18n } from '@/i18n';
-import { supabase } from '@/lib/supabase';
+import { AppShell } from "@/components/layout/AppSidebar";
+import Header from "@/components/layout/Header";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useEffect, useState } from "react";
+import { toast } from "@/hooks/use-toast";
+import { useI18n } from "@/i18n";
 
-type SettingsForm = {
-  fuel_unit_price: number;
-  vat_rate: number;
-  supplier_name: string;
-  supplier_address: string;
-  invoice_prefix: string;
-  invoice_sequence: number;
-  fcm_server_key: string;
-  fcm_sender_id: string;
+const STORAGE_KEY = "settings.general";
+
+type GeneralSettings = {
+  literPrice: number;
+  maxDistance: number;
+  language: "en" | "ar" | "ur";
 };
 
 export default function GeneralSettingsPage() {
-  const { t } = useI18n();
-  const role =
-    typeof window !== 'undefined' ? localStorage.getItem('auth.role') : null;
-  const isAdmin = role === 'superadmin';
-
-  const [form, setForm] = useState<SettingsForm>({
-    fuel_unit_price: 0.63,
-    vat_rate: 0.15,
-    supplier_name: '',
-    supplier_address: '',
-    invoice_prefix: 'INV-SEC-',
-    invoice_sequence: 1,
-    fcm_server_key: '',
-    fcm_sender_id: '',
+  const [form, setForm] = useState<GeneralSettings>({
+    literPrice: 0.63,
+    maxDistance: 500,
+    language: "en",
   });
   const [saving, setSaving] = useState(false);
+  const { t, setLang } = useI18n();
 
   useEffect(() => {
-    (async () => {
-      const { data } = await supabase
-        .from('settings')
-        .select('*')
-        .limit(1)
-        .maybeSingle();
-      if (data) {
-        setForm((f) => ({
-          fuel_unit_price: Number(data.fuel_unit_price ?? f.fuel_unit_price),
-          vat_rate: Number(data.vat_rate ?? f.vat_rate),
-          supplier_name: data.supplier_name ?? f.supplier_name,
-          supplier_address: data.supplier_address ?? f.supplier_address,
-          invoice_prefix: data.invoice_prefix ?? f.invoice_prefix,
-          invoice_sequence: Number(data.invoice_sequence ?? f.invoice_sequence),
-          fcm_server_key: data.fcm_server_key ?? f.fcm_server_key,
-          fcm_sender_id: data.fcm_sender_id ?? f.fcm_sender_id,
-        }));
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw) as Partial<GeneralSettings>;
+        if (
+          typeof parsed.literPrice === "number" &&
+          typeof parsed.maxDistance === "number"
+        ) {
+          setForm({
+            literPrice: parsed.literPrice,
+            maxDistance: parsed.maxDistance,
+            language: (parsed.language as "en" | "ar" | "ur") || "en",
+          });
+        }
       }
-    })();
+    } catch {}
   }, []);
 
   const save = async () => {
-    if (!isAdmin) return;
     setSaving(true);
-    const { error } = await supabase.from('settings').upsert(
-      [
-        {
-          id: 1,
-          fuel_unit_price: form.fuel_unit_price,
-          vat_rate: form.vat_rate,
-          supplier_name: form.supplier_name,
-          supplier_address: form.supplier_address,
-          invoice_prefix: form.invoice_prefix,
-          invoice_sequence: form.invoice_sequence,
-          fcm_server_key: form.fcm_server_key,
-          fcm_sender_id: form.fcm_sender_id,
-        },
-      ],
-      { onConflict: 'id' },
-    );
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(form));
+    localStorage.setItem("i18n.lang", form.language);
+    setLang(form.language);
+    await new Promise((r) => setTimeout(r, 300));
     setSaving(false);
-    if (error) {
-      toast({ title: 'Save failed', description: error.message });
-      return;
-    }
-    toast({ title: 'Saved', description: 'General settings updated.' });
+    toast({ title: "Saved", description: "General settings updated." });
   };
 
   return (
@@ -91,140 +65,74 @@ export default function GeneralSettingsPage() {
       <Header />
       <div className="px-4 pb-10 pt-4">
         <div className="mb-4 text-sm text-muted-foreground">
-          {t('generalSettings')}
+          {t("generalSettings")}
         </div>
-        {!isAdmin && (
-          <div className="mb-3 rounded border bg-muted p-3 text-sm">
-            Only administrators can edit settings. Values are read-only.
-          </div>
-        )}
         <Card>
           <CardContent className="p-6">
             <div className="grid max-w-3xl gap-6 md:grid-cols-2">
               <div>
                 <div className="text-xs text-muted-foreground">
-                  Fuel unit price
+                  {t("literPrice")}
                 </div>
                 <Input
                   type="number"
                   step="0.01"
-                  value={form.fuel_unit_price}
+                  value={form.literPrice}
                   onChange={(e) =>
                     setForm((f) => ({
                       ...f,
-                      fuel_unit_price: Number(e.target.value),
+                      literPrice: Number(e.target.value),
                     }))
                   }
-                  disabled={!isAdmin}
-                  className="mt-1"
-                />
-              </div>
-              <div>
-                <div className="text-xs text-muted-foreground">VAT rate</div>
-                <Input
-                  type="number"
-                  step="0.01"
-                  value={form.vat_rate}
-                  onChange={(e) =>
-                    setForm((f) => ({ ...f, vat_rate: Number(e.target.value) }))
-                  }
-                  disabled={!isAdmin}
+                  placeholder="0.63"
                   className="mt-1"
                 />
               </div>
               <div>
                 <div className="text-xs text-muted-foreground">
-                  Supplier name
-                </div>
-                <Input
-                  value={form.supplier_name}
-                  onChange={(e) =>
-                    setForm((f) => ({ ...f, supplier_name: e.target.value }))
-                  }
-                  disabled={!isAdmin}
-                  className="mt-1"
-                />
-              </div>
-              <div>
-                <div className="text-xs text-muted-foreground">
-                  Supplier address
-                </div>
-                <Input
-                  value={form.supplier_address}
-                  onChange={(e) =>
-                    setForm((f) => ({ ...f, supplier_address: e.target.value }))
-                  }
-                  disabled={!isAdmin}
-                  className="mt-1"
-                />
-              </div>
-              <div>
-                <div className="text-xs text-muted-foreground">
-                  Invoice prefix
-                </div>
-                <Input
-                  value={form.invoice_prefix}
-                  onChange={(e) =>
-                    setForm((f) => ({ ...f, invoice_prefix: e.target.value }))
-                  }
-                  disabled={!isAdmin}
-                  className="mt-1"
-                />
-              </div>
-              <div>
-                <div className="text-xs text-muted-foreground">
-                  Invoice sequence
+                  {t("maxDistance")}
                 </div>
                 <Input
                   type="number"
-                  value={form.invoice_sequence}
+                  value={form.maxDistance}
                   onChange={(e) =>
                     setForm((f) => ({
                       ...f,
-                      invoice_sequence: Number(e.target.value),
+                      maxDistance: Number(e.target.value),
                     }))
                   }
-                  disabled={!isAdmin}
+                  placeholder="500"
                   className="mt-1"
                 />
               </div>
-              <div className="md:col-span-2">
+              <div>
                 <div className="text-xs text-muted-foreground">
-                  FCM server key
+                  {t("language")}
                 </div>
-                <Input
-                  value={form.fcm_server_key}
-                  onChange={(e) =>
-                    setForm((f) => ({ ...f, fcm_server_key: e.target.value }))
+                <Select
+                  value={form.language}
+                  onValueChange={(v) =>
+                    setForm((f) => ({
+                      ...f,
+                      language: v as "en" | "ar" | "ur",
+                    }))
                   }
-                  disabled={!isAdmin}
-                  className="mt-1"
-                />
+                >
+                  <SelectTrigger className="mt-1">
+                    <SelectValue placeholder="Select language" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="en">English</SelectItem>
+                    <SelectItem value="ar">العربية</SelectItem>
+                    <SelectItem value="ur">اردو</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
-              <div className="md:col-span-2">
-                <div className="text-xs text-muted-foreground">
-                  FCM sender ID
-                </div>
-                <Input
-                  value={form.fcm_sender_id}
-                  onChange={(e) =>
-                    setForm((f) => ({ ...f, fcm_sender_id: e.target.value }))
-                  }
-                  disabled={!isAdmin}
-                  className="mt-1"
-                />
+              <div className="md:col-span-2 flex justify-end pt-2">
+                <Button onClick={save} disabled={saving} className="bg-sky-600 hover:bg-sky-500">
+                  {saving ? t("saving") : t("save")}
+                </Button>
               </div>
-              {isAdmin && (
-                <div className="md:col-span-2 flex justify-end pt-2">
-                  <Button
-                    onClick={save}
-                    disabled={saving}
-                    className="bg-sky-600 hover:bg-sky-500"
-                  >
-                    {saving ? 'Saving...' : 'Save'}
-                  </Button>
-                </div>
-              )}
             </div>
           </CardContent>
         </Card>

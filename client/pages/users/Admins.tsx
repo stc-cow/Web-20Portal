@@ -1,16 +1,16 @@
-import { AppShell } from '@/components/layout/AppSidebar';
-import Header from '@/components/layout/Header';
-import { useI18n } from '@/i18n';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { AppShell } from "@/components/layout/AppSidebar";
+import Header from "@/components/layout/Header";
+import { useI18n } from "@/i18n";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -18,7 +18,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 import {
   Dialog,
   DialogContent,
@@ -26,26 +26,18 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { useEffect, useMemo, useState } from 'react';
-import { supabase } from '@/lib/supabase';
-import { toast } from '@/hooks/use-toast';
-import {
-  Plus,
-  Download,
-  Columns2,
-  Pencil,
-  Trash2,
-  Eye,
-  UploadCloud,
-} from 'lucide-react';
+} from "@/components/ui/select";
+import { useEffect, useMemo, useState } from "react";
+import { supabase } from "@/lib/supabase";
+import { toast } from "@/hooks/use-toast";
+import { Plus, Download, Columns2, Pencil, Trash2, Eye, UploadCloud } from "lucide-react";
 
 type Admin = {
   id: number;
@@ -53,50 +45,50 @@ type Admin = {
   username: string;
   email: string;
   password: string;
-  position: 'Admin' | 'User';
+  position: "Admin" | "User";
 };
 
 const initialAdmins: Admin[] = [
   {
     id: 1,
-    name: 'Administrator',
-    username: 'Bannaga',
-    email: 'admin@aces-sa.com',
-    password: 'Aces@6343',
-    position: 'Admin',
+    name: "Administrator",
+    username: "Bannaga",
+    email: "admin@aces-sa.com",
+    password: "Aces@6343",
+    position: "Admin",
   },
 ];
 
 const allColumns = [
-  { key: 'name', label: 'Name' },
-  { key: 'username', label: 'Username' },
-  { key: 'email', label: 'Email' },
-  { key: 'password', label: 'Password' },
-  { key: 'position', label: 'Position' },
-  { key: 'settings', label: 'Settings', sticky: true },
+  { key: "name", label: "Name" },
+  { key: "username", label: "Username" },
+  { key: "email", label: "Email" },
+  { key: "password", label: "Password" },
+  { key: "position", label: "Position" },
+  { key: "settings", label: "Settings", sticky: true },
 ] as const;
 
-type ColumnKey = (typeof allColumns)[number]['key'];
+type ColumnKey = (typeof allColumns)[number]["key"];
 
 type AdminForm = {
   name: string;
   username: string;
   email: string;
   password: string;
-  position: 'Admin' | 'User';
+  position: "Admin" | "User";
 };
 
 const emptyForm: AdminForm = {
-  name: '',
-  username: '',
-  email: '',
-  password: '',
-  position: 'User',
+  name: "",
+  username: "",
+  email: "",
+  password: "",
+  position: "User",
 };
 
 export default function AdminUsersPage() {
-  const STORAGE_KEY = 'app.admins';
-  const [query, setQuery] = useState('');
+  const STORAGE_KEY = "app.admins";
+  const [query, setQuery] = useState("");
   const [cols, setCols] = useState<Record<ColumnKey, boolean>>({
     name: true,
     username: true,
@@ -123,7 +115,7 @@ export default function AdminUsersPage() {
   async function syncAdmins() {
     try {
       if (rows.length === 0) {
-        toast({ title: 'No results' });
+        toast({ title: "No results" });
         return;
       }
       const payload = rows.map((r) => ({
@@ -134,16 +126,16 @@ export default function AdminUsersPage() {
         position: r.position,
       }));
       const { error } = await supabase
-        .from('admins')
-        .upsert(payload, { onConflict: 'username' });
+        .from("admins")
+        .upsert(payload, { onConflict: "username" });
       if (error) {
-        toast({ title: 'Sync failed', description: error.message });
+        toast({ title: "Sync failed", description: error.message });
         return;
       }
       const { data } = await supabase
-        .from('admins')
-        .select('id, name, username, email, password, position')
-        .order('id', { ascending: false });
+        .from("admins")
+        .select("id, name, username, email, password, position")
+        .order("id", { ascending: false });
       if (data) {
         setRows(
           data.map((d: any) => ({
@@ -156,9 +148,9 @@ export default function AdminUsersPage() {
           })),
         );
       }
-      toast({ title: 'Synced to Supabase' });
+      toast({ title: "Synced to Supabase" });
     } catch (e: any) {
-      toast({ title: 'Sync failed', description: String(e?.message || e) });
+      toast({ title: "Sync failed", description: String(e?.message || e) });
     }
   }
 
@@ -180,32 +172,32 @@ export default function AdminUsersPage() {
 
   const exportCsv = () => {
     const visible = allColumns.filter(
-      (c) => cols[c.key] && !['settings', 'password'].includes(c.key),
+      (c) => cols[c.key] && !["settings", "password"].includes(c.key),
     );
-    const head = visible.map((c) => c.label).join(',');
+    const head = visible.map((c) => c.label).join(",");
     const body = filtered
-      .map((r) => visible.map((c) => (r as any)[c.key]).join(','))
-      .join('\n');
-    const blob = new Blob([head + '\n' + body], {
-      type: 'text/csv;charset=utf-8;',
+      .map((r) => visible.map((c) => (r as any)[c.key]).join(","))
+      .join("\n");
+    const blob = new Blob([head + "\n" + body], {
+      type: "text/csv;charset=utf-8;",
     });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = 'admins.csv';
+    a.download = "admins.csv";
     a.click();
     URL.revokeObjectURL(url);
   };
 
   const validateForm = (form: AdminForm) => {
     const errs: Partial<Record<keyof AdminForm, string>> = {};
-    if (!form.name.trim()) errs.name = 'required';
-    if (!form.username.trim()) errs.username = 'required';
-    if (!form.email.trim()) errs.email = 'required';
+    if (!form.name.trim()) errs.name = "required";
+    if (!form.username.trim()) errs.username = "required";
+    if (!form.email.trim()) errs.email = "required";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
-      errs.email = 'invalidEmail';
-    if (!form.password.trim()) errs.password = 'required';
-    if (!form.position) errs.position = 'required';
+      errs.email = "invalidEmail";
+    if (!form.password.trim()) errs.password = "required";
+    if (!form.position) errs.position = "required";
     return errs;
   };
 
@@ -214,7 +206,7 @@ export default function AdminUsersPage() {
     setAddErrors(errs);
     if (Object.keys(errs).length > 0) return;
     const { data, error } = await supabase
-      .from('admins')
+      .from("admins")
       .insert({
         name: addForm.name,
         username: addForm.username,
@@ -222,14 +214,11 @@ export default function AdminUsersPage() {
         password: addForm.password,
         position: addForm.position,
       })
-      .select('id, name, username, email, password, position')
+      .select("id, name, username, email, password, position")
       .single();
     if (!error && data) {
       try {
-        await supabase.auth.signUp({
-          email: addForm.email,
-          password: addForm.password,
-        });
+        await supabase.auth.signUp({ email: addForm.email, password: addForm.password });
       } catch {}
       setRows((r) => [
         {
@@ -242,15 +231,24 @@ export default function AdminUsersPage() {
         },
         ...r,
       ]);
-      toast({ title: 'Admin created' });
+      toast({ title: "Admin created" });
       setAddForm(emptyForm);
       setAddOpen(false);
       return;
     }
-    toast({
-      title: 'Supabase unavailable',
-      description: 'Could not save. Try again later.',
-    });
+    // Fallback: save locally if Supabase unavailable
+    const nextId = rows.reduce((m, r) => Math.max(m, r.id), 0) + 1;
+    const localRow: Admin = { id: nextId, ...addForm };
+    setRows((r) => [localRow, ...r]);
+    try {
+      const raw = localStorage.getItem("app.admins");
+      const arr = raw ? (JSON.parse(raw) as Admin[]) : [];
+      arr.unshift(localRow);
+      localStorage.setItem("app.admins", JSON.stringify(arr));
+    } catch {}
+    toast({ title: "Saved locally (Supabase unavailable)" });
+    setAddForm(emptyForm);
+    setAddOpen(false);
   };
 
   const openEdit = (row: Admin, index: number) => {
@@ -269,7 +267,7 @@ export default function AdminUsersPage() {
     });
     if (Object.keys(errs).length > 0) return;
     const { error } = await supabase
-      .from('admins')
+      .from("admins")
       .update({
         name: editForm.name,
         username: editForm.username,
@@ -277,7 +275,7 @@ export default function AdminUsersPage() {
         password: editForm.password,
         position: editForm.position,
       })
-      .eq('id', editForm.id);
+      .eq("id", editForm.id);
     if (!error) {
       setRows((r) => {
         const copy = r.slice();
@@ -297,17 +295,52 @@ export default function AdminUsersPage() {
   };
 
   const remove = async (id: number) => {
-    const { error } = await supabase.from('admins').delete().eq('id', id);
+    const { error } = await supabase.from("admins").delete().eq("id", id);
     if (!error) setRows((r) => r.filter((x) => x.id !== id));
   };
 
   useEffect(() => {
     (async () => {
       const { data, error } = await supabase
-        .from('admins')
-        .select('id, name, username, email, password, position')
-        .order('id', { ascending: false });
+        .from("admins")
+        .select("id, name, username, email, password, position")
+        .order("id", { ascending: false });
       if (!error && data) {
+        // If Supabase is empty, migrate any locally stored admins once
+        if (data.length === 0) {
+          try {
+            const raw = localStorage.getItem("app.admins");
+            if (raw) {
+              const arr = JSON.parse(raw) as Admin[];
+              if (Array.isArray(arr) && arr.length > 0) {
+                const payload = arr.map((a) => ({
+                  name: a.name,
+                  username: a.username,
+                  email: a.email,
+                  password: a.password,
+                  position: a.position,
+                }));
+                const { data: inserted, error: insErr } = await supabase
+                  .from("admins")
+                  .insert(payload)
+                  .select("id, name, username, email, password, position");
+                if (!insErr && inserted) {
+                  setRows(
+                    inserted.map((d) => ({
+                      id: d.id as number,
+                      name: d.name as string,
+                      username: d.username as string,
+                      email: d.email as string,
+                      password: d.password as string,
+                      position: d.position as any,
+                    })),
+                  );
+                  return;
+                }
+              }
+            }
+          } catch {}
+        }
         setRows(
           data.map((d) => ({
             id: d.id as number,
@@ -318,8 +351,6 @@ export default function AdminUsersPage() {
             position: d.position as any,
           })),
         );
-      } else {
-        setRows([]);
       }
     })();
   }, []);
@@ -331,7 +362,7 @@ export default function AdminUsersPage() {
       <div className="px-4 pb-10 pt-4">
         <div className="mb-4 flex items-center justify-between">
           <div className="text-sm text-muted-foreground">
-            {t('manageAdminsIntro')}
+            {t("manageAdminsIntro")}
           </div>
           <div className="flex items-center gap-2">
             <Button
@@ -339,12 +370,12 @@ export default function AdminUsersPage() {
               className="hidden sm:inline-flex"
               onClick={exportCsv}
             >
-              <Download className="mr-2 h-4 w-4" /> {t('export')}
+              <Download className="mr-2 h-4 w-4" /> {t("export")}
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="hidden sm:inline-flex">
-                  <Columns2 className="mr-2 h-4 w-4" /> {t('columns')}
+                  <Columns2 className="mr-2 h-4 w-4" /> {t("columns")}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -355,7 +386,7 @@ export default function AdminUsersPage() {
                     onCheckedChange={(v) =>
                       setCols((s) => ({ ...s, [c.key]: !!v }))
                     }
-                    disabled={c.key === 'settings'}
+                    disabled={c.key === "settings"}
                   >
                     {c.label}
                   </DropdownMenuCheckboxItem>
@@ -363,21 +394,21 @@ export default function AdminUsersPage() {
               </DropdownMenuContent>
             </DropdownMenu>
             <Button variant="outline" onClick={syncAdmins}>
-              <UploadCloud className="mr-2 h-4 w-4" /> {t('sync')}
+              <UploadCloud className="mr-2 h-4 w-4" /> {t("sync")}
             </Button>
             <Dialog open={addOpen} onOpenChange={setAddOpen}>
               <DialogTrigger asChild>
                 <Button className="bg-sky-600 hover:bg-sky-500">
-                  <Plus className="mr-2 h-4 w-4" /> {t('add')}
+                  <Plus className="mr-2 h-4 w-4" /> {t("add")}
                 </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>{t('addUser')}</DialogTitle>
+                  <DialogTitle>{t("addUser")}</DialogTitle>
                 </DialogHeader>
                 <div className="space-y-4">
                   <div>
-                    <Label htmlFor="name">{t('name')}</Label>
+                    <Label htmlFor="name">{t("name")}</Label>
                     <Input
                       id="name"
                       value={addForm.name}
@@ -392,7 +423,7 @@ export default function AdminUsersPage() {
                     )}
                   </div>
                   <div>
-                    <Label htmlFor="username">{t('username')}</Label>
+                    <Label htmlFor="username">{t("username")}</Label>
                     <Input
                       id="username"
                       value={addForm.username}
@@ -407,7 +438,7 @@ export default function AdminUsersPage() {
                     )}
                   </div>
                   <div>
-                    <Label htmlFor="email">{t('email')}</Label>
+                    <Label htmlFor="email">{t("email")}</Label>
                     <Input
                       id="email"
                       type="email"
@@ -423,7 +454,7 @@ export default function AdminUsersPage() {
                     )}
                   </div>
                   <div>
-                    <Label htmlFor="password">{t('password')}</Label>
+                    <Label htmlFor="password">{t("password")}</Label>
                     <Input
                       id="password"
                       type="password"
@@ -439,7 +470,7 @@ export default function AdminUsersPage() {
                     )}
                   </div>
                   <div>
-                    <Label>{t('position')}</Label>
+                    <Label>{t("position")}</Label>
                     <Select
                       value={addForm.position}
                       onValueChange={(v) =>
@@ -447,11 +478,11 @@ export default function AdminUsersPage() {
                       }
                     >
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder={t('position')} />
+                        <SelectValue placeholder={t("position")} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Admin">{t('admin')}</SelectItem>
-                        <SelectItem value="User">{t('user')}</SelectItem>
+                        <SelectItem value="Admin">{t("admin")}</SelectItem>
+                        <SelectItem value="User">{t("user")}</SelectItem>
                       </SelectContent>
                     </Select>
                     {addErrors.position && (
@@ -463,9 +494,9 @@ export default function AdminUsersPage() {
                 </div>
                 <DialogFooter className="mt-6 gap-2 sm:gap-2">
                   <Button variant="outline" onClick={() => setAddOpen(false)}>
-                    {t('cancel')}
+                    {t("cancel")}
                   </Button>
-                  <Button onClick={handleAdd}>{t('save')}</Button>
+                  <Button onClick={handleAdd}>{t("save")}</Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
@@ -476,11 +507,11 @@ export default function AdminUsersPage() {
           <CardContent className="p-0">
             <div className="flex items-center justify-between gap-4 p-4">
               <div className="text-sm text-muted-foreground">
-                {t('excelPrintColumnVisibility')}
+                {t("excelPrintColumnVisibility")}
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-sm text-muted-foreground">
-                  {t('search')}
+                  {t("search")}
                 </span>
                 <Input
                   value={query}
@@ -499,29 +530,29 @@ export default function AdminUsersPage() {
                 <TableHeader>
                   <TableRow className="bg-[hsl(var(--primary))] text-white hover:bg-[hsl(var(--primary))]">
                     {cols.name && (
-                      <TableHead className="text-white">{t('name')}</TableHead>
+                      <TableHead className="text-white">{t("name")}</TableHead>
                     )}
                     {cols.username && (
                       <TableHead className="text-white">
-                        {t('username')}
+                        {t("username")}
                       </TableHead>
                     )}
                     {cols.email && (
-                      <TableHead className="text-white">{t('email')}</TableHead>
+                      <TableHead className="text-white">{t("email")}</TableHead>
                     )}
                     {cols.password && (
                       <TableHead className="text-white">
-                        {t('password')}
+                        {t("password")}
                       </TableHead>
                     )}
                     {cols.position && (
                       <TableHead className="text-white">
-                        {t('position')}
+                        {t("position")}
                       </TableHead>
                     )}
                     {cols.settings && (
                       <TableHead className="text-white">
-                        {t('settingsCol')}
+                        {t("settingsCol")}
                       </TableHead>
                     )}
                   </TableRow>
@@ -534,7 +565,7 @@ export default function AdminUsersPage() {
                       )}
                       {cols.username && <TableCell>{r.username}</TableCell>}
                       {cols.email && <TableCell>{r.email}</TableCell>}
-                      {cols.password && <TableCell>{'*******'}</TableCell>}
+                      {cols.password && <TableCell>{"*******"}</TableCell>}
                       {cols.position && <TableCell>{r.position}</TableCell>}
                       {cols.settings && (
                         <TableCell className="space-x-2 text-right">
@@ -572,7 +603,7 @@ export default function AdminUsersPage() {
                         colSpan={6}
                         className="text-center text-sm text-muted-foreground"
                       >
-                        {t('noResults')}
+                        {t("noResults")}
                       </TableCell>
                     </TableRow>
                   )}
@@ -582,8 +613,8 @@ export default function AdminUsersPage() {
 
             <div className="flex items-center justify-between px-4 py-3 text-sm text-muted-foreground">
               <div>
-                {t('showing')} {current.length} {t('of')} {filtered.length}{' '}
-                {t('entries')}
+                {t("showing")} {current.length} {t("of")} {filtered.length}{" "}
+                {t("entries")}
               </div>
               <div className="flex items-center gap-2">
                 <Button
@@ -592,7 +623,7 @@ export default function AdminUsersPage() {
                   disabled={page === 1}
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                 >
-                  {t('prev')}
+                  {t("prev")}
                 </Button>
                 <span className="tabular-nums">
                   {page} / {totalPages}
@@ -603,7 +634,7 @@ export default function AdminUsersPage() {
                   disabled={page === totalPages}
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 >
-                  {t('next')}
+                  {t("next")}
                 </Button>
               </div>
             </div>
@@ -614,12 +645,12 @@ export default function AdminUsersPage() {
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{t('editUser')}</DialogTitle>
+            <DialogTitle>{t("editUser")}</DialogTitle>
           </DialogHeader>
           {editForm && (
             <div className="space-y-4">
               <div>
-                <Label htmlFor="edit-name">{t('name')}</Label>
+                <Label htmlFor="edit-name">{t("name")}</Label>
                 <Input
                   id="edit-name"
                   value={editForm.name}
@@ -629,7 +660,7 @@ export default function AdminUsersPage() {
                 />
               </div>
               <div>
-                <Label htmlFor="edit-username">{t('username')}</Label>
+                <Label htmlFor="edit-username">{t("username")}</Label>
                 <Input
                   id="edit-username"
                   value={editForm.username}
@@ -641,7 +672,7 @@ export default function AdminUsersPage() {
                 />
               </div>
               <div>
-                <Label htmlFor="edit-email">{t('email')}</Label>
+                <Label htmlFor="edit-email">{t("email")}</Label>
                 <Input
                   id="edit-email"
                   type="email"
@@ -654,7 +685,7 @@ export default function AdminUsersPage() {
                 />
               </div>
               <div>
-                <Label htmlFor="edit-password">{t('password')}</Label>
+                <Label htmlFor="edit-password">{t("password")}</Label>
                 <Input
                   id="edit-password"
                   type="password"
@@ -667,7 +698,7 @@ export default function AdminUsersPage() {
                 />
               </div>
               <div>
-                <Label>{t('position')}</Label>
+                <Label>{t("position")}</Label>
                 <Select
                   value={editForm.position}
                   onValueChange={(v) =>
@@ -675,11 +706,11 @@ export default function AdminUsersPage() {
                   }
                 >
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder={t('position')} />
+                    <SelectValue placeholder={t("position")} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Admin">{t('admin')}</SelectItem>
-                    <SelectItem value="User">{t('user')}</SelectItem>
+                    <SelectItem value="Admin">{t("admin")}</SelectItem>
+                    <SelectItem value="User">{t("user")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -687,9 +718,9 @@ export default function AdminUsersPage() {
           )}
           <DialogFooter className="mt-6 gap-2 sm:gap-2">
             <Button variant="outline" onClick={() => setEditOpen(false)}>
-              {t('cancel')}
+              {t("cancel")}
             </Button>
-            <Button onClick={handleEditSave}>{t('save')}</Button>
+            <Button onClick={handleEditSave}>{t("save")}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
