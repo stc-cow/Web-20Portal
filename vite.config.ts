@@ -5,7 +5,10 @@ import { createServer } from './server';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  // Use relative asset paths so GitHub Pages works under a subpath (e.g. /Web-20Portal/)
+  // Use relative asset paths so GitHub Pages works
+  // For user/org site (username.github.io): base: '/'
+  // For project site (username.github.io/repo): base: '/repo/'
+  // Using './' works for both - relative paths
   base: './',
   server: {
     host: '::',
