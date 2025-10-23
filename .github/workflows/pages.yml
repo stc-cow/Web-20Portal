@@ -50,35 +50,37 @@ jobs:
       - name: Build Builder.io site
         run: |
           echo "🚀 Starting Builder.io build"
-          cd code
-          pnpm run build || npm run build || echo "⚠️ No build script found, skipping build"
-          cd ..
+          echo "Current directory: $(pwd)"
+          echo "Directory contents:"
+          ls -la
+
+          # Build from current directory (GitHub checks out to root)
+          pnpm run build || echo "⚠️ Build command failed or not found"
+
           mkdir -p ./docs
-          # ✅ Handle project output (dist/spa) and common alternatives
-          if [ -d ./code/dist/spa ]; then
-            cp -r ./code/dist/spa/* ./docs/
-            echo "✅ Copied from code/dist/spa"
-          elif [ -d ./dist/spa ]; then
+
+          # ✅ Copy built files to docs (for GitHub Pages)
+          if [ -d ./dist/spa ]; then
+            echo "✅ Found dist/spa - copying to docs/"
             cp -r ./dist/spa/* ./docs/
-            echo "✅ Copied from dist/spa"
-          elif [ -d ./code/dist ]; then
-            cp -r ./code/dist/* ./docs/
-            echo "✅ Copied from code/dist"
           elif [ -d ./dist ]; then
+            echo "✅ Found dist - copying to docs/"
             cp -r ./dist/* ./docs/
-            echo "✅ Copied from dist"
           else
-            echo "⚠️ No build folder found"
+            echo "⚠️ No build folder found, checking for existing docs"
+            ls -la ./docs/ || echo "docs folder doesn't exist yet"
           fi
 
           # ✅ SPA fallback for GitHub Pages deep links - CRITICAL!
           if [ -f ./docs/index.html ]; then
             cp ./docs/index.html ./docs/404.html
             echo "✅ Created 404.html for SPA routing"
-            ls -la ./docs/ | grep -E "index|404"
+            echo "📁 Final docs/ contents:"
+            ls -la ./docs/ | grep -E "index|404|assets"
           else
             echo "❌ ERROR: docs/index.html not found!"
-            find . -name "index.html" -type f
+            echo "📁 Checking all index.html files:"
+            find . -maxdepth 3 -name "index.html" -type f 2>/dev/null
           fi
 
       - name: Upload artifact for GitHub Pages
