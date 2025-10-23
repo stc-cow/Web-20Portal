@@ -50,17 +50,36 @@ jobs:
       - name: Build Builder.io site
         run: |
           echo "🚀 Starting Builder.io build"
+          cd code
           pnpm run build || npm run build || echo "⚠️ No build script found, skipping build"
+          cd ..
           mkdir -p ./docs
           # ✅ Handle project output (dist/spa) and common alternatives
-          cp -r ./dist/spa/* ./docs/ 2>/dev/null || \
-          cp -r ./dist/* ./docs/ 2>/dev/null || \
-          cp -r ./build/* ./docs/ 2>/dev/null || \
-          cp -r ./out/* ./docs/ 2>/dev/null || \
-          cp -r ./public/* ./docs/ 2>/dev/null || \
-          echo "⚠️ No build folder found (dist/spa | dist | build | out | public)"
-          # SPA fallback for GitHub Pages deep links
-          if [ -f ./docs/index.html ]; then cp ./docs/index.html ./docs/404.html; fi
+          if [ -d ./code/dist/spa ]; then
+            cp -r ./code/dist/spa/* ./docs/
+            echo "✅ Copied from code/dist/spa"
+          elif [ -d ./dist/spa ]; then
+            cp -r ./dist/spa/* ./docs/
+            echo "✅ Copied from dist/spa"
+          elif [ -d ./code/dist ]; then
+            cp -r ./code/dist/* ./docs/
+            echo "✅ Copied from code/dist"
+          elif [ -d ./dist ]; then
+            cp -r ./dist/* ./docs/
+            echo "✅ Copied from dist"
+          else
+            echo "⚠️ No build folder found"
+          fi
+
+          # ✅ SPA fallback for GitHub Pages deep links - CRITICAL!
+          if [ -f ./docs/index.html ]; then
+            cp ./docs/index.html ./docs/404.html
+            echo "✅ Created 404.html for SPA routing"
+            ls -la ./docs/ | grep -E "index|404"
+          else
+            echo "❌ ERROR: docs/index.html not found!"
+            find . -name "index.html" -type f
+          fi
 
       - name: Upload artifact for GitHub Pages
         uses: actions/upload-pages-artifact@v3
