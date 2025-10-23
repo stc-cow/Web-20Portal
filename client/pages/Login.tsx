@@ -228,7 +228,7 @@ export default function Login() {
                     className="border-black/30 data-[state=checked]:bg-primary"
                     {...register('remember')}
                   />
-                  <span className="text-sm">{t('rememberMe')}</span>
+                  <p>Remember Me</p>
                 </label>
               </div>
               {authError && (
