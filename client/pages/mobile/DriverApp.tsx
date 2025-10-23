@@ -17,12 +17,22 @@ import {
   initializePushNotifications,
 } from "@/lib/pushNotifications";
 import { Bell, Eye, EyeOff, Loader2, PlusCircle } from "lucide-react";
-import {
-  Camera,
-  CameraDirection,
-  CameraResultType,
-  CameraSource,
-} from "@capacitor/camera";
+
+// Capacitor imports with fallback for web
+let Camera: any = null;
+let CameraDirection: any = null;
+let CameraResultType: any = null;
+let CameraSource: any = null;
+
+try {
+  const capCamera = require("@capacitor/camera");
+  Camera = capCamera.Camera;
+  CameraDirection = capCamera.CameraDirection;
+  CameraResultType = capCamera.CameraResultType;
+  CameraSource = capCamera.CameraSource;
+} catch (e) {
+  // Capacitor camera not available (web environment)
+}
 
 const COMPLETED_RETENTION_MS = 7 * 24 * 60 * 60 * 1000;
 const COMPLETION_DATE_KEYS = [
