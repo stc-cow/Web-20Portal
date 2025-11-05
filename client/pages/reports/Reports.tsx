@@ -1,5 +1,4 @@
-import { AppShell } from '@/components/layout/AppSidebar';
-import Header from '@/components/layout/Header';
+import { PageLayout } from '@/components/layout/PageLayout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -58,6 +57,12 @@ export default function ReportsPage() {
   const total = useMemo(
     () => subtotal * (1 + (settings.vat_rate ?? 0)),
     [subtotal, settings],
+  );
+
+  const lineCount = lines.length;
+  const uniqueSites = useMemo(
+    () => new Set(lines.map((l) => l.siteName)).size,
+    [lines],
   );
 
   useEffect(() => {
@@ -217,115 +222,153 @@ export default function ReportsPage() {
   };
 
   return (
-    <AppShell>
-      <Header />
-      <div className="px-4 pb-10 pt-4">
-        <div className="mb-4 text-sm font-bold text-[#0C2340]">
-          Fuel Supplier Invoice
+    <PageLayout
+      title="Billing intelligence"
+      description="Aggregate driver task entries into finance-ready invoice reports."
+      breadcrumbs={[{ label: 'Operations' }, { label: 'Reports' }]}
+      actions={
+        <Button
+          onClick={exportCsv}
+          className="rounded-full bg-sky-500 px-6 text-sm font-semibold text-white shadow-lg shadow-sky-500/30 hover:bg-sky-400"
+        >
+          <Download className="mr-2 h-4 w-4" /> Export CSV
+        </Button>
+      }
+      heroContent={
+        <div className="grid gap-3 sm:grid-cols-3">
+          {[{
+            label: 'Invoice lines',
+            value: lineCount.toLocaleString(),
+            description: 'Filtered task entries included in this export.',
+          },
+          {
+            label: 'Subtotal',
+            value: subtotal.toLocaleString(undefined, { style: 'currency', currency: 'SAR' }),
+            description: 'Fuel charges before VAT.',
+          },
+          {
+            label: 'Total with VAT',
+            value: total.toLocaleString(undefined, { style: 'currency', currency: 'SAR' }),
+            description: `${uniqueSites} site${uniqueSites === 1 ? '' : 's'} represented.`,
+          }].map((metric) => (
+            <Card
+              key={metric.label}
+              className="rounded-3xl border border-white/10 bg-white/[0.07] text-slate-100 shadow-lg backdrop-blur"
+            >
+              <CardContent className="p-5">
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-200/70">
+                  {metric.label}
+                </p>
+                <p className="mt-1 text-2xl font-semibold text-white">{metric.value}</p>
+                <p className="mt-2 text-xs text-slate-200/70">{metric.description}</p>
+              </CardContent>
+            </Card>
+          ))}
         </div>
-
-        <Card>
-          <CardContent className="p-4">
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-4">
-              <div>
-                <div className="text-xs text-muted-foreground">From Date</div>
-                <Input
-                  type="date"
-                  value={fromDate}
-                  onChange={(e) => setFromDate(e.target.value)}
-                  className="mt-1"
-                />
-              </div>
-              <div>
-                <div className="text-xs text-muted-foreground">To Date</div>
-                <Input
-                  type="date"
-                  value={toDate}
-                  onChange={(e) => setToDate(e.target.value)}
-                  className="mt-1"
-                />
-              </div>
-              <div>
-                <div className="text-xs text-muted-foreground">Site</div>
-                <Input
-                  value={siteQuery}
-                  onChange={(e) => setSiteQuery(e.target.value)}
-                  placeholder="Filter by site name"
-                  className="mt-1"
-                />
-              </div>
-              <div>
-                <div className="text-xs text-muted-foreground">Region/Zone</div>
-                <Input
-                  value={region}
-                  onChange={(e) => setRegion(e.target.value)}
-                  placeholder="e.g. East"
-                  className="mt-1"
-                />
-              </div>
+      }
+    >
+      <Card className="rounded-3xl border border-white/10 bg-white/5 text-slate-100 shadow-xl backdrop-blur">
+        <CardContent className="p-6">
+          <div className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-200/70">
+            Fuel supplier invoice
+          </div>
+          <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-4">
+            <div>
+              <div className="text-xs uppercase tracking-[0.2em] text-slate-200/60">From date</div>
+              <Input
+                type="date"
+                value={fromDate}
+                onChange={(e) => setFromDate(e.target.value)}
+                className="mt-2 border-white/20 bg-white/10 text-white focus-visible:ring-sky-400"
+              />
             </div>
+            <div>
+              <div className="text-xs uppercase tracking-[0.2em] text-slate-200/60">To date</div>
+              <Input
+                type="date"
+                value={toDate}
+                onChange={(e) => setToDate(e.target.value)}
+                className="mt-2 border-white/20 bg-white/10 text-white focus-visible:ring-sky-400"
+              />
+            </div>
+            <div>
+              <div className="text-xs uppercase tracking-[0.2em] text-slate-200/60">Site</div>
+              <Input
+                value={siteQuery}
+                onChange={(e) => setSiteQuery(e.target.value)}
+                placeholder="Filter by site name"
+                className="mt-2 border-white/20 bg-white/10 text-white placeholder:text-slate-200/60 focus-visible:ring-sky-400"
+              />
+            </div>
+            <div>
+              <div className="text-xs uppercase tracking-[0.2em] text-slate-200/60">Region/Zone</div>
+              <Input
+                value={region}
+                onChange={(e) => setRegion(e.target.value)}
+                placeholder="e.g. East"
+                className="mt-2 border-white/20 bg-white/10 text-white placeholder:text-slate-200/60 focus-visible:ring-sky-400"
+              />
+            </div>
+          </div>
 
-            <div className="mt-4 overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow className="bg-[hsl(var(--primary))] text-white hover:bg-[hsl(var(--primary))]">
-                    <TableHead className="text-white">Site Name</TableHead>
-                    <TableHead className="text-white">Region</TableHead>
-                    <TableHead className="text-white">Date</TableHead>
-                    <TableHead className="text-white">Liters</TableHead>
-                    <TableHead className="text-white">Unit Price</TableHead>
-                    <TableHead className="text-white">Line Price</TableHead>
+          <div className="mt-6 overflow-x-auto rounded-2xl border border-white/10 bg-white/5">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-white/[0.08] text-xs uppercase tracking-[0.2em] text-slate-100">
+                  <TableHead className="border-none text-slate-100">Site Name</TableHead>
+                  <TableHead className="border-none text-slate-100">Region</TableHead>
+                  <TableHead className="border-none text-slate-100">Date</TableHead>
+                  <TableHead className="border-none text-slate-100">Liters</TableHead>
+                  <TableHead className="border-none text-slate-100">Unit Price</TableHead>
+                  <TableHead className="border-none text-slate-100">Line Price</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {lines.length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={6} className="py-8 text-center text-sm text-slate-200/70">
+                      No data
+                    </TableCell>
                   </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {lines.length === 0 && (
-                    <TableRow>
-                      <TableCell
-                        colSpan={6}
-                        className="text-center text-sm text-muted-foreground"
-                      >
-                        No data
-                      </TableCell>
-                    </TableRow>
-                  )}
-                  {lines.map((l, i) => (
-                    <TableRow key={`${l.taskId}-${i}`}>
-                      <TableCell className="font-medium">
-                        {l.siteName}
-                      </TableCell>
-                      <TableCell>{l.region}</TableCell>
-                      <TableCell>{l.date}</TableCell>
-                      <TableCell>{l.liters.toFixed(2)}</TableCell>
-                      <TableCell>{l.unitPrice.toFixed(2)}</TableCell>
-                      <TableCell>{l.linePrice.toFixed(2)}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
+                )}
+                {lines.map((l, i) => (
+                  <TableRow
+                    key={`${l.taskId}-${i}`}
+                    className="border-b border-white/5 bg-white/[0.02] text-sm text-slate-100 hover:bg-white/[0.08]"
+                  >
+                    <TableCell className="font-semibold text-white">{l.siteName}</TableCell>
+                    <TableCell className="text-slate-200/80">{l.region}</TableCell>
+                    <TableCell className="text-slate-200/80">{l.date}</TableCell>
+                    <TableCell className="text-slate-200/80">{l.liters.toFixed(2)}</TableCell>
+                    <TableCell className="text-slate-200/80">{l.unitPrice.toFixed(2)}</TableCell>
+                    <TableCell className="text-slate-200/80">{l.linePrice.toFixed(2)}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
 
-            <div className="mt-4 grid grid-cols-1 gap-2 md:grid-cols-3">
-              <div className="text-sm">Subtotal: {subtotal.toFixed(2)}</div>
-              <div className="text-sm">
-                VAT ({((settings.vat_rate ?? 0) * 100).toFixed(0)}%):{' '}
-                {(subtotal * (settings.vat_rate ?? 0)).toFixed(2)}
-              </div>
-              <div className="text-sm font-semibold">
-                Total with VAT: {total.toFixed(2)}
-              </div>
+          <div className="mt-6 grid grid-cols-1 gap-4 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-slate-200/80 md:grid-cols-3">
+            <div>Subtotal: {subtotal.toFixed(2)}</div>
+            <div>
+              VAT ({((settings.vat_rate ?? 0) * 100).toFixed(0)}%):{' '}
+              {(subtotal * (settings.vat_rate ?? 0)).toFixed(2)}
             </div>
+            <div className="font-semibold text-white">
+              Total with VAT: {total.toFixed(2)}
+            </div>
+          </div>
 
-            <div className="mt-4 flex items-center justify-end">
-              <Button
-                className="bg-[#E60000] hover:opacity-90"
-                onClick={exportCsv}
-              >
-                <Download className="mr-2 h-4 w-4" /> Export Invoice
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    </AppShell>
+          <div className="mt-6 flex items-center justify-end">
+            <Button
+              className="rounded-full bg-emerald-500 px-6 text-sm font-semibold text-white shadow-md shadow-emerald-500/30 hover:bg-emerald-400"
+              onClick={exportCsv}
+            >
+              <Download className="mr-2 h-4 w-4" /> Export invoice
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </PageLayout>
   );
 }
