@@ -365,10 +365,9 @@ This creates `dist/` folder with:
 
 1. **GitHub Pages** (Static frontend)
    - See `DRIVER_APP_DEPLOYMENT.md`
-2. **Netlify** (Static + functions)
-3. **Vercel** (Full-stack)
-4. **Self-hosted** (Any Node.js server)
-5. **Android/iOS** (via Capacitor)
+2. **Vercel** (Full-stack)
+3. **Self-hosted** (Any Node.js server)
+4. **Android/iOS** (via Capacitor)
 
 ---
 
