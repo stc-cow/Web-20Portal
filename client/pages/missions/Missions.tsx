@@ -672,8 +672,12 @@ export default function MissionsPage() {
   }, [filtered, page, pageSize]);
 
   const totalMissions = rows.length;
-  const pendingMissions = rows.filter((r) => r.missionStatus === 'Creation').length;
-  const approvedMissions = rows.filter((r) => r.missionStatus === 'Task approved').length;
+  const pendingMissions = rows.filter(
+    (r) => r.missionStatus === 'Creation',
+  ).length;
+  const approvedMissions = rows.filter(
+    (r) => r.missionStatus === 'Task approved',
+  ).length;
 
   const exportXlsx = () => {
     const headers = VISIBLE_COLUMNS.map((c) => c.label);
@@ -714,21 +718,23 @@ export default function MissionsPage() {
       }
       heroContent={
         <div className="grid gap-3 sm:grid-cols-3">
-          {[{
-            label: 'Total missions',
-            value: totalMissions.toLocaleString(),
-            description: 'All records synced from the last refresh.',
-          },
-          {
-            label: 'Pending dispatch',
-            value: pendingMissions.toLocaleString(),
-            description: 'Awaiting confirmation or driver acceptance.',
-          },
-          {
-            label: 'Approved',
-            value: approvedMissions.toLocaleString(),
-            description: 'Ready for invoicing and reporting.',
-          }].map((metric) => (
+          {[
+            {
+              label: 'Total missions',
+              value: totalMissions.toLocaleString(),
+              description: 'All records synced from the last refresh.',
+            },
+            {
+              label: 'Pending dispatch',
+              value: pendingMissions.toLocaleString(),
+              description: 'Awaiting confirmation or driver acceptance.',
+            },
+            {
+              label: 'Approved',
+              value: approvedMissions.toLocaleString(),
+              description: 'Ready for invoicing and reporting.',
+            },
+          ].map((metric) => (
             <Card
               key={metric.label}
               className="rounded-3xl border border-white/10 bg-white/[0.07] text-slate-100 shadow-lg backdrop-blur"
@@ -737,8 +743,12 @@ export default function MissionsPage() {
                 <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-200/70">
                   {metric.label}
                 </p>
-                <p className="mt-1 text-2xl font-semibold text-white">{metric.value}</p>
-                <p className="mt-2 text-xs text-slate-200/70">{metric.description}</p>
+                <p className="mt-1 text-2xl font-semibold text-white">
+                  {metric.value}
+                </p>
+                <p className="mt-2 text-xs text-slate-200/70">
+                  {metric.description}
+                </p>
               </CardContent>
             </Card>
           ))}
@@ -833,9 +843,7 @@ export default function MissionsPage() {
                     setAddForm((s) => ({
                       ...s,
                       requiredLiters:
-                        e.target.value === ''
-                          ? null
-                          : Number(e.target.value),
+                        e.target.value === '' ? null : Number(e.target.value),
                     }))
                   }
                 />
@@ -893,7 +901,9 @@ export default function MissionsPage() {
               Missions
             </div>
             <div className="flex items-center gap-2">
-              <div className="text-xs uppercase tracking-[0.2em] text-slate-200/60">Rows per page</div>
+              <div className="text-xs uppercase tracking-[0.2em] text-slate-200/60">
+                Rows per page
+              </div>
               <Select
                 value={String(pageSize)}
                 onValueChange={(v) => {
@@ -919,18 +929,30 @@ export default function MissionsPage() {
             <Table className="table-fixed text-slate-100">
               <TableHeader>
                 <TableRow className="bg-white/[0.08] text-xs uppercase tracking-[0.2em] text-slate-100">
-                  <TableHead className="border-none text-slate-100">Mission ID</TableHead>
-                  <TableHead className="border-none text-slate-100">Site Name</TableHead>
-                  <TableHead className="border-none text-slate-100">Created Date</TableHead>
-                  <TableHead className="border-none text-slate-100">Added Liters</TableHead>
+                  <TableHead className="border-none text-slate-100">
+                    Mission ID
+                  </TableHead>
+                  <TableHead className="border-none text-slate-100">
+                    Site Name
+                  </TableHead>
+                  <TableHead className="border-none text-slate-100">
+                    Created Date
+                  </TableHead>
+                  <TableHead className="border-none text-slate-100">
+                    Added Liters
+                  </TableHead>
                   <TableHead className="border-none text-slate-100">
                     Actual Liters Found in Tank
                   </TableHead>
                   <TableHead className="border-none text-slate-100">
                     Quantity Added (Last Task)
                   </TableHead>
-                  <TableHead className="border-none text-slate-100">City</TableHead>
-                  <TableHead className="border-none text-slate-100">Mission Status</TableHead>
+                  <TableHead className="border-none text-slate-100">
+                    City
+                  </TableHead>
+                  <TableHead className="border-none text-slate-100">
+                    Mission Status
+                  </TableHead>
                 </TableRow>
                 {/* Filter row */}
                 <TableRow className="bg-white/[0.04]">
@@ -1132,9 +1154,7 @@ export default function MissionsPage() {
                               <div>
                                 Liters: {entryByTask[r.id]?.liters ?? '-'}
                               </div>
-                              <div>
-                                Rate: {entryByTask[r.id]?.rate ?? '-'}
-                              </div>
+                              <div>Rate: {entryByTask[r.id]?.rate ?? '-'}</div>
                               <div>
                                 Station: {entryByTask[r.id]?.station ?? '-'}
                               </div>

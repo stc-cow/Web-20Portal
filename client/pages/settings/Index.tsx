@@ -24,24 +24,26 @@ export default function SettingsIndexPage() {
       }
       heroContent={
         <div className="grid gap-3 sm:grid-cols-3">
-          {[{
-            label: 'Automation rules',
-            value: '12',
-            description: 'Trigger mission updates and alert routing.',
-            icon: SlidersHorizontal,
-          },
-          {
-            label: 'Notification templates',
-            value: '28',
-            description: 'SMS, email and in-app experiences.',
-            icon: Bell,
-          },
-          {
-            label: 'Brand themes',
-            value: '3',
-            description: 'Custom palettes applied across deployments.',
-            icon: Palette,
-          }].map((metric) => (
+          {[
+            {
+              label: 'Automation rules',
+              value: '12',
+              description: 'Trigger mission updates and alert routing.',
+              icon: SlidersHorizontal,
+            },
+            {
+              label: 'Notification templates',
+              value: '28',
+              description: 'SMS, email and in-app experiences.',
+              icon: Bell,
+            },
+            {
+              label: 'Brand themes',
+              value: '3',
+              description: 'Custom palettes applied across deployments.',
+              icon: Palette,
+            },
+          ].map((metric) => (
             <GlassCard
               key={metric.label}
               className="flex items-start gap-4 border-white/10 bg-white/[0.07] p-5"
@@ -53,8 +55,12 @@ export default function SettingsIndexPage() {
                 <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-200/70">
                   {metric.label}
                 </p>
-                <p className="mt-1 text-2xl font-semibold text-white">{metric.value}</p>
-                <p className="mt-2 text-xs text-slate-200/70">{metric.description}</p>
+                <p className="mt-1 text-2xl font-semibold text-white">
+                  {metric.value}
+                </p>
+                <p className="mt-2 text-xs text-slate-200/70">
+                  {metric.description}
+                </p>
               </div>
             </GlassCard>
           ))}
