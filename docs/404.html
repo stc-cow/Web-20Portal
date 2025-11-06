@@ -20,6 +20,29 @@
 
         const finalUrl = `${window.location.origin}${basePath}#/${rest}${search}${trailingHash}`;
         window.location.replace(finalUrl);
+    <script>
+      (function () {
+        const storageKey = 'spa-redirect';
+        const redirectUrl = sessionStorage.getItem(storageKey);
+        if (redirectUrl) {
+          sessionStorage.removeItem(storageKey);
+          window.location.replace(redirectUrl);
+          return;
+        }
+
+        const segments = window.location.pathname.split('/').filter(Boolean);
+        const repoSegment = segments.length > 0 ? segments[0] : '';
+        const basePath = repoSegment ? `/${repoSegment}/` : '/';
+        const rest = segments.slice(1).join('/');
+        const targetPath = rest ? `${basePath}${rest}` : basePath;
+        const search = window.location.search || '';
+        const hash = window.location.hash || '';
+
+        sessionStorage.setItem(
+          storageKey,
+          `${window.location.origin}${targetPath}${search}${hash}`,
+        );
+        window.location.replace(`${window.location.origin}${basePath}`);
       })();
     </script>
   </head>
