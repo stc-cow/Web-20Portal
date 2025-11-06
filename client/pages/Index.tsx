@@ -113,7 +113,7 @@ export default function Index() {
         <div className="absolute inset-x-0 top-0 h-[420px] bg-gradient-to-br from-[#0b1e3e] via-[#102c57] to-[#040b1d]" />
         <div className="relative z-[1] px-6 pb-12 pt-6">
           <section className="grid gap-6 xl:grid-cols-[1.8fr,1fr]">
-            <Card className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 via-white/5 to-white/[0.02] text-slate-100 shadow-xl">
+            <Card className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900/60 via-slate-900/40 to-slate-900/20 text-slate-100 shadow-xl">
               <div className="pointer-events-none absolute -top-24 right-0 h-56 w-56 rounded-full bg-sky-400/20 blur-3xl" />
               <CardHeader className="space-y-4 pb-2">
                 <Badge className="w-fit bg-sky-400/20 text-xs font-medium uppercase tracking-[0.3em] text-sky-100">
