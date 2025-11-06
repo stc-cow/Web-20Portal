@@ -5,11 +5,10 @@ import { createServer } from './server';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  // Use relative asset paths so GitHub Pages works
-  // For user/org site (username.github.io): base: '/'
-  // For project site (username.github.io/repo): base: '/repo/'
-  // Using './' works for both - relative paths
-  base: './',
+  // Determine base path based on environment
+  // Use '/' for most deployments (fly.dev, Vercel, Netlify, etc.)
+  // Use './' only if VITE_BASE_PATH env var is explicitly set
+  base: process.env.VITE_BASE_PATH || '/',
   server: {
     host: '::',
     port: 8080,
