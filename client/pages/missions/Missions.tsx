@@ -755,107 +755,107 @@ export default function MissionsPage() {
             <DialogHeader>
               <DialogTitle>Create Task</DialogTitle>
             </DialogHeader>
-                <div className="grid gap-4 py-2">
-                  <div className="grid gap-2">
-                    <Label htmlFor="m-site">Site name</Label>
-                    <Input
-                      id="m-site"
-                      value={addForm.siteName}
-                      onChange={(e) =>
-                        setAddForm((s) => ({ ...s, siteName: e.target.value }))
-                      }
-                    />
-                    {addErrors.siteName && (
-                      <span className="text-sm text-red-500">required</span>
-                    )}
-                  </div>
-                  <div className="grid gap-2">
-                    <Label>Driver</Label>
-                    <Select
-                      value={addForm.driverId ? String(addForm.driverId) : ''}
-                      onValueChange={(v) => {
-                        const d = drivers.find((x) => String(x.id) === v);
-                        setAddForm((s) => ({
-                          ...s,
-                          driverId: d ? d.id : null,
-                          driverName: d ? d.name : '',
-                          driverPhone: d?.phone || '',
-                        }));
-                      }}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select driver" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {drivers.map((d) => (
-                          <SelectItem key={d.id} value={String(d.id)}>
-                            {d.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="m-phone">Driver phone</Label>
-                    <Input
-                      id="m-phone"
-                      value={addForm.driverPhone}
-                      onChange={(e) =>
-                        setAddForm((s) => ({
-                          ...s,
-                          driverPhone: e.target.value,
-                        }))
-                      }
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="m-when">Scheduled at</Label>
-                    <Input
-                      id="m-when"
-                      type="datetime-local"
-                      value={addForm.scheduledAt}
-                      onChange={(e) =>
-                        setAddForm((s) => ({
-                          ...s,
-                          scheduledAt: e.target.value,
-                        }))
-                      }
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="m-liters">Required liters</Label>
-                    <Input
-                      id="m-liters"
-                      type="number"
-                      value={addForm.requiredLiters ?? ''}
-                      onChange={(e) =>
-                        setAddForm((s) => ({
-                          ...s,
-                          requiredLiters:
-                            e.target.value === ''
-                              ? null
-                              : Number(e.target.value),
-                        }))
-                      }
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="m-notes">Notes</Label>
-                    <Textarea
-                      id="m-notes"
-                      value={addForm.notes}
-                      onChange={(e) =>
-                        setAddForm((s) => ({ ...s, notes: e.target.value }))
-                      }
-                    />
-                  </div>
-                </div>
-                <DialogFooter>
-                  <Button variant="outline" onClick={() => setAddOpen(false)}>
-                    Cancel
-                  </Button>
-                  <Button onClick={handleAdd}>Save</Button>
-                </DialogFooter>
+            <div className="grid gap-4 py-2">
+            <div className="grid gap-2">
+              <Label htmlFor="m-site">Site name</Label>
+              <Input
+                id="m-site"
+                value={addForm.siteName}
+                onChange={(e) =>
+                  setAddForm((s) => ({ ...s, siteName: e.target.value }))
+                }
+              />
+              {addErrors.siteName && (
+                <span className="text-sm text-red-500">required</span>
+              )}
+            </div>
+            <div className="grid gap-2">
+              <Label>Driver</Label>
+              <Select
+                value={addForm.driverId ? String(addForm.driverId) : ''}
+                onValueChange={(v) => {
+                  const d = drivers.find((x) => String(x.id) === v);
+                  setAddForm((s) => ({
+                    ...s,
+                    driverId: d ? d.id : null,
+                    driverName: d ? d.name : '',
+                    driverPhone: d?.phone || '',
+                  }));
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select driver" />
+                </SelectTrigger>
+                <SelectContent>
+                  {drivers.map((d) => (
+                    <SelectItem key={d.id} value={String(d.id)}>
+                      {d.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="m-phone">Driver phone</Label>
+              <Input
+                id="m-phone"
+                value={addForm.driverPhone}
+                onChange={(e) =>
+                  setAddForm((s) => ({
+                    ...s,
+                    driverPhone: e.target.value,
+                  }))
+                }
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="m-when">Scheduled at</Label>
+              <Input
+                id="m-when"
+                type="datetime-local"
+                value={addForm.scheduledAt}
+                onChange={(e) =>
+                  setAddForm((s) => ({
+                    ...s,
+                    scheduledAt: e.target.value,
+                  }))
+                }
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="m-liters">Required liters</Label>
+              <Input
+                id="m-liters"
+                type="number"
+                value={addForm.requiredLiters ?? ''}
+                onChange={(e) =>
+                  setAddForm((s) => ({
+                    ...s,
+                    requiredLiters:
+                      e.target.value === ''
+                        ? null
+                        : Number(e.target.value),
+                  }))
+                }
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="m-notes">Notes</Label>
+              <Textarea
+                id="m-notes"
+                value={addForm.notes}
+                onChange={(e) =>
+                  setAddForm((s) => ({ ...s, notes: e.target.value }))
+                }
+              />
+            </div>
+            </div>
+            <DialogFooter>
+            <Button variant="outline" onClick={() => setAddOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleAdd}>Save</Button>
+            </DialogFooter>
               </DialogContent>
             </Dialog>
           </div>
