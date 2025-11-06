@@ -1,7 +1,5 @@
-import { AppShell } from '@/components/layout/AppSidebar';
-import Header from '@/components/layout/Header';
+import { PageLayout, GlassCard } from '@/components/layout/PageLayout';
 import { useI18n } from '@/i18n';
-import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -25,7 +23,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import {
   Select,
@@ -325,225 +322,221 @@ export default function AdminUsersPage() {
   }, []);
 
   const { t } = useI18n();
-  return (
-    <AppShell>
-      <Header />
-      <div className="px-4 pb-10 pt-4">
-        <div className="mb-4 flex items-center justify-between">
-          <div className="text-sm text-muted-foreground">
-            {t('manageAdminsIntro')}
-          </div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="secondary"
-              className="hidden sm:inline-flex"
-              onClick={exportCsv}
-            >
-              <Download className="mr-2 h-4 w-4" /> {t('export')}
-            </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="hidden sm:inline-flex">
-                  <Columns2 className="mr-2 h-4 w-4" /> {t('columns')}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {allColumns.map((c) => (
-                  <DropdownMenuCheckboxItem
-                    key={c.key}
-                    checked={cols[c.key]}
-                    onCheckedChange={(v) =>
-                      setCols((s) => ({ ...s, [c.key]: !!v }))
-                    }
-                    disabled={c.key === 'settings'}
-                  >
-                    {c.label}
-                  </DropdownMenuCheckboxItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <Button variant="outline" onClick={syncAdmins}>
-              <UploadCloud className="mr-2 h-4 w-4" /> {t('sync')}
-            </Button>
-            <Dialog open={addOpen} onOpenChange={setAddOpen}>
-              <DialogTrigger asChild>
-                <Button className="bg-sky-600 hover:bg-sky-500">
-                  <Plus className="mr-2 h-4 w-4" /> {t('add')}
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>{t('addUser')}</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="name">{t('name')}</Label>
-                    <Input
-                      id="name"
-                      value={addForm.name}
-                      onChange={(e) =>
-                        setAddForm((f) => ({ ...f, name: e.target.value }))
-                      }
-                    />
-                    {addErrors.name && (
-                      <p className="mt-1 text-xs text-destructive">
-                        {t(addErrors.name)}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <Label htmlFor="username">{t('username')}</Label>
-                    <Input
-                      id="username"
-                      value={addForm.username}
-                      onChange={(e) =>
-                        setAddForm((f) => ({ ...f, username: e.target.value }))
-                      }
-                    />
-                    {addErrors.username && (
-                      <p className="mt-1 text-xs text-destructive">
-                        {t(addErrors.username)}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <Label htmlFor="email">{t('email')}</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={addForm.email}
-                      onChange={(e) =>
-                        setAddForm((f) => ({ ...f, email: e.target.value }))
-                      }
-                    />
-                    {addErrors.email && (
-                      <p className="mt-1 text-xs text-destructive">
-                        {t(addErrors.email)}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <Label htmlFor="password">{t('password')}</Label>
-                    <Input
-                      id="password"
-                      type="password"
-                      value={addForm.password}
-                      onChange={(e) =>
-                        setAddForm((f) => ({ ...f, password: e.target.value }))
-                      }
-                    />
-                    {addErrors.password && (
-                      <p className="mt-1 text-xs text-destructive">
-                        {t(addErrors.password)}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <Label>{t('position')}</Label>
-                    <Select
-                      value={addForm.position}
-                      onValueChange={(v) =>
-                        setAddForm((f) => ({ ...f, position: v as any }))
-                      }
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder={t('position')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Admin">{t('admin')}</SelectItem>
-                        <SelectItem value="User">{t('user')}</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    {addErrors.position && (
-                      <p className="mt-1 text-xs text-destructive">
-                        {t(addErrors.position)}
-                      </p>
-                    )}
-                  </div>
-                </div>
-                <DialogFooter className="mt-6 gap-2 sm:gap-2">
-                  <Button variant="outline" onClick={() => setAddOpen(false)}>
-                    {t('cancel')}
-                  </Button>
-                  <Button onClick={handleAdd}>{t('save')}</Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-          </div>
-        </div>
+  const totalAdmins = rows.length;
+  const privilegedAdmins = rows.filter((r) => r.position === 'Admin').length;
+  const standardMembers = totalAdmins - privilegedAdmins;
 
-        <Card>
-          <CardContent className="p-0">
-            <div className="flex items-center justify-between gap-4 p-4">
-              <div className="text-sm text-muted-foreground">
+  return (
+    <PageLayout
+      title="Administrative accounts"
+      description="Govern platform access with granular permissions, credential lifecycle controls and secure provisioning."
+      breadcrumbs={[{ label: t('usersAuth') }, { label: t('adminUsers') }]}
+      actions={
+        <Button
+          className="rounded-full bg-sky-500 px-5 text-sm font-semibold text-white shadow-lg shadow-sky-500/30"
+          onClick={() => setAddOpen(true)}
+        >
+          <Plus className="mr-2 h-4 w-4" /> {t('add')}
+        </Button>
+      }
+      heroContent={
+        <div className="grid gap-3 sm:grid-cols-3">
+          {[{
+            label: 'Total admins',
+            value: totalAdmins.toLocaleString(),
+            description: 'Active directory users synced from Supabase.',
+          },
+          {
+            label: 'Privileged roles',
+            value: privilegedAdmins.toLocaleString(),
+            description: 'Accounts with elevated approval authority.',
+          },
+          {
+            label: 'Standard members',
+            value: standardMembers.toLocaleString(),
+            description: 'Limited-scope operators and auditors.',
+          }].map((metric) => (
+            <GlassCard
+              key={metric.label}
+              className="border-white/10 bg-white/[0.07] p-5"
+            >
+              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-200/70">
+                {metric.label}
+              </p>
+              <p className="mt-1 text-2xl font-semibold text-white">{metric.value}</p>
+              <p className="mt-2 text-xs text-slate-200/70">{metric.description}</p>
+            </GlassCard>
+          ))}
+        </div>
+      }
+    >
+      <div className="space-y-6">
+        <GlassCard className="border-white/10 bg-white/10 p-6">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div className="text-sm text-slate-200/80">
+              {t('manageAdminsIntro')}
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <Button
+                variant="ghost"
+                className="rounded-full border border-white/10 bg-white/5 px-4 text-white hover:border-white/30 hover:bg-white/10"
+                onClick={exportCsv}
+              >
+                <Download className="mr-2 h-4 w-4" /> {t('export')}
+              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button className="rounded-full border border-white/10 bg-white/5 px-4 text-white hover:border-white/30 hover:bg-white/10">
+                    <Columns2 className="mr-2 h-4 w-4" /> {t('columns')}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align="end"
+                  className="border border-white/10 bg-[#0b1e3e] text-slate-100"
+                >
+                  {allColumns.map((c) => (
+                    <DropdownMenuCheckboxItem
+                      key={c.key}
+                      checked={cols[c.key]}
+                      onCheckedChange={(v) =>
+                        setCols((s) => ({ ...s, [c.key]: !!v }))
+                      }
+                      disabled={c.key === 'settings'}
+                    >
+                      {c.label}
+                    </DropdownMenuCheckboxItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <Button
+                variant="ghost"
+                className="rounded-full border border-white/10 bg-white/5 px-4 text-white hover:border-white/30 hover:bg-white/10"
+                onClick={syncAdmins}
+              >
+                <UploadCloud className="mr-2 h-4 w-4" /> {t('sync')}
+              </Button>
+            </div>
+          </div>
+        </GlassCard>
+
+        <GlassCard className="border-white/10 bg-white/5 p-0">
+          <div className="space-y-4 p-6">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-200/70">
                 {t('excelPrintColumnVisibility')}
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">
-                  {t('search')}
-                </span>
+              <div className="flex flex-wrap items-center gap-3">
                 <Input
                   value={query}
                   onChange={(e) => {
                     setPage(1);
                     setQuery(e.target.value);
                   }}
-                  placeholder=""
-                  className="h-9 w-56"
+                  placeholder={t('search') ?? 'Search'}
+                  className="h-10 min-w-[200px] border-white/20 bg-white/10 text-white placeholder:text-slate-200/60 focus-visible:ring-sky-400"
                 />
+                <Select
+                  value={String(pageSize)}
+                  onValueChange={(value) => setPageSize(Number(value))}
+                >
+                  <SelectTrigger className="h-10 w-[130px] border-white/20 bg-white/10 text-white focus:ring-sky-400">
+                    <SelectValue placeholder="10" />
+                  </SelectTrigger>
+                  <SelectContent className="border border-white/10 bg-[#0b1e3e] text-slate-100">
+                    {[10, 25, 50].map((size) => (
+                      <SelectItem key={size} value={String(size)}>
+                        Show {size}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
             <div className="overflow-x-auto">
-              <Table>
+              <Table className="min-w-full text-slate-100">
                 <TableHeader>
-                  <TableRow className="bg-[hsl(var(--primary))] text-white hover:bg-[hsl(var(--primary))]">
+                  <TableRow className="bg-white/[0.08] text-xs uppercase tracking-[0.2em] text-slate-100">
                     {cols.name && (
-                      <TableHead className="text-white">{t('name')}</TableHead>
+                      <TableHead className="border-none text-slate-100">
+                        {t('name')}
+                      </TableHead>
                     )}
                     {cols.username && (
-                      <TableHead className="text-white">
+                      <TableHead className="border-none text-slate-100">
                         {t('username')}
                       </TableHead>
                     )}
                     {cols.email && (
-                      <TableHead className="text-white">{t('email')}</TableHead>
+                      <TableHead className="border-none text-slate-100">
+                        {t('email')}
+                      </TableHead>
                     )}
                     {cols.password && (
-                      <TableHead className="text-white">
+                      <TableHead className="border-none text-slate-100">
                         {t('password')}
                       </TableHead>
                     )}
                     {cols.position && (
-                      <TableHead className="text-white">
+                      <TableHead className="border-none text-slate-100">
                         {t('position')}
                       </TableHead>
                     )}
                     {cols.settings && (
-                      <TableHead className="text-white">
+                      <TableHead className="border-none text-right text-slate-100">
                         {t('settingsCol')}
                       </TableHead>
                     )}
                   </TableRow>
                 </TableHeader>
                 <TableBody>
+                  {current.length === 0 && (
+                    <TableRow>
+                      <TableCell
+                        colSpan={allColumns.length}
+                        className="py-8 text-center text-sm text-slate-200/70"
+                      >
+                        {t('noResults')}
+                      </TableCell>
+                    </TableRow>
+                  )}
                   {current.map((r) => (
-                    <TableRow key={r.id}>
+                    <TableRow
+                      key={r.id}
+                      className="border-white/5 bg-white/[0.02] text-sm text-slate-100 transition hover:bg-white/[0.08]"
+                    >
                       {cols.name && (
-                        <TableCell className="font-medium">{r.name}</TableCell>
+                        <TableCell className="font-semibold text-white">
+                          {r.name}
+                        </TableCell>
                       )}
-                      {cols.username && <TableCell>{r.username}</TableCell>}
-                      {cols.email && <TableCell>{r.email}</TableCell>}
-                      {cols.password && <TableCell>{'*******'}</TableCell>}
-                      {cols.position && <TableCell>{r.position}</TableCell>}
+                      {cols.username && (
+                        <TableCell className="text-slate-200/80">
+                          {r.username}
+                        </TableCell>
+                      )}
+                      {cols.email && (
+                        <TableCell className="text-slate-200/80">
+                          {r.email}
+                        </TableCell>
+                      )}
+                      {cols.password && (
+                        <TableCell className="text-slate-200/80">*******</TableCell>
+                      )}
+                      {cols.position && (
+                        <TableCell className="text-slate-200/80">
+                          {r.position}
+                        </TableCell>
+                      )}
                       {cols.settings && (
-                        <TableCell className="space-x-2 text-right">
-                          <Button size="icon" variant="ghost" aria-label="View">
+                        <TableCell className="flex items-center justify-end gap-2">
+                          <Button size="icon" variant="ghost" className="text-slate-200 hover:text-white" aria-label="View">
                             <Eye className="h-4 w-4" />
                           </Button>
                           <Button
                             size="icon"
                             variant="ghost"
+                            className="text-slate-200 hover:text-white"
                             aria-label="Edit"
                             onClick={() =>
                               openEdit(
@@ -557,6 +550,7 @@ export default function AdminUsersPage() {
                           <Button
                             size="icon"
                             variant="ghost"
+                            className="text-rose-200 hover:text-rose-100"
                             aria-label="Delete"
                             onClick={() => remove(r.id)}
                           >
@@ -566,59 +560,142 @@ export default function AdminUsersPage() {
                       )}
                     </TableRow>
                   ))}
-                  {current.length === 0 && (
-                    <TableRow>
-                      <TableCell
-                        colSpan={6}
-                        className="text-center text-sm text-muted-foreground"
-                      >
-                        {t('noResults')}
-                      </TableCell>
-                    </TableRow>
-                  )}
                 </TableBody>
               </Table>
             </div>
 
-            <div className="flex items-center justify-between px-4 py-3 text-sm text-muted-foreground">
+            <div className="flex flex-col gap-3 border-t border-white/10 pt-4 text-sm text-slate-200/70 md:flex-row md:items-center md:justify-between">
               <div>
                 {t('showing')} {current.length} {t('of')} {filtered.length}{' '}
                 {t('entries')}
               </div>
               <div className="flex items-center gap-2">
                 <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={page === 1}
+                  variant="ghost"
+                  className="rounded-full border border-white/10 bg-white/5 px-4 text-white hover:border-white/30 hover:bg-white/10"
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={page === 1}
                 >
                   {t('prev')}
                 </Button>
-                <span className="tabular-nums">
+                <span className="text-xs uppercase tracking-[0.3em] text-slate-200/60">
                   {page} / {totalPages}
                 </span>
                 <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={page === totalPages}
+                  variant="ghost"
+                  className="rounded-full border border-white/10 bg-white/5 px-4 text-white hover:border-white/30 hover:bg-white/10"
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={page === totalPages}
                 >
                   {t('next')}
                 </Button>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </GlassCard>
       </div>
 
+      <Dialog open={addOpen} onOpenChange={setAddOpen}>
+        <DialogContent className="max-w-2xl border border-white/10 bg-gradient-to-br from-[#0b1e3e] via-[#102c57] to-[#040b1d] text-slate-100">
+          <DialogHeader>
+            <DialogTitle>{t('addUser')}</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 py-2 md:grid-cols-2">
+            <div className="grid gap-2">
+              <Label htmlFor="name">{t('name')}</Label>
+              <Input
+                id="name"
+                value={addForm.name}
+                onChange={(e) => setAddForm((f) => ({ ...f, name: e.target.value }))}
+                className="border-white/20 bg-white/10 text-white focus-visible:ring-sky-400"
+              />
+              {addErrors.name && (
+                <p className="text-xs text-rose-300">{t(addErrors.name)}</p>
+              )}
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="username">{t('username')}</Label>
+              <Input
+                id="username"
+                value={addForm.username}
+                onChange={(e) => setAddForm((f) => ({ ...f, username: e.target.value }))}
+                className="border-white/20 bg-white/10 text-white focus-visible:ring-sky-400"
+              />
+              {addErrors.username && (
+                <p className="text-xs text-rose-300">{t(addErrors.username)}</p>
+              )}
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="email">{t('email')}</Label>
+              <Input
+                id="email"
+                type="email"
+                value={addForm.email}
+                onChange={(e) => setAddForm((f) => ({ ...f, email: e.target.value }))}
+                className="border-white/20 bg-white/10 text-white focus-visible:ring-sky-400"
+              />
+              {addErrors.email && (
+                <p className="text-xs text-rose-300">{t(addErrors.email)}</p>
+              )}
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="password">{t('password')}</Label>
+              <Input
+                id="password"
+                type="password"
+                value={addForm.password}
+                onChange={(e) => setAddForm((f) => ({ ...f, password: e.target.value }))}
+                className="border-white/20 bg-white/10 text-white focus-visible:ring-sky-400"
+              />
+              {addErrors.password && (
+                <p className="text-xs text-rose-300">{t(addErrors.password)}</p>
+              )}
+            </div>
+            <div className="md:col-span-2">
+              <Label>{t('position')}</Label>
+              <Select
+                value={addForm.position}
+                onValueChange={(v) => setAddForm((f) => ({ ...f, position: v as any }))}
+              >
+                <SelectTrigger className="mt-2 h-10 border-white/20 bg-white/10 text-white focus:ring-sky-400">
+                  <SelectValue placeholder={t('position')} />
+                </SelectTrigger>
+                <SelectContent className="border border-white/10 bg-[#0b1e3e] text-slate-100">
+                  <SelectItem value="Admin">{t('admin')}</SelectItem>
+                  <SelectItem value="User">{t('user')}</SelectItem>
+                </SelectContent>
+              </Select>
+              {addErrors.position && (
+                <p className="mt-2 text-xs text-rose-300">{t(addErrors.position)}</p>
+              )}
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="ghost"
+              className="rounded-full border border-white/10 bg-white/5 px-4 text-white hover:border-white/30 hover:bg-white/10"
+              onClick={() => setAddOpen(false)}
+            >
+              {t('cancel')}
+            </Button>
+            <Button
+              className="rounded-full bg-emerald-500 px-5 text-white shadow-md shadow-emerald-500/30 hover:bg-emerald-400"
+              onClick={handleAdd}
+            >
+              {t('save')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
-        <DialogContent>
+        <DialogContent className="max-w-2xl border border-white/10 bg-gradient-to-br from-[#0b1e3e] via-[#102c57] to-[#040b1d] text-slate-100">
           <DialogHeader>
             <DialogTitle>{t('editUser')}</DialogTitle>
           </DialogHeader>
           {editForm && (
-            <div className="space-y-4">
-              <div>
+            <div className="grid gap-4 py-2 md:grid-cols-2">
+              <div className="grid gap-2">
                 <Label htmlFor="edit-name">{t('name')}</Label>
                 <Input
                   id="edit-name"
@@ -626,9 +703,10 @@ export default function AdminUsersPage() {
                   onChange={(e) =>
                     setEditForm((f) => (f ? { ...f, name: e.target.value } : f))
                   }
+                  className="border-white/20 bg-white/10 text-white focus-visible:ring-sky-400"
                 />
               </div>
-              <div>
+              <div className="grid gap-2">
                 <Label htmlFor="edit-username">{t('username')}</Label>
                 <Input
                   id="edit-username"
@@ -638,9 +716,10 @@ export default function AdminUsersPage() {
                       f ? { ...f, username: e.target.value } : f,
                     )
                   }
+                  className="border-white/20 bg-white/10 text-white focus-visible:ring-sky-400"
                 />
               </div>
-              <div>
+              <div className="grid gap-2">
                 <Label htmlFor="edit-email">{t('email')}</Label>
                 <Input
                   id="edit-email"
@@ -651,9 +730,10 @@ export default function AdminUsersPage() {
                       f ? { ...f, email: e.target.value } : f,
                     )
                   }
+                  className="border-white/20 bg-white/10 text-white focus-visible:ring-sky-400"
                 />
               </div>
-              <div>
+              <div className="grid gap-2">
                 <Label htmlFor="edit-password">{t('password')}</Label>
                 <Input
                   id="edit-password"
@@ -664,9 +744,10 @@ export default function AdminUsersPage() {
                       f ? { ...f, password: e.target.value } : f,
                     )
                   }
+                  className="border-white/20 bg-white/10 text-white focus-visible:ring-sky-400"
                 />
               </div>
-              <div>
+              <div className="md:col-span-2">
                 <Label>{t('position')}</Label>
                 <Select
                   value={editForm.position}
@@ -674,10 +755,10 @@ export default function AdminUsersPage() {
                     setEditForm((f) => (f ? { ...f, position: v as any } : f))
                   }
                 >
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger className="mt-2 h-10 border-white/20 bg-white/10 text-white focus:ring-sky-400">
                     <SelectValue placeholder={t('position')} />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="border border-white/10 bg-[#0b1e3e] text-slate-100">
                     <SelectItem value="Admin">{t('admin')}</SelectItem>
                     <SelectItem value="User">{t('user')}</SelectItem>
                   </SelectContent>
@@ -685,14 +766,23 @@ export default function AdminUsersPage() {
               </div>
             </div>
           )}
-          <DialogFooter className="mt-6 gap-2 sm:gap-2">
-            <Button variant="outline" onClick={() => setEditOpen(false)}>
+          <DialogFooter>
+            <Button
+              variant="ghost"
+              className="rounded-full border border-white/10 bg-white/5 px-4 text-white hover:border-white/30 hover:bg-white/10"
+              onClick={() => setEditOpen(false)}
+            >
               {t('cancel')}
             </Button>
-            <Button onClick={handleEditSave}>{t('save')}</Button>
+            <Button
+              className="rounded-full bg-emerald-500 px-5 text-white shadow-md shadow-emerald-500/30 hover:bg-emerald-400"
+              onClick={handleEditSave}
+            >
+              {t('save')}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </AppShell>
+    </PageLayout>
   );
 }
