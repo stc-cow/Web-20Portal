@@ -145,6 +145,7 @@ export default function MissionsPage() {
       { notes: string; added: number; actual: number; qtyLast: number }
     >
   >({});
+  const [editing, setEditing] = useState<Record<number, boolean>>({});
 
   useEffect(() => {
     let mounted = true;
@@ -757,96 +758,96 @@ export default function MissionsPage() {
             </DialogHeader>
             <div className="grid gap-4 py-2">
               <div className="grid gap-2">
-            <Label htmlFor="m-site">Site name</Label>
-            <Input
-              id="m-site"
-              value={addForm.siteName}
-              onChange={(e) =>
-                setAddForm((s) => ({ ...s, siteName: e.target.value }))
-              }
+                <Label htmlFor="m-site">Site name</Label>
+                <Input
+                  id="m-site"
+                  value={addForm.siteName}
+                  onChange={(e) =>
+                    setAddForm((s) => ({ ...s, siteName: e.target.value }))
+                  }
                 />
                 {addErrors.siteName && (
-              <span className="text-sm text-red-500">required</span>
+                  <span className="text-sm text-red-500">required</span>
                 )}
               </div>
               <div className="grid gap-2">
-            <Label>Driver</Label>
-            <Select
-              value={addForm.driverId ? String(addForm.driverId) : ''}
-              onValueChange={(v) => {
-                const d = drivers.find((x) => String(x.id) === v);
-                setAddForm((s) => ({
-                  ...s,
-                  driverId: d ? d.id : null,
-                  driverName: d ? d.name : '',
-                  driverPhone: d?.phone || '',
-                }));
-              }}
+                <Label>Driver</Label>
+                <Select
+                  value={addForm.driverId ? String(addForm.driverId) : ''}
+                  onValueChange={(v) => {
+                    const d = drivers.find((x) => String(x.id) === v);
+                    setAddForm((s) => ({
+                      ...s,
+                      driverId: d ? d.id : null,
+                      driverName: d ? d.name : '',
+                      driverPhone: d?.phone || '',
+                    }));
+                  }}
                 >
-              <SelectTrigger>
-            <SelectValue placeholder="Select driver" />
-              </SelectTrigger>
-              <SelectContent>
-                {drivers.map((d) => (
-                  <SelectItem key={d.id} value={String(d.id)}>
-                    {d.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select driver" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {drivers.map((d) => (
+                      <SelectItem key={d.id} value={String(d.id)}>
+                        {d.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <div className="grid gap-2">
-            <Label htmlFor="m-phone">Driver phone</Label>
-            <Input
-              id="m-phone"
-              value={addForm.driverPhone}
-              onChange={(e) =>
-                setAddForm((s) => ({
-                  ...s,
-                  driverPhone: e.target.value,
-                }))
-              }
+                <Label htmlFor="m-phone">Driver phone</Label>
+                <Input
+                  id="m-phone"
+                  value={addForm.driverPhone}
+                  onChange={(e) =>
+                    setAddForm((s) => ({
+                      ...s,
+                      driverPhone: e.target.value,
+                    }))
+                  }
                 />
               </div>
               <div className="grid gap-2">
-            <Label htmlFor="m-when">Scheduled at</Label>
-            <Input
-              id="m-when"
-              type="datetime-local"
-              value={addForm.scheduledAt}
-              onChange={(e) =>
-                setAddForm((s) => ({
-                  ...s,
-                  scheduledAt: e.target.value,
-                }))
-              }
+                <Label htmlFor="m-when">Scheduled at</Label>
+                <Input
+                  id="m-when"
+                  type="datetime-local"
+                  value={addForm.scheduledAt}
+                  onChange={(e) =>
+                    setAddForm((s) => ({
+                      ...s,
+                      scheduledAt: e.target.value,
+                    }))
+                  }
                 />
               </div>
               <div className="grid gap-2">
-            <Label htmlFor="m-liters">Required liters</Label>
-            <Input
-              id="m-liters"
-              type="number"
-              value={addForm.requiredLiters ?? ''}
-              onChange={(e) =>
-                setAddForm((s) => ({
-                  ...s,
-                  requiredLiters:
-                    e.target.value === ''
-                      ? null
-                      : Number(e.target.value),
-                }))
-              }
+                <Label htmlFor="m-liters">Required liters</Label>
+                <Input
+                  id="m-liters"
+                  type="number"
+                  value={addForm.requiredLiters ?? ''}
+                  onChange={(e) =>
+                    setAddForm((s) => ({
+                      ...s,
+                      requiredLiters:
+                        e.target.value === ''
+                          ? null
+                          : Number(e.target.value),
+                    }))
+                  }
                 />
               </div>
               <div className="grid gap-2">
-            <Label htmlFor="m-notes">Notes</Label>
-            <Textarea
-              id="m-notes"
-              value={addForm.notes}
-              onChange={(e) =>
-                setAddForm((s) => ({ ...s, notes: e.target.value }))
-              }
+                <Label htmlFor="m-notes">Notes</Label>
+                <Textarea
+                  id="m-notes"
+                  value={addForm.notes}
+                  onChange={(e) =>
+                    setAddForm((s) => ({ ...s, notes: e.target.value }))
+                  }
                 />
               </div>
             </div>
@@ -856,548 +857,546 @@ export default function MissionsPage() {
               </Button>
               <Button onClick={handleAdd}>Save</Button>
             </DialogFooter>
-              </DialogContent>
-            </Dialog>
-          </div>
-        </div>
+          </DialogContent>
+        </Dialog>
+      </div>
 
-        <div className="mb-3 flex flex-wrap items-center gap-2">
+      <div className="mb-3 flex flex-wrap items-center gap-2">
+        <Badge
+          variant="secondary"
+          className="cursor-pointer"
+          onClick={() => setStatusFilter('All')}
+        >
+          All{' '}
+          <span className="ml-2 rounded bg-gray-200 px-1.5 py-0.5 text-xs text-foreground">
+            {rows.length}
+          </span>
+        </Badge>
+        {STATUS_ORDER.map((s) => (
           <Badge
-            variant="secondary"
-            className="cursor-pointer"
-            onClick={() => setStatusFilter('All')}
+            key={s}
+            className={`${statusColor[s]} cursor-pointer text-white hover:opacity-90`}
+            onClick={() => setStatusFilter(s)}
           >
-            All{' '}
-            <span className="ml-2 rounded bg-gray-200 px-1.5 py-0.5 text-xs text-foreground">
-              {rows.length}
+            {s}
+            <span className="ml-2 rounded bg-white/20 px-1.5 py-0.5 text-xs">
+              {counts[s] || 0}
             </span>
           </Badge>
-          {STATUS_ORDER.map((s) => (
-            <Badge
-              key={s}
-              className={`${statusColor[s]} cursor-pointer text-white hover:opacity-90`}
-              onClick={() => setStatusFilter(s)}
-            >
-              {s}
-              <span className="ml-2 rounded bg-white/20 px-1.5 py-0.5 text-xs">
-                {counts[s] || 0}
-              </span>
-            </Badge>
-          ))}
-        </div>
+        ))}
+      </div>
 
-        <Card className="overflow-hidden rounded-3xl border border-white/10 bg-white/5 text-slate-100 shadow-xl backdrop-blur">
-          <CardContent className="p-0 text-slate-100">
-            <div className="flex items-center justify-between gap-4 border-b border-white/10 px-4 py-4">
-              <div className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-200/70">
-                Missions
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="text-xs uppercase tracking-[0.2em] text-slate-200/60">Rows per page</div>
-                <Select
-                  value={String(pageSize)}
-                  onValueChange={(v) => {
-                    setPageSize(Number(v));
-                    setPage(1);
-                  }}
-                >
-                  <SelectTrigger className="h-9 w-[110px] border-white/20 bg-white/10 text-white focus:ring-sky-400">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="border border-white/10 bg-[#0b1e3e] text-slate-100">
-                    {[25, 50, 100, 250, 500].map((n) => (
-                      <SelectItem key={n} value={String(n)}>
-                        {n}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+      <Card className="overflow-hidden rounded-3xl border border-white/10 bg-white/5 text-slate-100 shadow-xl backdrop-blur">
+        <CardContent className="p-0 text-slate-100">
+          <div className="flex items-center justify-between gap-4 border-b border-white/10 px-4 py-4">
+            <div className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-200/70">
+              Missions
             </div>
-
-            <div className="overflow-x-hidden">
-              <Table className="table-fixed text-slate-100">
-                <TableHeader>
-                  <TableRow className="bg-white/[0.08] text-xs uppercase tracking-[0.2em] text-slate-100">
-                    <TableHead className="border-none text-slate-100">Mission ID</TableHead>
-                    <TableHead className="border-none text-slate-100">Site Name</TableHead>
-                    <TableHead className="border-none text-slate-100">Created Date</TableHead>
-                    <TableHead className="border-none text-slate-100">Added Liters</TableHead>
-                    <TableHead className="border-none text-slate-100">
-                      Actual Liters Found in Tank
-                    </TableHead>
-                    <TableHead className="border-none text-slate-100">
-                      Quantity Added (Last Task)
-                    </TableHead>
-                    <TableHead className="border-none text-slate-100">City</TableHead>
-                    <TableHead className="border-none text-slate-100">Mission Status</TableHead>
-                  </TableRow>
-                  {/* Filter row */}
-                  <TableRow className="bg-white/[0.04]">
-                    <TableHead>
-                      <Input
-                        placeholder="Filter"
-                        className="h-8"
-                        value={filters.missionId || ''}
-                        onChange={(e) => {
-                          setPage(1);
-                          setFilters((f) => ({
-                            ...f,
-                            missionId: e.target.value,
-                          }));
-                        }}
-                      />
-                    </TableHead>
-                    <TableHead>
-                      <Input
-                        placeholder="Filter"
-                        className="h-8"
-                        value={filters.siteName || ''}
-                        onChange={(e) => {
-                          setPage(1);
-                          setFilters((f) => ({
-                            ...f,
-                            siteName: e.target.value,
-                          }));
-                        }}
-                      />
-                    </TableHead>
-                    <TableHead>
-                      <Input
-                        type="date"
-                        className="h-8"
-                        value={filters.createdDate || ''}
-                        onChange={(e) => {
-                          setPage(1);
-                          setFilters((f) => ({
-                            ...f,
-                            createdDate: e.target.value,
-                          }));
-                        }}
-                      />
-                    </TableHead>
-                    <TableHead>
-                      <Input
-                        type="number"
-                        placeholder="="
-                        className="h-8"
-                        value={filters.filledLiters || ''}
-                        onChange={(e) => {
-                          setPage(1);
-                          setFilters((f) => ({
-                            ...f,
-                            filledLiters: e.target.value,
-                          }));
-                        }}
-                      />
-                    </TableHead>
-                    <TableHead>
-                      <Input
-                        type="number"
-                        placeholder="="
-                        className="h-8"
-                        value={filters.actualInTank || ''}
-                        onChange={(e) => {
-                          setPage(1);
-                          setFilters((f) => ({
-                            ...f,
-                            actualInTank: e.target.value,
-                          }));
-                        }}
-                      />
-                    </TableHead>
-                    <TableHead>
-                      <Input
-                        type="number"
-                        placeholder="="
-                        className="h-8"
-                        value={filters.quantityAddedLastTask || ''}
-                        onChange={(e) => {
-                          setPage(1);
-                          setFilters((f) => ({
-                            ...f,
-                            quantityAddedLastTask: e.target.value,
-                          }));
-                        }}
-                      />
-                    </TableHead>
-                    <TableHead>
-                      <Input
-                        placeholder="Filter"
-                        className="h-8"
-                        value={filters.city || ''}
-                        onChange={(e) => {
-                          setPage(1);
-                          setFilters((f) => ({ ...f, city: e.target.value }));
-                        }}
-                      />
-                    </TableHead>
-                    <TableHead>
-                      <Select
-                        value={filters.missionStatus || '__ALL__'}
-                        onValueChange={(v) => {
-                          setPage(1);
-                          setFilters((f) => ({
-                            ...f,
-                            missionStatus: v === '__ALL__' ? '' : v,
-                          }));
-                        }}
-                      >
-                        <SelectTrigger className="h-8">
-                          <SelectValue placeholder="All" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="__ALL__">All</SelectItem>
-                          {STATUS_ORDER.map((s) => (
-                            <SelectItem key={s} value={s}>
-                              {s}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {current.map((r) => (
-                    <TableRow
-                      key={r.id}
-                      onClick={() => toggleExpand(r)}
-                      className="cursor-pointer hover:bg-[#EEF2FF]"
-                    >
-                      <TableCell className="font-medium break-words">
-                        {r.missionId}
-                      </TableCell>
-                      <TableCell className="font-medium break-words">
-                        {r.siteName}
-                      </TableCell>
-                      <TableCell className="break-words">
-                        {r.createdDate}
-                      </TableCell>
-                      <TableCell className="break-words">
-                        {r.filledLiters}
-                      </TableCell>
-                      <TableCell className="break-words">
-                        {r.actualInTank}
-                      </TableCell>
-                      <TableCell className="break-words">
-                        {r.quantityAddedLastTask}
-                      </TableCell>
-                      <TableCell className="break-words">{r.city}</TableCell>
-                      <TableCell>
-                        <span
-                          className={`rounded px-2 py-0.5 text-xs text-white ${statusColor[r.missionStatus]}`}
-                        >
-                          {r.missionStatus}
-                        </span>
-                      </TableCell>
-                    </TableRow>
+            <div className="flex items-center gap-2">
+              <div className="text-xs uppercase tracking-[0.2em] text-slate-200/60">Rows per page</div>
+              <Select
+                value={String(pageSize)}
+                onValueChange={(v) => {
+                  setPageSize(Number(v));
+                  setPage(1);
+                }}
+              >
+                <SelectTrigger className="h-9 w-[110px] border-white/20 bg-white/10 text-white focus:ring-sky-400">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="border border-white/10 bg-[#0b1e3e] text-slate-100">
+                  {[25, 50, 100, 250, 500].map((n) => (
+                    <SelectItem key={n} value={String(n)}>
+                      {n}
+                    </SelectItem>
                   ))}
-                  {current.map((r) =>
-                    expanded[r.id] ? (
-                      <TableRow key={`exp-${r.id}`} className="bg-white">
-                        <TableCell colSpan={VISIBLE_COLUMNS.length}>
-                          <div className="grid grid-cols-1 gap-3 p-4 rounded-md transition-all duration-300 ease-in-out md:grid-cols-3">
-                            <div>
-                              <div className="text-xs text-muted-foreground">
-                                Mission ID
-                              </div>
-                              <div className="font-medium">{r.missionId}</div>
-                            </div>
-                            <div>
-                              <div className="text-xs text-muted-foreground">
-                                Site Name
-                              </div>
-                              <div className="font-medium">{r.siteName}</div>
-                            </div>
-                            <div>
-                              <div className="text-xs text-muted-foreground">
-                                Driver Name
-                              </div>
-                              <div className="font-medium">{r.driverName}</div>
-                            </div>
-                            <div>
-                              <div className="text-xs text-muted-foreground">
-                                Required Liters
-                              </div>
-                              <div className="font-medium">
-                                {r.quantityAddedLastTask}
-                              </div>
-                            </div>
-                            <div className="md:col-span-3">
-                              <div className="text-xs text-muted-foreground">
-                                Driver Entry
-                              </div>
-                              <div className="grid grid-cols-2 gap-2 text-sm">
-                                <div>
-                                  Liters: {entryByTask[r.id]?.liters ?? '-'}
-                                </div>
-                                <div>
-                                  Rate: {entryByTask[r.id]?.rate ?? '-'}
-                                </div>
-                                <div>
-                                  Station: {entryByTask[r.id]?.station ?? '-'}
-                                </div>
-                                <div>
-                                  Receipt #:{' '}
-                                  {entryByTask[r.id]?.receipt_number ?? '-'}
-                                </div>
-                                <div>
-                                  Odometer: {entryByTask[r.id]?.odometer ?? '-'}
-                                </div>
-                                <div>
-                                  Submitted By:{' '}
-                                  {entryByTask[r.id]?.submitted_by ?? '-'}
-                                </div>
-                                <div className="col-span-2">
-                                  Submitted At:{' '}
-                                  {entryByTask[r.id]?.submitted_at ?? '-'}
-                                </div>
-                              </div>
-                            </div>
-                            <div className="md:col-span-3">
-                              <div className="text-xs text-[#6B7280] mb-1">
-                                Images
-                              </div>
-                              <div className="grid grid-cols-3 gap-2">
-                                {entryByTask[r.id]?.photo_url && (
-                                  <img
-                                    src={entryByTask[r.id]?.photo_url}
-                                    alt="photo"
-                                    className="h-24 w-24 rounded object-cover cursor-zoom-in"
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      setImageSrc(
-                                        entryByTask[r.id]?.photo_url as string,
-                                      );
-                                      setImageOpen(true);
-                                    }}
-                                  />
-                                )}
-                                {(imagesByTask[r.id] || []).map((u, i) => (
-                                  <img
-                                    key={i}
-                                    src={u}
-                                    alt={`upload-${i + 1}`}
-                                    className="h-24 w-24 rounded object-cover cursor-zoom-in"
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      setImageSrc(u);
-                                      setImageOpen(true);
-                                    }}
-                                  />
-                                ))}
-                                {!entryByTask[r.id]?.photo_url &&
-                                  (!imagesByTask[r.id] ||
-                                    imagesByTask[r.id].length === 0) && (
-                                    <div className="text-sm text-muted-foreground">
-                                      No images
-                                    </div>
-                                  )}
-                              </div>
-                            </div>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
 
-                            {/* Inline edit form */}
-                            <div className="md:col-span-3 grid grid-cols-1 gap-3 md:grid-cols-4">
-                              <div>
-                                <div className="text-xs text-muted-foreground">
-                                  Added Liters
-                                </div>
-                                <Input
-                                  type="number"
-                                  className="mt-1"
-                                  value={editDraft[r.id]?.added ?? 0}
-                                  onClick={(e) => e.stopPropagation()}
-                                  onChange={(e) =>
-                                    setEditDraft((d) => ({
-                                      ...d,
-                                      [r.id]: {
-                                        ...(d[r.id] || {
-                                          notes: '',
-                                          added: 0,
-                                          actual: 0,
-                                          qtyLast: 0,
-                                        }),
-                                        added: Number(e.target.value) || 0,
-                                      },
-                                    }))
-                                  }
-                                />
-                              </div>
-                              <div>
-                                <div className="text-xs text-muted-foreground">
-                                  Actual In Tank
-                                </div>
-                                <Input
-                                  type="number"
-                                  className="mt-1"
-                                  value={editDraft[r.id]?.actual ?? 0}
-                                  onClick={(e) => e.stopPropagation()}
-                                  onChange={(e) =>
-                                    setEditDraft((d) => ({
-                                      ...d,
-                                      [r.id]: {
-                                        ...(d[r.id] || {
-                                          notes: '',
-                                          added: 0,
-                                          actual: 0,
-                                          qtyLast: 0,
-                                        }),
-                                        actual: Number(e.target.value) || 0,
-                                      },
-                                    }))
-                                  }
-                                />
-                              </div>
-                              <div>
-                                <div className="text-xs text-muted-foreground">
-                                  Quantity Added (Last Task)
-                                </div>
-                                <Input
-                                  type="number"
-                                  className="mt-1"
-                                  value={editDraft[r.id]?.qtyLast ?? 0}
-                                  onClick={(e) => e.stopPropagation()}
-                                  onChange={(e) =>
-                                    setEditDraft((d) => ({
-                                      ...d,
-                                      [r.id]: {
-                                        ...(d[r.id] || {
-                                          notes: '',
-                                          added: 0,
-                                          actual: 0,
-                                          qtyLast: 0,
-                                        }),
-                                        qtyLast: Number(e.target.value) || 0,
-                                      },
-                                    }))
-                                  }
-                                />
-                              </div>
-                              <div className="md:col-span-1">
-                                <div className="text-xs text-muted-foreground">
-                                  Notes
-                                </div>
-                                <Input
-                                  className="mt-1"
-                                  value={editDraft[r.id]?.notes ?? ''}
-                                  onClick={(e) => e.stopPropagation()}
-                                  onChange={(e) =>
-                                    setEditDraft((d) => ({
-                                      ...d,
-                                      [r.id]: {
-                                        ...(d[r.id] || {
-                                          notes: '',
-                                          added: 0,
-                                          actual: 0,
-                                          qtyLast: 0,
-                                        }),
-                                        notes: e.target.value,
-                                      },
-                                    }))
-                                  }
-                                />
-                              </div>
+          <div className="overflow-x-hidden">
+            <Table className="table-fixed text-slate-100">
+              <TableHeader>
+                <TableRow className="bg-white/[0.08] text-xs uppercase tracking-[0.2em] text-slate-100">
+                  <TableHead className="border-none text-slate-100">Mission ID</TableHead>
+                  <TableHead className="border-none text-slate-100">Site Name</TableHead>
+                  <TableHead className="border-none text-slate-100">Created Date</TableHead>
+                  <TableHead className="border-none text-slate-100">Added Liters</TableHead>
+                  <TableHead className="border-none text-slate-100">
+                    Actual Liters Found in Tank
+                  </TableHead>
+                  <TableHead className="border-none text-slate-100">
+                    Quantity Added (Last Task)
+                  </TableHead>
+                  <TableHead className="border-none text-slate-100">City</TableHead>
+                  <TableHead className="border-none text-slate-100">Mission Status</TableHead>
+                </TableRow>
+                {/* Filter row */}
+                <TableRow className="bg-white/[0.04]">
+                  <TableHead>
+                    <Input
+                      placeholder="Filter"
+                      className="h-8"
+                      value={filters.missionId || ''}
+                      onChange={(e) => {
+                        setPage(1);
+                        setFilters((f) => ({
+                          ...f,
+                          missionId: e.target.value,
+                        }));
+                      }}
+                    />
+                  </TableHead>
+                  <TableHead>
+                    <Input
+                      placeholder="Filter"
+                      className="h-8"
+                      value={filters.siteName || ''}
+                      onChange={(e) => {
+                        setPage(1);
+                        setFilters((f) => ({
+                          ...f,
+                          siteName: e.target.value,
+                        }));
+                      }}
+                    />
+                  </TableHead>
+                  <TableHead>
+                    <Input
+                      type="date"
+                      className="h-8"
+                      value={filters.createdDate || ''}
+                      onChange={(e) => {
+                        setPage(1);
+                        setFilters((f) => ({
+                          ...f,
+                          createdDate: e.target.value,
+                        }));
+                      }}
+                    />
+                  </TableHead>
+                  <TableHead>
+                    <Input
+                      type="number"
+                      placeholder="="
+                      className="h-8"
+                      value={filters.filledLiters || ''}
+                      onChange={(e) => {
+                        setPage(1);
+                        setFilters((f) => ({
+                          ...f,
+                          filledLiters: e.target.value,
+                        }));
+                      }}
+                    />
+                  </TableHead>
+                  <TableHead>
+                    <Input
+                      type="number"
+                      placeholder="="
+                      className="h-8"
+                      value={filters.actualInTank || ''}
+                      onChange={(e) => {
+                        setPage(1);
+                        setFilters((f) => ({
+                          ...f,
+                          actualInTank: e.target.value,
+                        }));
+                      }}
+                    />
+                  </TableHead>
+                  <TableHead>
+                    <Input
+                      type="number"
+                      placeholder="="
+                      className="h-8"
+                      value={filters.quantityAddedLastTask || ''}
+                      onChange={(e) => {
+                        setPage(1);
+                        setFilters((f) => ({
+                          ...f,
+                          quantityAddedLastTask: e.target.value,
+                        }));
+                      }}
+                    />
+                  </TableHead>
+                  <TableHead>
+                    <Input
+                      placeholder="Filter"
+                      className="h-8"
+                      value={filters.city || ''}
+                      onChange={(e) => {
+                        setPage(1);
+                        setFilters((f) => ({ ...f, city: e.target.value }));
+                      }}
+                    />
+                  </TableHead>
+                  <TableHead>
+                    <Select
+                      value={filters.missionStatus || '__ALL__'}
+                      onValueChange={(v) => {
+                        setPage(1);
+                        setFilters((f) => ({
+                          ...f,
+                          missionStatus: v === '__ALL__' ? '' : v,
+                        }));
+                      }}
+                    >
+                      <SelectTrigger className="h-8">
+                        <SelectValue placeholder="All" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="__ALL__">All</SelectItem>
+                        {STATUS_ORDER.map((s) => (
+                          <SelectItem key={s} value={s}>
+                            {s}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {current.map((r) => (
+                  <TableRow
+                    key={r.id}
+                    onClick={() => toggleExpand(r)}
+                    className="cursor-pointer hover:bg-[#EEF2FF]"
+                  >
+                    <TableCell className="font-medium break-words">
+                      {r.missionId}
+                    </TableCell>
+                    <TableCell className="font-medium break-words">
+                      {r.siteName}
+                    </TableCell>
+                    <TableCell className="break-words">
+                      {r.createdDate}
+                    </TableCell>
+                    <TableCell className="break-words">
+                      {r.filledLiters}
+                    </TableCell>
+                    <TableCell className="break-words">
+                      {r.actualInTank}
+                    </TableCell>
+                    <TableCell className="break-words">
+                      {r.quantityAddedLastTask}
+                    </TableCell>
+                    <TableCell className="break-words">{r.city}</TableCell>
+                    <TableCell>
+                      <span
+                        className={`rounded px-2 py-0.5 text-xs text-white ${statusColor[r.missionStatus]}`}
+                      >
+                        {r.missionStatus}
+                      </span>
+                    </TableCell>
+                  </TableRow>
+                ))}
+                {current.map((r) =>
+                  expanded[r.id] ? (
+                    <TableRow key={`exp-${r.id}`} className="bg-white">
+                      <TableCell colSpan={VISIBLE_COLUMNS.length}>
+                        <div className="grid grid-cols-1 gap-3 p-4 rounded-md transition-all duration-300 ease-in-out md:grid-cols-3">
+                          <div>
+                            <div className="text-xs text-muted-foreground">
+                              Mission ID
                             </div>
-
-                            <div className="md:col-span-3 flex flex-wrap items-center justify-end gap-2">
-                              <Button
-                                className="bg-[#16A34A] hover:opacity-90"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setAdminStatus(r.id, 'Task approved');
-                                }}
-                              >
-                                Approve
-                              </Button>
-                              <Button
-                                variant="outline"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setAdminStatus(
-                                    r.id,
-                                    'Task returned to the driver',
-                                  );
-                                }}
-                              >
-                                Return to Driver
-                              </Button>
-                              <Button
-                                variant="destructive"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  remove(r.id);
-                                }}
-                              >
-                                Delete
-                              </Button>
-                              <Button
-                                variant="secondary"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  // Edit opens inline fields above; make changes then click Save Changes
-                                }}
-                              >
-                                Edit
-                              </Button>
-                              <Button
-                                variant="outline"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  saveEdit(r);
-                                }}
-                              >
-                                Save Changes
-                              </Button>
+                            <div className="font-medium">{r.missionId}</div>
+                          </div>
+                          <div>
+                            <div className="text-xs text-muted-foreground">
+                              Site Name
+                            </div>
+                            <div className="font-medium">{r.siteName}</div>
+                          </div>
+                          <div>
+                            <div className="text-xs text-muted-foreground">
+                              Driver Name
+                            </div>
+                            <div className="font-medium">{r.driverName}</div>
+                          </div>
+                          <div>
+                            <div className="text-xs text-muted-foreground">
+                              Required Liters
+                            </div>
+                            <div className="font-medium">
+                              {r.quantityAddedLastTask}
                             </div>
                           </div>
-                        </TableCell>
-                      </TableRow>
-                    ) : null,
-                  )}
-                  {current.length === 0 && (
-                    <TableRow>
-                      <TableCell
-                        colSpan={VISIBLE_COLUMNS.length}
-                        className="text-center text-sm text-muted-foreground"
-                      >
-                        No results
+                          <div className="md:col-span-3">
+                            <div className="text-xs text-muted-foreground">
+                              Driver Entry
+                            </div>
+                            <div className="grid grid-cols-2 gap-2 text-sm">
+                              <div>
+                                Liters: {entryByTask[r.id]?.liters ?? '-'}
+                              </div>
+                              <div>
+                                Rate: {entryByTask[r.id]?.rate ?? '-'}
+                              </div>
+                              <div>
+                                Station: {entryByTask[r.id]?.station ?? '-'}
+                              </div>
+                              <div>
+                                Receipt #:{' '}
+                                {entryByTask[r.id]?.receipt_number ?? '-'}
+                              </div>
+                              <div>
+                                Odometer: {entryByTask[r.id]?.odometer ?? '-'}
+                              </div>
+                              <div>
+                                Submitted By:{' '}
+                                {entryByTask[r.id]?.submitted_by ?? '-'}
+                              </div>
+                              <div className="col-span-2">
+                                Submitted At:{' '}
+                                {entryByTask[r.id]?.submitted_at ?? '-'}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="md:col-span-3">
+                            <div className="text-xs text-[#6B7280] mb-1">
+                              Images
+                            </div>
+                            <div className="grid grid-cols-3 gap-2">
+                              {entryByTask[r.id]?.photo_url && (
+                                <img
+                                  src={entryByTask[r.id]?.photo_url}
+                                  alt="photo"
+                                  className="h-24 w-24 rounded object-cover cursor-zoom-in"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setImageSrc(
+                                      entryByTask[r.id]?.photo_url as string,
+                                    );
+                                    setImageOpen(true);
+                                  }}
+                                />
+                              )}
+                              {(imagesByTask[r.id] || []).map((u, i) => (
+                                <img
+                                  key={i}
+                                  src={u}
+                                  alt={`upload-${i + 1}`}
+                                  className="h-24 w-24 rounded object-cover cursor-zoom-in"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setImageSrc(u);
+                                    setImageOpen(true);
+                                  }}
+                                />
+                              ))}
+                              {!entryByTask[r.id]?.photo_url &&
+                                (!imagesByTask[r.id] ||
+                                  imagesByTask[r.id].length === 0) && (
+                                  <div className="text-sm text-muted-foreground">
+                                    No images
+                                  </div>
+                                )}
+                            </div>
+                          </div>
+
+                          {/* Inline edit form */}
+                          <div className="md:col-span-3 grid grid-cols-1 gap-3 md:grid-cols-4">
+                            <div>
+                              <div className="text-xs text-muted-foreground">
+                                Added Liters
+                              </div>
+                              <Input
+                                type="number"
+                                className="mt-1"
+                                value={editDraft[r.id]?.added ?? 0}
+                                onClick={(e) => e.stopPropagation()}
+                                onChange={(e) =>
+                                  setEditDraft((d) => ({
+                                    ...d,
+                                    [r.id]: {
+                                      ...(d[r.id] || {
+                                        notes: '',
+                                        added: 0,
+                                        actual: 0,
+                                        qtyLast: 0,
+                                      }),
+                                      added: Number(e.target.value) || 0,
+                                    },
+                                  }))
+                                }
+                              />
+                            </div>
+                            <div>
+                              <div className="text-xs text-muted-foreground">
+                                Actual In Tank
+                              </div>
+                              <Input
+                                type="number"
+                                className="mt-1"
+                                value={editDraft[r.id]?.actual ?? 0}
+                                onClick={(e) => e.stopPropagation()}
+                                onChange={(e) =>
+                                  setEditDraft((d) => ({
+                                    ...d,
+                                    [r.id]: {
+                                      ...(d[r.id] || {
+                                        notes: '',
+                                        added: 0,
+                                        actual: 0,
+                                        qtyLast: 0,
+                                      }),
+                                      actual: Number(e.target.value) || 0,
+                                    },
+                                  }))
+                                }
+                              />
+                            </div>
+                            <div>
+                              <div className="text-xs text-muted-foreground">
+                                Quantity Added (Last Task)
+                              </div>
+                              <Input
+                                type="number"
+                                className="mt-1"
+                                value={editDraft[r.id]?.qtyLast ?? 0}
+                                onClick={(e) => e.stopPropagation()}
+                                onChange={(e) =>
+                                  setEditDraft((d) => ({
+                                    ...d,
+                                    [r.id]: {
+                                      ...(d[r.id] || {
+                                        notes: '',
+                                        added: 0,
+                                        actual: 0,
+                                        qtyLast: 0,
+                                      }),
+                                      qtyLast: Number(e.target.value) || 0,
+                                    },
+                                  }))
+                                }
+                              />
+                            </div>
+                            <div className="md:col-span-1">
+                              <div className="text-xs text-muted-foreground">
+                                Notes
+                              </div>
+                              <Input
+                                className="mt-1"
+                                value={editDraft[r.id]?.notes ?? ''}
+                                onClick={(e) => e.stopPropagation()}
+                                onChange={(e) =>
+                                  setEditDraft((d) => ({
+                                    ...d,
+                                    [r.id]: {
+                                      ...(d[r.id] || {
+                                        notes: '',
+                                        added: 0,
+                                        actual: 0,
+                                        qtyLast: 0,
+                                      }),
+                                      notes: e.target.value,
+                                    },
+                                  }))
+                                }
+                              />
+                            </div>
+                          </div>
+
+                          <div className="md:col-span-3 flex flex-wrap items-center justify-end gap-2">
+                            <Button
+                              className="bg-[#16A34A] hover:opacity-90"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setAdminStatus(r.id, 'Task approved');
+                              }}
+                            >
+                              Approve
+                            </Button>
+                            <Button
+                              variant="outline"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setAdminStatus(
+                                  r.id,
+                                  'Task returned to the driver',
+                                );
+                              }}
+                            >
+                              Return to Driver
+                            </Button>
+                            <Button
+                              variant="destructive"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                remove(r.id);
+                              }}
+                            >
+                              Delete
+                            </Button>
+                            <Button
+                              variant="secondary"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                // Edit opens inline fields above; make changes then click Save Changes
+                              }}
+                            >
+                              Edit
+                            </Button>
+                            <Button
+                              variant="outline"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                saveEdit(r);
+                              }}
+                            >
+                              Save Changes
+                            </Button>
+                          </div>
+                        </div>
                       </TableCell>
                     </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </div>
+                  ) : null,
+                )}
+                {current.length === 0 && (
+                  <TableRow>
+                    <TableCell
+                      colSpan={VISIBLE_COLUMNS.length}
+                      className="text-center text-sm text-muted-foreground"
+                    >
+                      No results
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
 
-            <div className="flex items-center justify-between px-4 py-3 text-sm text-muted-foreground">
-              <div>
-                Showing {current.length} of {filtered.length} entries
-              </div>
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={page === 1}
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                >
-                  Prev
-                </Button>
-                <span className="tabular-nums">
-                  {page} / {totalPages}
-                </span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={page === totalPages}
-                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                >
-                  Next
-                </Button>
-              </div>
+          <div className="flex items-center justify-between px-4 py-3 text-sm text-muted-foreground">
+            <div>
+              Showing {current.length} of {filtered.length} entries
             </div>
-          </CardContent>
-        </Card>
-      </div>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={page === 1}
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+              >
+                Prev
+              </Button>
+              <span className="tabular-nums">
+                {page} / {totalPages}
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={page === totalPages}
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              >
+                Next
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
       <Dialog
         open={imageOpen}
         onOpenChange={(o) => {
