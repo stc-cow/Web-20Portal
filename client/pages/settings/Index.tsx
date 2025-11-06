@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import {
   Settings as SettingsIcon,
   SlidersHorizontal,
-  BellCog,
+  Bell,
   Palette,
 } from 'lucide-react';
 
