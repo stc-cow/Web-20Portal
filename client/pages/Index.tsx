@@ -88,14 +88,16 @@ export default function Index() {
     },
     {
       label: 'Mission performance',
-      description: 'Review completion status, SLA adherence and fuel variances.',
+      description:
+        'Review completion status, SLA adherence and fuel variances.',
       to: '/reports',
       icon: BarChart3,
       badge: 'Reports',
     },
     {
       label: 'Driver readiness',
-      description: 'Validate crew availability, certifications and assignments.',
+      description:
+        'Validate crew availability, certifications and assignments.',
       to: '/employees',
       icon: ShieldCheck,
       badge: 'Compliance',
@@ -125,9 +127,9 @@ export default function Index() {
                       Command Center Dashboard
                     </CardTitle>
                     <p className="mt-2 max-w-xl text-sm text-slate-200/80">
-                      Stay ahead of fueling demand with a consolidated, real-time
-                      view of volumes, crews and mission outcomes across your
-                      network.
+                      Stay ahead of fueling demand with a consolidated,
+                      real-time view of volumes, crews and mission outcomes
+                      across your network.
                     </p>
                   </div>
                   <Badge
@@ -326,7 +328,10 @@ export default function Index() {
                       }
                     >
                       {(regionPie || []).map((_: any, index: number) => (
-                        <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                        <Cell
+                          key={index}
+                          fill={COLORS[index % COLORS.length]}
+                        />
                       ))}
                       <Label
                         value="Total volume"
@@ -356,7 +361,9 @@ export default function Index() {
                     <span className="flex items-center gap-2 text-sm font-semibold text-white">
                       <span
                         className="h-2.5 w-2.5 rounded-full"
-                        style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                        style={{
+                          backgroundColor: COLORS[index % COLORS.length],
+                        }}
                       />
                       {entry.name}
                     </span>
@@ -392,7 +399,10 @@ export default function Index() {
                       }
                     >
                       {(missionPie || []).map((_: any, index: number) => (
-                        <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                        <Cell
+                          key={index}
+                          fill={COLORS[index % COLORS.length]}
+                        />
                       ))}
                       <Label
                         value="Fuel demand"
@@ -424,7 +434,10 @@ export default function Index() {
                         {mission.name}
                       </p>
                       <p className="text-xs text-slate-200/60">
-                        {percentageOf(mission.value, totalMissionVolume(missionPie))}{' '}
+                        {percentageOf(
+                          mission.value,
+                          totalMissionVolume(missionPie),
+                        )}{' '}
                         of demand
                       </p>
                     </div>
@@ -524,7 +537,12 @@ function MetricCard({
 }: MetricCardProps) {
   return (
     <Card className="group relative overflow-hidden rounded-3xl border border-white/10 bg-slate-900/30 text-slate-100 shadow-lg backdrop-blur">
-      <div className="pointer-events-none absolute inset-0 opacity-0 transition group-hover:opacity-100" style={{ background: `radial-gradient(circle at top, ${accent}33, transparent 55%)` }} />
+      <div
+        className="pointer-events-none absolute inset-0 opacity-0 transition group-hover:opacity-100"
+        style={{
+          background: `radial-gradient(circle at top, ${accent}33, transparent 55%)`,
+        }}
+      />
       <CardHeader className="pb-2">
         <div className="flex items-start justify-between gap-4">
           <div>
@@ -543,7 +561,7 @@ function MetricCard({
       </CardHeader>
       <CardContent className="pt-0">
         <div className="text-3xl font-semibold text-white">
-          {typeof value === 'number' ? formatNum(value) : value ?? '--'}
+          {typeof value === 'number' ? formatNum(value) : (value ?? '--')}
         </div>
         {(trendLabel || trendValue) && (
           <div className="mt-3 flex items-center gap-3 text-xs uppercase tracking-wide text-slate-200/70">
@@ -577,14 +595,18 @@ function SnapshotItem({
 }: SnapshotItemProps) {
   return (
     <div className="flex items-start gap-3 rounded-2xl border border-white/5 bg-slate-900/40 p-4">
-      <span className={`mt-1 flex h-9 w-9 items-center justify-center rounded-full ${accent}`}>
+      <span
+        className={`mt-1 flex h-9 w-9 items-center justify-center rounded-full ${accent}`}
+      >
         <Icon className="h-4 w-4" />
       </span>
       <div className="flex-1">
         <p className="text-sm font-semibold text-white">{title}</p>
         <p className="text-xs text-slate-200/60">{description}</p>
       </div>
-      <span className="text-base font-semibold text-white">{value ?? '--'}</span>
+      <span className="text-base font-semibold text-white">
+        {value ?? '--'}
+      </span>
     </div>
   );
 }
@@ -596,13 +618,20 @@ type InsightCardProps = {
   children: ReactNode;
 };
 
-function InsightCard({ title, description, className, children }: InsightCardProps) {
+function InsightCard({
+  title,
+  description,
+  className,
+  children,
+}: InsightCardProps) {
   return (
     <Card
       className={`rounded-3xl border border-white/10 bg-slate-900/30 text-slate-100 shadow-xl backdrop-blur ${className ?? ''}`}
     >
       <CardHeader className="pb-3">
-        <CardTitle className="text-lg font-semibold text-white">{title}</CardTitle>
+        <CardTitle className="text-lg font-semibold text-white">
+          {title}
+        </CardTitle>
         <p className="text-xs text-slate-200/70">{description}</p>
       </CardHeader>
       <CardContent>{children}</CardContent>
@@ -628,7 +657,10 @@ function RegionProgress({ name, value, share, accent }: RegionProgressProps) {
       <div className="h-2 w-full overflow-hidden rounded-full bg-white/10">
         <div
           className="h-full rounded-full"
-          style={{ width: `${Math.min(percent, 100)}%`, backgroundColor: accent }}
+          style={{
+            width: `${Math.min(percent, 100)}%`,
+            backgroundColor: accent,
+          }}
         />
       </div>
       <p className="text-[10px] uppercase tracking-[0.2em] text-slate-200/70">
@@ -655,7 +687,9 @@ function TimelineItem({
 }: TimelineItemProps) {
   return (
     <div className="flex items-start gap-3 rounded-2xl border border-white/5 bg-slate-900/40 p-4">
-      <span className={`mt-1 flex h-9 w-9 items-center justify-center rounded-full ${accent}`}>
+      <span
+        className={`mt-1 flex h-9 w-9 items-center justify-center rounded-full ${accent}`}
+      >
         <Icon className="h-4 w-4" />
       </span>
       <div className="flex-1">
@@ -685,7 +719,11 @@ function percentageOf(value: number, total: number, fromFraction = false) {
 }
 
 function percentageChange(current: number, baseline: number) {
-  if (!Number.isFinite(current) || !Number.isFinite(baseline) || baseline === 0) {
+  if (
+    !Number.isFinite(current) ||
+    !Number.isFinite(baseline) ||
+    baseline === 0
+  ) {
     return 0;
   }
   return ((current - baseline) / baseline) * 100;
