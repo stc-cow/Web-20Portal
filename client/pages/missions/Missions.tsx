@@ -757,8 +757,8 @@ export default function MissionsPage() {
             </DialogHeader>
             <div className="grid gap-4 py-2">
               <div className="grid gap-2">
-                <Label htmlFor="m-site">Site name</Label>
-                <Input
+            <Label htmlFor="m-site">Site name</Label>
+            <Input
               id="m-site"
               value={addForm.siteName}
               onChange={(e) =>
@@ -770,8 +770,8 @@ export default function MissionsPage() {
                 )}
               </div>
               <div className="grid gap-2">
-                <Label>Driver</Label>
-                <Select
+            <Label>Driver</Label>
+            <Select
               value={addForm.driverId ? String(addForm.driverId) : ''}
               onValueChange={(v) => {
                 const d = drivers.find((x) => String(x.id) === v);
@@ -784,7 +784,7 @@ export default function MissionsPage() {
               }}
                 >
               <SelectTrigger>
-                <SelectValue placeholder="Select driver" />
+            <SelectValue placeholder="Select driver" />
               </SelectTrigger>
               <SelectContent>
                 {drivers.map((d) => (
@@ -793,11 +793,11 @@ export default function MissionsPage() {
                   </SelectItem>
                 ))}
               </SelectContent>
-                </Select>
+            </Select>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="m-phone">Driver phone</Label>
-                <Input
+            <Label htmlFor="m-phone">Driver phone</Label>
+            <Input
               id="m-phone"
               value={addForm.driverPhone}
               onChange={(e) =>
@@ -809,8 +809,8 @@ export default function MissionsPage() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="m-when">Scheduled at</Label>
-                <Input
+            <Label htmlFor="m-when">Scheduled at</Label>
+            <Input
               id="m-when"
               type="datetime-local"
               value={addForm.scheduledAt}
@@ -823,8 +823,8 @@ export default function MissionsPage() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="m-liters">Required liters</Label>
-                <Input
+            <Label htmlFor="m-liters">Required liters</Label>
+            <Input
               id="m-liters"
               type="number"
               value={addForm.requiredLiters ?? ''}
@@ -840,8 +840,8 @@ export default function MissionsPage() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="m-notes">Notes</Label>
-                <Textarea
+            <Label htmlFor="m-notes">Notes</Label>
+            <Textarea
               id="m-notes"
               value={addForm.notes}
               onChange={(e) =>
