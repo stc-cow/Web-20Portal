@@ -776,10 +776,10 @@ export default function MissionsPage() {
               onValueChange={(v) => {
                 const d = drivers.find((x) => String(x.id) === v);
                 setAddForm((s) => ({
-                  ...s,
-                  driverId: d ? d.id : null,
-                  driverName: d ? d.name : '',
-                  driverPhone: d?.phone || '',
+              ...s,
+              driverId: d ? d.id : null,
+              driverName: d ? d.name : '',
+              driverPhone: d?.phone || '',
                 }));
               }}
                 >
@@ -788,9 +788,9 @@ export default function MissionsPage() {
               </SelectTrigger>
               <SelectContent>
                 {drivers.map((d) => (
-                  <SelectItem key={d.id} value={String(d.id)}>
-                    {d.name}
-                  </SelectItem>
+              <SelectItem key={d.id} value={String(d.id)}>
+                {d.name}
+              </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -802,8 +802,8 @@ export default function MissionsPage() {
               value={addForm.driverPhone}
               onChange={(e) =>
                 setAddForm((s) => ({
-                  ...s,
-                  driverPhone: e.target.value,
+              ...s,
+              driverPhone: e.target.value,
                 }))
               }
                 />
@@ -816,8 +816,8 @@ export default function MissionsPage() {
               value={addForm.scheduledAt}
               onChange={(e) =>
                 setAddForm((s) => ({
-                  ...s,
-                  scheduledAt: e.target.value,
+              ...s,
+              scheduledAt: e.target.value,
                 }))
               }
                 />
@@ -830,11 +830,11 @@ export default function MissionsPage() {
               value={addForm.requiredLiters ?? ''}
               onChange={(e) =>
                 setAddForm((s) => ({
-                  ...s,
-                  requiredLiters:
-                    e.target.value === ''
-                      ? null
-                      : Number(e.target.value),
+              ...s,
+              requiredLiters:
+                e.target.value === ''
+                  ? null
+                  : Number(e.target.value),
                 }))
               }
                 />
