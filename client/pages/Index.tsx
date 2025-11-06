@@ -113,9 +113,9 @@ export default function Index() {
         <div className="absolute inset-x-0 top-0 h-[420px] bg-gradient-to-br from-[#0b1e3e] via-[#102c57] to-[#040b1d]" />
         <div className="relative z-[1] px-6 pb-12 pt-6">
           <section className="grid gap-6 xl:grid-cols-[1.8fr,1fr]">
-            <Card className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900/60 via-slate-900/40 to-slate-900/20 text-slate-100 shadow-xl">
+            <Card className="relative overflow-hidden rounded-3xl border border-white/10 bg-[#204975] text-slate-100 shadow-xl">
               <div className="pointer-events-none absolute -top-24 right-0 h-56 w-56 rounded-full bg-sky-400/20 blur-3xl" />
-              <CardHeader className="space-y-4 pb-2">
+              <CardHeader className="space-y-4 pb-2 bg-[#1c365f]">
                 <Badge className="w-fit bg-sky-400/20 text-xs font-medium uppercase tracking-[0.3em] text-sky-100">
                   ACES Fuel
                 </Badge>
@@ -144,7 +144,13 @@ export default function Index() {
                   {heroHighlights.map((item) => (
                     <div
                       key={item.label}
-                      className="rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur"
+                      className={`rounded-2xl border border-white/10 p-4 backdrop-blur ${
+                        item.label === 'Liters Added Today'
+                          ? 'bg-[#204975]'
+                          : item.label === '30 Day Rolling Total'
+                            ? 'bg-[#204873]'
+                            : 'bg-[#204a75]'
+                      }`}
                     >
                       <p className="text-xs font-medium uppercase tracking-wide text-slate-100/70">
                         {item.label}
@@ -202,8 +208,8 @@ export default function Index() {
                 </CardContent>
               </Card>
 
-              <Card className="rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900/40 via-slate-900/20 to-slate-900/10 text-slate-100 shadow-lg">
-                <CardHeader className="pb-3">
+              <Card className="rounded-3xl border border-white/10 bg-[#1b395d] text-slate-100 shadow-lg">
+                <CardHeader className="pb-3 bg-[#1b395d]">
                   <CardTitle className="text-lg font-semibold text-white">
                     Operations snapshot
                   </CardTitle>
@@ -211,7 +217,7 @@ export default function Index() {
                     A curated summary of today&apos;s key operational signals.
                   </p>
                 </CardHeader>
-                <CardContent className="space-y-4 text-sm text-slate-200/80">
+                <CardContent className="space-y-4 text-sm text-slate-200/80 bg-[#1b395d]">
                   <SnapshotItem
                     title="Active missions"
                     value={formatNum(kpis?.activeMissions)}
