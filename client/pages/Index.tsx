@@ -648,7 +648,7 @@ function TimelineItem({
   timestamp,
 }: TimelineItemProps) {
   return (
-    <div className="flex items-start gap-3 rounded-2xl border border-white/5 bg-white/5 p-4">
+    <div className="flex items-start gap-3 rounded-2xl border border-white/5 bg-slate-900/40 p-4">
       <span className={`mt-1 flex h-9 w-9 items-center justify-center rounded-full ${accent}`}>
         <Icon className="h-4 w-4" />
       </span>
