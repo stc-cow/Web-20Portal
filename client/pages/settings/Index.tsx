@@ -34,7 +34,7 @@ export default function SettingsIndexPage() {
             label: 'Notification templates',
             value: '28',
             description: 'SMS, email and in-app experiences.',
-            icon: BellCog,
+            icon: Bell,
           },
           {
             label: 'Brand themes',
