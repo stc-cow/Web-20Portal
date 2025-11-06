@@ -463,8 +463,8 @@ export default function Index() {
               </CardContent>
             </Card>
 
-            <Card className="rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900/40 via-slate-900/20 to-slate-900/10 text-slate-100 shadow-lg">
-              <CardHeader className="pb-3">
+            <Card className="rounded-3xl border border-white/10 bg-[#1b395d] text-slate-100 shadow-lg">
+              <CardHeader className="pb-3 bg-[#0b1225]">
                 <CardTitle className="text-lg font-semibold text-white">
                   Mission control log
                 </CardTitle>
@@ -472,7 +472,7 @@ export default function Index() {
                   Recent highlights curated for leadership visibility.
                 </p>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-4 bg-[#080f21]">
                 <TimelineItem
                   title="Fuel dispatch synchronized"
                   description="Central depots locked routes for overnight deliveries."
