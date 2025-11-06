@@ -1,8 +1,13 @@
-import { AppShell } from '@/components/layout/AppSidebar';
-import Header from '@/components/layout/Header';
-import { Card, CardContent } from '@/components/ui/card';
+import { PageLayout, GlassCard } from '@/components/layout/PageLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -29,6 +34,7 @@ import {
   CheckCircle2,
   XCircle,
 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 type GeneratorRow = {
   id: number;
@@ -172,158 +178,240 @@ export default function GeneratorsPage() {
 
   const remove = (id: number) => setRows((r) => r.filter((x) => x.id !== id));
 
-  return (
-    <AppShell>
-      <Header />
-      <div className="px-4 pb-10 pt-4">
-        <div className="mb-4 flex items-center justify-between">
-          <div className="text-sm text-muted-foreground">
-            Change the generators by their manager
-          </div>
-          <div className="flex items-center gap-2">
-            <Button variant="destructive" className="hidden sm:inline-flex">
-              Archive
-            </Button>
-            <Button
-              variant="secondary"
-              className="hidden sm:inline-flex"
-              onClick={exportCsv}
-            >
-              <Download className="mr-2 h-4 w-4" /> Excel All
-            </Button>
-            <Button
-              variant={onlyWithoutSite ? 'default' : 'outline'}
-              className="hidden sm:inline-flex"
-              onClick={() => setOnlyWithoutSite((v) => !v)}
-            >
-              Generators Without Site
-            </Button>
-            <Button
-              variant="outline"
-              className="hidden sm:inline-flex"
-              onClick={() => window.print()}
-            >
-              <Printer className="mr-2 h-4 w-4" /> Print
-            </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="hidden sm:inline-flex">
-                  <Columns2 className="mr-2 h-4 w-4" /> Column visibility
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {allColumns.map((c) => (
-                  <DropdownMenuCheckboxItem
-                    key={c.key}
-                    checked={cols[c.key]}
-                    onCheckedChange={(v) =>
-                      setCols((s) => ({ ...s, [c.key]: !!v }))
-                    }
-                  >
-                    {c.label}
-                  </DropdownMenuCheckboxItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <Button className="bg-sky-600 hover:bg-sky-500">
-              <Plus className="mr-2 h-4 w-4" /> Add
-            </Button>
-          </div>
-        </div>
+  const totalGenerators = rows.length;
+  const activeGenerators = rows.filter((r) => r.active).length;
+  const generatorsWithoutSite = rows.filter(
+    (r) => !r.site || r.site === '-',
+  ).length;
 
-        <Card>
-          <CardContent className="p-0">
-            <div className="flex items-center justify-between gap-4 p-4">
-              <div className="text-sm text-muted-foreground">
-                Print | Column visibility | Show {pageSize} rows
+  return (
+    <PageLayout
+      title="Generator performance"
+      description="Monitor fleet readiness, runtime health and assignments across every deployed generator."
+      breadcrumbs={[{ label: 'Operations' }, { label: 'Generators' }]}
+      actions={
+        <Button className="rounded-full bg-sky-500 px-5 text-sm font-semibold text-white shadow-lg shadow-sky-500/30">
+          <Plus className="mr-2 h-4 w-4" /> Add generator
+        </Button>
+      }
+      heroContent={
+        <div className="grid gap-3 sm:grid-cols-3">
+          {[{
+            label: 'Total generators',
+            value: totalGenerators.toLocaleString(),
+            description: 'Includes every unit synced from the last refresh.',
+          },
+          {
+            label: 'Active & fueled',
+            value: activeGenerators.toLocaleString(),
+            description: 'Currently reporting online status.',
+          },
+          {
+            label: 'Awaiting site pairing',
+            value: generatorsWithoutSite.toLocaleString(),
+            description: 'Units missing an assigned deployment site.',
+          }].map((metric) => (
+            <GlassCard
+              key={metric.label}
+              className="border-white/10 bg-white/[0.07] p-5"
+            >
+              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-200/70">
+                {metric.label}
+              </p>
+              <p className="mt-1 text-2xl font-semibold text-white">{metric.value}</p>
+              <p className="mt-2 text-xs text-slate-200/70">{metric.description}</p>
+            </GlassCard>
+          ))}
+        </div>
+      }
+    >
+      <div className="space-y-6">
+        <GlassCard className="border-white/10 bg-white/10 p-6">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div className="text-sm text-slate-200/80">
+              Fine-tune generator visibility, export manifests and print onsite runbooks.
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <Button
+                variant="ghost"
+                className="rounded-full border border-white/10 bg-white/5 text-white hover:border-white/30 hover:bg-white/10"
+                onClick={() => window.print()}
+              >
+                <Printer className="mr-2 h-4 w-4" /> Print summary
+              </Button>
+              <Button
+                variant="ghost"
+                className="rounded-full border border-white/10 bg-white/5 text-white hover:border-white/30 hover:bg-white/10"
+                onClick={exportCsv}
+              >
+                <Download className="mr-2 h-4 w-4" /> Export CSV
+              </Button>
+              <Button
+                variant="ghost"
+                className={cn(
+                  'rounded-full border border-white/10 px-4 text-white transition hover:border-white/30 hover:bg-white/10',
+                  onlyWithoutSite
+                    ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/30 hover:bg-emerald-400'
+                    : 'bg-white/5',
+                )}
+                onClick={() => setOnlyWithoutSite((v) => !v)}
+              >
+                Without site
+              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button className="rounded-full border border-white/10 bg-white/5 px-4 text-white hover:border-white/30 hover:bg-white/10">
+                    <Columns2 className="mr-2 h-4 w-4" /> Columns
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align="end"
+                  className="border border-white/10 bg-[#0b1e3e] text-slate-100"
+                >
+                  {allColumns.map((c) => (
+                    <DropdownMenuCheckboxItem
+                      key={c.key}
+                      checked={cols[c.key]}
+                      onCheckedChange={(v) =>
+                        setCols((s) => ({ ...s, [c.key]: !!v }))
+                      }
+                    >
+                      {c.label}
+                    </DropdownMenuCheckboxItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
+        </GlassCard>
+
+        <GlassCard className="border-white/10 bg-white/5 p-0">
+          <div className="space-y-4 p-6">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-200/70">
+                Fleet roster
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">Search</span>
+              <div className="flex flex-wrap items-center gap-3">
                 <Input
                   value={query}
-                  onChange={(e) => {
-                    setPage(1);
-                    setQuery(e.target.value);
-                  }}
-                  placeholder=""
-                  className="h-9 w-56"
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search generators"
+                  className="h-10 min-w-[200px] border-white/20 bg-white/10 text-white placeholder:text-slate-200/60 focus-visible:ring-sky-400"
                 />
+                <Select
+                  value={String(pageSize)}
+                  onValueChange={(value) => setPageSize(Number(value))}
+                >
+                  <SelectTrigger className="h-10 w-[130px] border-white/20 bg-white/10 text-white focus:ring-sky-400">
+                    <SelectValue placeholder="10" />
+                  </SelectTrigger>
+                  <SelectContent className="border border-white/10 bg-[#0b1e3e] text-slate-100">
+                    {[10, 25, 50].map((size) => (
+                      <SelectItem key={size} value={String(size)}>
+                        Show {size}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
             <div className="overflow-x-auto">
-              <Table>
+              <Table className="min-w-full text-slate-100">
                 <TableHeader>
-                  <TableRow className="bg-[hsl(var(--primary))] text-white hover:bg-[hsl(var(--primary))]">
-                    {cols.name && (
-                      <TableHead className="text-white">Name</TableHead>
-                    )}
-                    {cols.site && (
-                      <TableHead className="text-white">Site</TableHead>
-                    )}
-                    {cols.dailyVirtual && (
-                      <TableHead className="text-white">
-                        Daily virtual consumption
-                      </TableHead>
-                    )}
-                    {cols.lastAvg && (
-                      <TableHead className="text-white">
-                        Last average consumption
-                      </TableHead>
-                    )}
-                    {cols.rateOk && (
-                      <TableHead className="text-white">Rate</TableHead>
-                    )}
-                    {cols.active && (
-                      <TableHead className="text-white">Active</TableHead>
-                    )}
-                    {cols.settings && (
-                      <TableHead className="text-white">Settings</TableHead>
+                  <TableRow className="bg-white/[0.08] text-xs uppercase tracking-[0.2em] text-slate-100">
+                    {allColumns.map((column) =>
+                      cols[column.key] ? (
+                        <TableHead key={column.key} className="border-none text-slate-100">
+                          {column.label}
+                        </TableHead>
+                      ) : null,
                     )}
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {current.map((r) => (
-                    <TableRow key={r.id}>
+                  {current.length === 0 && (
+                    <TableRow>
+                      <TableCell
+                        colSpan={allColumns.length}
+                        className="py-8 text-center text-sm text-slate-200/70"
+                      >
+                        No generators match your filters.
+                      </TableCell>
+                    </TableRow>
+                  )}
+                  {current.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      className="border-white/5 bg-white/[0.02] text-sm text-slate-100 transition hover:bg-white/[0.08]"
+                    >
                       {cols.name && (
-                        <TableCell className="font-medium">{r.name}</TableCell>
+                        <TableCell className="font-semibold text-white">
+                          {row.name}
+                        </TableCell>
                       )}
-                      {cols.site && <TableCell>{r.site || '-'}</TableCell>}
+                      {cols.site && (
+                        <TableCell className="text-slate-200/80">
+                          {row.site || '—'}
+                        </TableCell>
+                      )}
                       {cols.dailyVirtual && (
-                        <TableCell>{r.dailyVirtual}</TableCell>
+                        <TableCell className="text-slate-200/80">
+                          {row.dailyVirtual.toLocaleString()}
+                        </TableCell>
                       )}
-                      {cols.lastAvg && <TableCell>{r.lastAvg}</TableCell>}
+                      {cols.lastAvg && (
+                        <TableCell className="text-slate-200/80">
+                          {row.lastAvg.toLocaleString()}
+                        </TableCell>
+                      )}
                       {cols.rateOk && (
                         <TableCell>
-                          {r.rateOk ? (
-                            <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+                          {row.rateOk ? (
+                            <span className="inline-flex items-center gap-2 rounded-full bg-emerald-500/20 px-3 py-1 text-xs font-semibold text-emerald-200">
+                              <CheckCircle2 className="h-4 w-4" /> OK
+                            </span>
                           ) : (
-                            <XCircle className="h-5 w-5 text-rose-500" />
+                            <span className="inline-flex items-center gap-2 rounded-full bg-rose-500/20 px-3 py-1 text-xs font-semibold text-rose-100">
+                              <XCircle className="h-4 w-4" /> Alert
+                            </span>
                           )}
                         </TableCell>
                       )}
                       {cols.active && (
                         <TableCell>
-                          {r.active ? (
-                            <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+                          {row.active ? (
+                            <span className="inline-flex items-center gap-2 rounded-full bg-emerald-500/20 px-3 py-1 text-xs font-semibold text-emerald-200">
+                              <CheckCircle2 className="h-4 w-4" /> Active
+                            </span>
                           ) : (
-                            <XCircle className="h-5 w-5 text-gray-400" />
+                            <span className="inline-flex items-center gap-2 rounded-full bg-rose-500/20 px-3 py-1 text-xs font-semibold text-rose-100">
+                              <XCircle className="h-4 w-4" /> Offline
+                            </span>
                           )}
                         </TableCell>
                       )}
                       {cols.settings && (
-                        <TableCell className="space-x-2 text-right">
-                          <Button size="icon" variant="ghost" aria-label="View">
+                        <TableCell className="flex items-center gap-2">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="text-slate-200 hover:text-white"
+                          >
                             <Eye className="h-4 w-4" />
                           </Button>
-                          <Button size="icon" variant="ghost" aria-label="Edit">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="text-slate-200 hover:text-white"
+                          >
                             <Pencil className="h-4 w-4" />
                           </Button>
                           <Button
-                            size="icon"
                             variant="ghost"
-                            aria-label="Delete"
-                            onClick={() => remove(r.id)}
+                            size="icon"
+                            className="text-rose-200 hover:text-rose-100"
+                            onClick={() => remove(row.id)}
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
@@ -331,49 +419,39 @@ export default function GeneratorsPage() {
                       )}
                     </TableRow>
                   ))}
-                  {current.length === 0 && (
-                    <TableRow>
-                      <TableCell
-                        colSpan={allColumns.length}
-                        className="text-center text-sm text-muted-foreground"
-                      >
-                        No results
-                      </TableCell>
-                    </TableRow>
-                  )}
                 </TableBody>
               </Table>
             </div>
 
-            <div className="flex items-center justify-between px-4 py-3 text-sm text-muted-foreground">
+            <div className="flex flex-col gap-3 border-t border-white/10 pt-4 text-sm text-slate-200/70 md:flex-row md:items-center md:justify-between">
               <div>
-                Showing {current.length} of {filtered.length} entries
+                Showing {current.length} of {filtered.length} generators
               </div>
               <div className="flex items-center gap-2">
                 <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={page === 1}
+                  variant="ghost"
+                  className="rounded-full border border-white/10 bg-white/5 px-4 text-white hover:border-white/30 hover:bg-white/10"
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={page === 1}
                 >
-                  Prev
+                  Previous
                 </Button>
-                <span className="tabular-nums">
-                  {page} / {totalPages}
+                <span className="text-xs uppercase tracking-[0.3em] text-slate-200/60">
+                  Page {page} of {totalPages}
                 </span>
                 <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={page === totalPages}
+                  variant="ghost"
+                  className="rounded-full border border-white/10 bg-white/5 px-4 text-white hover:border-white/30 hover:bg-white/10"
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={page === totalPages}
                 >
                   Next
                 </Button>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </GlassCard>
       </div>
-    </AppShell>
+    </PageLayout>
   );
 }
