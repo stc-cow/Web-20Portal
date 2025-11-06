@@ -12,6 +12,31 @@
   </head>
 
   <body>
+    <script>
+      (function () {
+        const storageKey = 'spa-redirect';
+        try {
+          const redirectUrl = sessionStorage.getItem(storageKey);
+          if (!redirectUrl) {
+            return;
+          }
+
+          sessionStorage.removeItem(storageKey);
+          const target = new URL(redirectUrl, window.location.origin);
+          if (target.origin !== window.location.origin) {
+            return;
+          }
+
+          const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+          const desired = `${target.pathname}${target.search}${target.hash}`;
+          if (current !== desired) {
+            window.history.replaceState(null, '', desired);
+          }
+        } catch (error) {
+          console.warn('SPA redirect recovery failed', error);
+        }
+      })();
+    </script>
     <div id="root"></div>
 
     <script type="module" src="./client/App.tsx"></script>
