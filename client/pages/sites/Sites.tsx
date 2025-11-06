@@ -1,5 +1,4 @@
-import { AppShell } from '@/components/layout/AppSidebar';
-import Header from '@/components/layout/Header';
+import { PageLayout } from '@/components/layout/PageLayout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,16 +11,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useEffect, useMemo, useState } from 'react';
-import {
-  Eye,
-  Pencil,
-  Trash2,
-  Columns2,
-  Download,
-  Printer,
-  CheckCircle2,
-  XCircle,
-} from 'lucide-react';
+import { Eye, Pencil, Trash2, Download, CheckCircle2, XCircle } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import {
   Dialog,
@@ -31,13 +21,6 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 
 // Dashboard-mapped row
 type SiteRow = {
@@ -98,13 +81,44 @@ export default function SitesPage() {
     city: true,
     address: true,
     active: true,
-    settings: false,
+    settings: true,
   });
 
   const [editOpen, setEditOpen] = useState(false);
   const [viewOpen, setViewOpen] = useState(false);
   const [editing, setEditing] = useState<EditForm | null>(null);
   const [viewing, setViewing] = useState<SiteRow | null>(null);
+
+  const filtered = useMemo(() => {
+    if (!query) return rows;
+    const q = query.toLowerCase();
+    return rows.filter((r) =>
+      [r.name, r.generator, r.driver, r.project, r.city, r.address].some((value) =>
+        String(value).toLowerCase().includes(q),
+      ),
+    );
+  }, [rows, query]);
+
+  const totalSites = rows.length;
+  const activeSites = useMemo(
+    () => rows.filter((r) => r.active).length,
+    [rows],
+  );
+  const inactiveSites = totalSites - activeSites;
+
+  const totalPages = useMemo(
+    () => Math.max(1, Math.ceil(filtered.length / pageSize)),
+    [filtered.length, pageSize],
+  );
+
+  const current = useMemo(() => {
+    const start = (page - 1) * pageSize;
+    return filtered.slice(start, start + pageSize);
+  }, [filtered, page, pageSize]);
+
+  useEffect(() => {
+    setPage((p) => Math.min(p, totalPages));
+  }, [totalPages]);
 
   const mapRow = (d: any): SiteRow => {
     const status = (d.cow_status || '').toString();
@@ -146,22 +160,6 @@ export default function SitesPage() {
     };
   }, []);
 
-  const filtered = useMemo(() => {
-    if (!query) return rows;
-    const q = query.toLowerCase();
-    return rows.filter((r) =>
-      [r.name, r.generator, r.driver, r.project, r.city, r.address].some((v) =>
-        String(v).toLowerCase().includes(q),
-      ),
-    );
-  }, [rows, query]);
-
-  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
-  const current = useMemo(() => {
-    const start = (page - 1) * pageSize;
-    return filtered.slice(start, start + pageSize);
-  }, [filtered, page, pageSize]);
-
   const exportCsv = () => {
     const visible = allColumns.filter(
       (c) =>
@@ -170,7 +168,7 @@ export default function SitesPage() {
     );
     const head = visible.map((c) => c.label).join(',');
     const body = filtered
-      .map((r) => visible.map((c) => (r as any)[c.key]).join(','))
+      .map((r) => visible.map((c) => (r as any)[c.key] ?? '').join(','))
       .join('\n');
     const blob = new Blob([head + '\n' + body], {
       type: 'text/csv;charset=utf-8;',
@@ -179,7 +177,7 @@ export default function SitesPage() {
     const a = document.createElement('a');
     a.href = url;
     const today = new Date().toISOString().slice(0, 10);
-    a.download = `ACES_Sites_Report_${today}.xlsx`;
+    a.download = `ACES_Sites_Report_${today}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -199,6 +197,7 @@ export default function SitesPage() {
     });
     setEditOpen(true);
   };
+
   const openView = (r: SiteRow) => {
     setViewing(r);
     setViewOpen(true);
@@ -225,273 +224,328 @@ export default function SitesPage() {
   };
 
   return (
-    <AppShell>
-      <Header />
-      <div className="px-4 pb-10 pt-4">
-        <div className="mb-4 flex items-center justify-between">
-          <div className="text-sm text-muted-foreground">
-            Manage the site details
-          </div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="secondary"
-              className="hidden sm:inline-flex"
-              onClick={exportCsv}
+    <PageLayout
+      title="Site intelligence"
+      description="Monitor generator readiness, consumption trends and field assignments across every site."
+      breadcrumbs={[{ label: 'Operations' }, { label: 'Sites' }]}
+      actions={
+        <Button
+          variant="outline"
+          className="rounded-full border-white/20 bg-white/10 px-5 text-sm font-semibold text-white shadow-sm shadow-black/20 transition hover:border-white/40 hover:bg-white/20"
+          onClick={exportCsv}
+        >
+          <Download className="mr-2 h-4 w-4" /> Export register
+        </Button>
+      }
+      heroContent={
+        <div className="grid gap-3 sm:grid-cols-3">
+          {[{
+            label: 'Total sites',
+            value: totalSites.toLocaleString(),
+            description: 'Sites onboarded across all regions.',
+          },
+          {
+            label: 'Operational',
+            value: activeSites.toLocaleString(),
+            description: 'Currently live or in-progress COW locations.',
+          },
+          {
+            label: 'Needs attention',
+            value: inactiveSites.toLocaleString(),
+            description: 'Offline or awaiting activation follow-up.',
+          }].map((metric) => (
+            <Card
+              key={metric.label}
+              className="rounded-3xl border border-white/10 bg-white/[0.07] text-slate-100 shadow-lg backdrop-blur"
             >
-              <Download className="mr-2 h-4 w-4" /> Export
-            </Button>
-          </div>
+              <CardContent className="p-5">
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-200/70">
+                  {metric.label}
+                </p>
+                <p className="mt-1 text-2xl font-semibold text-white">{metric.value}</p>
+                <p className="mt-2 text-xs text-slate-200/70">{metric.description}</p>
+              </CardContent>
+            </Card>
+          ))}
         </div>
-
-        <Card>
-          <CardContent className="p-0">
-            <div className="flex items-center justify-between gap-4 p-4">
-              <div className="text-sm text-muted-foreground">
-                Print | Column visibility | Show {pageSize} rows
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">Search</span>
-                <Input
-                  value={query}
-                  onChange={(e) => {
-                    setPage(1);
-                    setQuery(e.target.value);
-                  }}
-                  placeholder=""
-                  className="h-9 w-56"
-                />
-              </div>
+      }
+    >
+      <Card className="overflow-hidden rounded-3xl border border-white/10 bg-white/5 text-slate-100 shadow-xl backdrop-blur">
+        <CardContent className="p-0">
+          <div className="flex flex-col gap-4 border-b border-white/10 px-6 py-5 md:flex-row md:items-center md:justify-between">
+            <div className="text-xs uppercase tracking-[0.25em] text-slate-200/70">
+              Print • Column visibility • Showing {pageSize} rows
             </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="text-xs uppercase tracking-[0.25em] text-slate-200/60">
+                Search
+              </span>
+              <Input
+                value={query}
+                onChange={(e) => {
+                  setPage(1);
+                  setQuery(e.target.value);
+                }}
+                placeholder="Search by site or region"
+                className="h-10 w-64 border-white/20 bg-white/10 text-sm text-white placeholder:text-slate-200/60 focus-visible:ring-sky-400"
+              />
+            </div>
+          </div>
 
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow className="bg-[#0C2340] text-white hover:bg-[#0C2340]">
-                    {cols.index && (
-                      <TableHead className="text-white">#</TableHead>
-                    )}
-                    {cols.name && (
-                      <TableHead className="text-white">Name</TableHead>
-                    )}
-                    {cols.generator && (
-                      <TableHead className="text-white">Generator</TableHead>
-                    )}
-                    {cols.currentLiters && (
-                      <TableHead className="text-white">
-                        Current Liters in Tank
-                      </TableHead>
-                    )}
-                    {cols.dailyVirtual && (
-                      <TableHead className="text-white">
-                        Daily virtual consumption
-                      </TableHead>
-                    )}
-                    {cols.rate && (
-                      <TableHead className="text-white">Rate</TableHead>
-                    )}
-                    {cols.driver && (
-                      <TableHead className="text-white">Driver</TableHead>
-                    )}
-                    {cols.project && (
-                      <TableHead className="text-white">Project</TableHead>
-                    )}
-                    {cols.city && (
-                      <TableHead className="text-white">City</TableHead>
-                    )}
-                    {cols.address && (
-                      <TableHead className="text-white">Address</TableHead>
-                    )}
-                    {cols.active && (
-                      <TableHead className="text-white">Active</TableHead>
-                    )}
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {current.map((r, idx) => (
-                    <TableRow key={r.id}>
-                      {cols.index && (
-                        <TableCell className="font-medium">
-                          {(page - 1) * pageSize + idx + 1}
-                        </TableCell>
-                      )}
-                      {cols.name && (
-                        <TableCell className="font-medium">{r.name}</TableCell>
-                      )}
-                      {cols.generator && <TableCell>{r.generator}</TableCell>}
-                      {cols.currentLiters && (
-                        <TableCell>{r.currentLiters}</TableCell>
-                      )}
-                      {cols.dailyVirtual && (
-                        <TableCell>{r.dailyVirtual}</TableCell>
-                      )}
-                      {cols.rate && <TableCell>{r.rate}</TableCell>}
-                      {cols.driver && <TableCell>{r.driver}</TableCell>}
-                      {cols.project && <TableCell>{r.project}</TableCell>}
-                      {cols.city && <TableCell>{r.city}</TableCell>}
-                      {cols.address && <TableCell>{r.address}</TableCell>}
-                      {cols.active && (
-                        <TableCell>
-                          {r.active ? (
-                            <CheckCircle2 className="h-5 w-5 text-emerald-500" />
-                          ) : (
-                            <XCircle className="h-5 w-5 text-rose-500" />
-                          )}
-                        </TableCell>
-                      )}
-                    </TableRow>
-                  ))}
-                  {current.length === 0 && (
-                    <TableRow>
-                      <TableCell
-                        colSpan={allColumns.length}
-                        className="text-center text-sm text-muted-foreground"
-                      >
-                        No results
-                      </TableCell>
-                    </TableRow>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-white/[0.08] text-xs uppercase tracking-[0.2em] text-slate-100">
+                  {cols.index && <TableHead className="border-none text-slate-100">#</TableHead>}
+                  {cols.name && <TableHead className="border-none text-slate-100">Name</TableHead>}
+                  {cols.generator && <TableHead className="border-none text-slate-100">Generator</TableHead>}
+                  {cols.currentLiters && (
+                    <TableHead className="border-none text-slate-100">
+                      Current liters in tank
+                    </TableHead>
                   )}
-                </TableBody>
-              </Table>
-            </div>
+                  {cols.dailyVirtual && (
+                    <TableHead className="border-none text-slate-100">
+                      Daily virtual consumption
+                    </TableHead>
+                  )}
+                  {cols.rate && <TableHead className="border-none text-slate-100">Rate</TableHead>}
+                  {cols.driver && <TableHead className="border-none text-slate-100">Driver</TableHead>}
+                  {cols.project && <TableHead className="border-none text-slate-100">Project</TableHead>}
+                  {cols.city && <TableHead className="border-none text-slate-100">City</TableHead>}
+                  {cols.address && <TableHead className="border-none text-slate-100">Address</TableHead>}
+                  {cols.active && <TableHead className="border-none text-slate-100">Status</TableHead>}
+                  {cols.settings && (
+                    <TableHead className="border-none text-right text-slate-100">
+                      Actions
+                    </TableHead>
+                  )}
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {current.map((r, idx) => (
+                  <TableRow
+                    key={r.id}
+                    className="border-b border-white/5 bg-white/[0.02] text-sm text-slate-100 transition hover:bg-white/[0.08]"
+                  >
+                    {cols.index && (
+                      <TableCell className="font-semibold text-white">
+                        {(page - 1) * pageSize + idx + 1}
+                      </TableCell>
+                    )}
+                    {cols.name && <TableCell className="font-semibold text-white">{r.name}</TableCell>}
+                    {cols.generator && <TableCell className="text-slate-200/80">{r.generator || '—'}</TableCell>}
+                    {cols.currentLiters && <TableCell className="text-slate-200/80">{r.currentLiters || '—'}</TableCell>}
+                    {cols.dailyVirtual && <TableCell className="text-slate-200/80">{r.dailyVirtual || '—'}</TableCell>}
+                    {cols.rate && <TableCell className="text-slate-200/80">{r.rate || '—'}</TableCell>}
+                    {cols.driver && <TableCell className="text-slate-200/80">{r.driver || '—'}</TableCell>}
+                    {cols.project && <TableCell className="text-slate-200/80">{r.project || '—'}</TableCell>}
+                    {cols.city && <TableCell className="text-slate-200/80">{r.city || '—'}</TableCell>}
+                    {cols.address && <TableCell className="text-slate-200/80">{r.address || '—'}</TableCell>}
+                  {cols.active && (
+                    <TableCell>
+                      <span
+                        className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] ${r.active ? 'bg-emerald-500/15 text-emerald-200' : 'bg-rose-500/10 text-rose-200'}`}
+                      >
+                        <span className="flex h-2 w-2 rounded-full bg-current" />
+                        {r.active ? 'Active' : 'Inactive'}
+                      </span>
+                    </TableCell>
+                  )}
+                  {cols.settings && (
+                    <TableCell className="text-right">
+                      <div className="flex justify-end gap-2">
+                        <button
+                          type="button"
+                          onClick={() => openView(r)}
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-100 transition hover:border-white/30 hover:bg-white/15"
+                          aria-label="View site"
+                        >
+                          <Eye className="h-4 w-4" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => openEdit(r)}
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-100 transition hover:border-white/30 hover:bg-white/15"
+                          aria-label="Edit site"
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (window.confirm('Remove this site?')) remove(r.id);
+                          }}
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-rose-200 transition hover:border-white/30 hover:bg-rose-500/10"
+                          aria-label="Delete site"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </TableCell>
+                  )}
+                </TableRow>
+              ))}
+                {current.length === 0 && (
+                  <TableRow>
+                    <TableCell
+                      colSpan={allColumns.length}
+                      className="py-10 text-center text-sm text-slate-200/70"
+                    >
+                      No results
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
 
-            <div className="flex items-center justify-between px-4 py-3 text-sm text-muted-foreground">
-              <div>
-                Showing {current.length} of {filtered.length} entries
-              </div>
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={page === 1}
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                >
-                  Prev
-                </Button>
-                <span className="tabular-nums">
-                  {page} / {totalPages}
-                </span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={page === totalPages}
-                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                >
-                  Next
-                </Button>
-              </div>
+          <div className="flex flex-col gap-3 border-t border-white/10 px-6 py-4 text-xs text-slate-200/70 md:flex-row md:items-center md:justify-between">
+            <div>
+              Showing <span className="font-semibold text-white">{current.length}</span> of{' '}
+              <span className="font-semibold text-white">{filtered.length}</span> entries
             </div>
-          </CardContent>
-        </Card>
-      </div>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="rounded-full border-white/20 bg-transparent px-4 text-white transition hover:border-white/40 hover:bg-white/10 disabled:opacity-40"
+                disabled={page === 1}
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+              >
+                Previous
+              </Button>
+              <span className="tabular-nums text-sm text-white/80">
+                {page} / {totalPages}
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                className="rounded-full border-white/20 bg-transparent px-4 text-white transition hover:border-white/40 hover:bg-white/10 disabled:opacity-40"
+                disabled={page === totalPages}
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              >
+                Next
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
-      <Dialog open={false} onOpenChange={() => {}}>
-        <DialogContent>
+      <Dialog open={viewOpen} onOpenChange={setViewOpen}>
+        <DialogContent className="max-w-lg border border-white/10 bg-gradient-to-br from-[#0b1e3e] via-[#102c57] to-[#040b1d] text-slate-100">
           <DialogHeader>
-            <DialogTitle>Edit Site</DialogTitle>
+            <DialogTitle className="text-lg font-semibold text-white">Site details</DialogTitle>
+          </DialogHeader>
+          {viewing && (
+            <div className="grid gap-4 text-sm">
+              <div>
+                <p className="text-xs uppercase tracking-[0.25em] text-slate-200/70">Name</p>
+                <p className="mt-1 text-white">{viewing.name}</p>
+              </div>
+              <div>
+                <p className="text-xs uppercase tracking-[0.25em] text-slate-200/70">City</p>
+                <p className="mt-1 text-slate-200/80">{viewing.city}</p>
+              </div>
+              <div>
+                <p className="text-xs uppercase tracking-[0.25em] text-slate-200/70">Address</p>
+                <p className="mt-1 text-slate-200/80">{viewing.address}</p>
+              </div>
+              <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+                <span className="text-xs uppercase tracking-[0.25em] text-slate-200/70">Status</span>
+                {viewing.active ? (
+                  <span className="inline-flex items-center gap-2 text-sm font-medium text-emerald-200">
+                    <CheckCircle2 className="h-4 w-4" /> Active
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-2 text-sm font-medium text-rose-200">
+                    <XCircle className="h-4 w-4" /> Inactive
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={editOpen} onOpenChange={setEditOpen}>
+        <DialogContent className="max-w-lg border border-white/10 bg-gradient-to-br from-[#0b1e3e] via-[#102c57] to-[#040b1d] text-slate-100">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-semibold text-white">Edit site</DialogTitle>
           </DialogHeader>
           {editing && (
             <div className="space-y-4">
               <div>
-                <Label htmlFor="site_name">Name (Site Name)</Label>
+                <Label htmlFor="site_name" className="text-xs uppercase tracking-[0.25em] text-slate-200/70">
+                  Name (Site name)
+                </Label>
                 <Input
                   id="site_name"
                   value={editing.site_name}
                   onChange={(e) =>
-                    setEditing((s) =>
-                      s ? { ...s, site_name: e.target.value } : s,
-                    )
+                    setEditing((s) => (s ? { ...s, site_name: e.target.value } : s))
                   }
+                  className="mt-2 border-white/20 bg-white/10 text-white placeholder:text-slate-200/60 focus-visible:ring-sky-400"
                 />
               </div>
               <div>
-                <Label htmlFor="district">City (District)</Label>
+                <Label htmlFor="district" className="text-xs uppercase tracking-[0.25em] text-slate-200/70">
+                  District
+                </Label>
                 <Input
                   id="district"
                   value={editing.district}
                   onChange={(e) =>
-                    setEditing((s) =>
-                      s ? { ...s, district: e.target.value } : s,
-                    )
+                    setEditing((s) => (s ? { ...s, district: e.target.value } : s))
                   }
+                  className="mt-2 border-white/20 bg-white/10 text-white placeholder:text-slate-200/60 focus-visible:ring-sky-400"
                 />
               </div>
               <div>
-                <Label htmlFor="city">Address (City)</Label>
+                <Label htmlFor="city" className="text-xs uppercase tracking-[0.25em] text-slate-200/70">
+                  City
+                </Label>
                 <Input
                   id="city"
                   value={editing.city}
                   onChange={(e) =>
                     setEditing((s) => (s ? { ...s, city: e.target.value } : s))
                   }
+                  className="mt-2 border-white/20 bg-white/10 text-white placeholder:text-slate-200/60 focus-visible:ring-sky-400"
                 />
               </div>
               <div>
-                <Label>Status</Label>
-                <Select
+                <Label htmlFor="cow_status" className="text-xs uppercase tracking-[0.25em] text-slate-200/70">
+                  COW status
+                </Label>
+                <Input
+                  id="cow_status"
                   value={editing.cow_status}
-                  onValueChange={(v) =>
-                    setEditing((s) => (s ? { ...s, cow_status: v } : s))
+                  onChange={(e) =>
+                    setEditing((s) => (s ? { ...s, cow_status: e.target.value } : s))
                   }
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="ON-AIR">ON-AIR</SelectItem>
-                    <SelectItem value="OFF-AIR">OFF-AIR</SelectItem>
-                    <SelectItem value="In Progress">In Progress</SelectItem>
-                  </SelectContent>
-                </Select>
+                  className="mt-2 border-white/20 bg-white/10 text-white placeholder:text-slate-200/60 focus-visible:ring-sky-400"
+                />
               </div>
             </div>
           )}
-          <DialogFooter className="mt-6 gap-2 sm:gap-2">
-            <Button variant="outline" onClick={() => setEditOpen(false)}>
+          <DialogFooter className="mt-6">
+            <Button
+              variant="outline"
+              className="rounded-full border-white/20 bg-transparent px-5 text-white hover:border-white/40 hover:bg-white/10"
+              onClick={() => setEditOpen(false)}
+            >
               Cancel
             </Button>
-            <Button onClick={saveEdit}>Save</Button>
+            <Button
+              className="rounded-full bg-sky-500 px-6 text-white hover:bg-sky-400"
+              onClick={saveEdit}
+            >
+              Save changes
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
-
-      <Dialog open={viewOpen} onOpenChange={setViewOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Site Details</DialogTitle>
-          </DialogHeader>
-          {viewing && (
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <div>
-                <span className="text-muted-foreground">Name:</span>{' '}
-                {viewing.name}
-              </div>
-              <div>
-                <span className="text-muted-foreground">Generator:</span>{' '}
-                {viewing.generator}
-              </div>
-              <div>
-                <span className="text-muted-foreground">City (District):</span>{' '}
-                {viewing.city}
-              </div>
-              <div>
-                <span className="text-muted-foreground">Address (City):</span>{' '}
-                {viewing.address}
-              </div>
-              <div>
-                <span className="text-muted-foreground">Status:</span>{' '}
-                {viewing.cowStatus}
-              </div>
-              <div>
-                <span className="text-muted-foreground">Project:</span>{' '}
-                {viewing.project}
-              </div>
-            </div>
-          )}
-          <DialogFooter>
-            <Button onClick={() => setViewOpen(false)}>Close</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </AppShell>
+    </PageLayout>
   );
 }

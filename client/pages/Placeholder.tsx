@@ -1,6 +1,4 @@
-import Header from '@/components/layout/Header';
-import { AppShell } from '@/components/layout/AppSidebar';
-import PlaceholderPage from '@/components/layout/PlaceholderPage';
+import { PageLayout, GlassCard } from '@/components/layout/PageLayout';
 import { useEffect, useState } from 'react';
 
 const TITLES: Record<string, string> = {
@@ -34,11 +32,19 @@ export default function Placeholder() {
 
   const title = TITLES[pathname] || pathname.replace('/', '');
   return (
-    <AppShell>
-      <Header />
-      <div className="px-4 pb-10 pt-6">
-        <PlaceholderPage title={title} />
+    <PageLayout
+      title={title || 'Placeholder'}
+      description="This workspace is ready for implementation. Provide the requirements and we will craft the full experience."
+      breadcrumbs={[{ label: 'Work-in-progress' }, { label: title || 'Placeholder' }]}
+    >
+      <div className="flex min-h-[50vh] items-center justify-center">
+        <GlassCard className="max-w-lg border-white/10 bg-white/5 p-10 text-center text-slate-100">
+          <h2 className="text-2xl font-semibold text-white">{title}</h2>
+          <p className="mt-4 text-sm text-slate-200/70">
+            This page is ready to be filled. Tell me what to add and I’ll build it.
+          </p>
+        </GlassCard>
       </div>
-    </AppShell>
+    </PageLayout>
   );
 }
