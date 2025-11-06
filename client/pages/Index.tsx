@@ -202,7 +202,7 @@ export default function Index() {
                 </CardContent>
               </Card>
 
-              <Card className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 via-white/[0.04] to-transparent text-slate-100 shadow-lg">
+              <Card className="rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900/40 via-slate-900/20 to-slate-900/10 text-slate-100 shadow-lg">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-lg font-semibold text-white">
                     Operations snapshot
@@ -345,7 +345,7 @@ export default function Index() {
                 {(regionPie || []).map((entry, index) => (
                   <div
                     key={entry.name ?? index}
-                    className="flex flex-col rounded-2xl border border-white/5 bg-white/5 p-4 text-xs text-slate-200/80"
+                    className="flex flex-col rounded-2xl border border-white/5 bg-slate-900/40 p-4 text-xs text-slate-200/80"
                   >
                     <span className="flex items-center gap-2 text-sm font-semibold text-white">
                       <span
@@ -411,7 +411,7 @@ export default function Index() {
                 {missionLeaders.map((mission) => (
                   <div
                     key={mission.name}
-                    className="flex items-center justify-between rounded-2xl border border-white/5 bg-white/5 p-4 text-sm text-slate-200/80"
+                    className="flex items-center justify-between rounded-2xl border border-white/5 bg-slate-900/40 p-4 text-sm text-slate-200/80"
                   >
                     <div>
                       <p className="text-sm font-semibold text-white">
@@ -432,7 +432,7 @@ export default function Index() {
           </section>
 
           <section className="mt-10 grid gap-6 lg:grid-cols-2">
-            <Card className="rounded-3xl border border-white/10 bg-white/5 text-slate-100 shadow-lg backdrop-blur">
+            <Card className="rounded-3xl border border-white/10 bg-slate-900/30 text-slate-100 shadow-lg backdrop-blur">
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg font-semibold text-white">
                   Regional load outlook
@@ -457,7 +457,7 @@ export default function Index() {
               </CardContent>
             </Card>
 
-            <Card className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.08] via-transparent to-transparent text-slate-100 shadow-lg">
+            <Card className="rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900/40 via-slate-900/20 to-slate-900/10 text-slate-100 shadow-lg">
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg font-semibold text-white">
                   Mission control log
@@ -517,7 +517,7 @@ function MetricCard({
   trendValue,
 }: MetricCardProps) {
   return (
-    <Card className="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 text-slate-100 shadow-lg backdrop-blur">
+    <Card className="group relative overflow-hidden rounded-3xl border border-white/10 bg-slate-900/30 text-slate-100 shadow-lg backdrop-blur">
       <div className="pointer-events-none absolute inset-0 opacity-0 transition group-hover:opacity-100" style={{ background: `radial-gradient(circle at top, ${accent}33, transparent 55%)` }} />
       <CardHeader className="pb-2">
         <div className="flex items-start justify-between gap-4">
@@ -570,7 +570,7 @@ function SnapshotItem({
   description,
 }: SnapshotItemProps) {
   return (
-    <div className="flex items-start gap-3 rounded-2xl border border-white/5 bg-white/5 p-4">
+    <div className="flex items-start gap-3 rounded-2xl border border-white/5 bg-slate-900/40 p-4">
       <span className={`mt-1 flex h-9 w-9 items-center justify-center rounded-full ${accent}`}>
         <Icon className="h-4 w-4" />
       </span>
@@ -593,7 +593,7 @@ type InsightCardProps = {
 function InsightCard({ title, description, className, children }: InsightCardProps) {
   return (
     <Card
-      className={`rounded-3xl border border-white/10 bg-white/5 text-slate-100 shadow-xl backdrop-blur ${className ?? ''}`}
+      className={`rounded-3xl border border-white/10 bg-slate-900/30 text-slate-100 shadow-xl backdrop-blur ${className ?? ''}`}
     >
       <CardHeader className="pb-3">
         <CardTitle className="text-lg font-semibold text-white">{title}</CardTitle>
