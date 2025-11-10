@@ -9,6 +9,7 @@ import {
   useRegionLitersTotal,
   useRegionLitersPie,
   useMissionCategoryPie,
+  useApprovedForInvoicing,
 } from '@/hooks/useDashboard';
 import {
   PieChart,
