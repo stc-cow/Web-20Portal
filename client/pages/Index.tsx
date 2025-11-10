@@ -243,6 +243,13 @@ export default function Index() {
                     accent="bg-purple-400/20 text-purple-200"
                     description="Contribution to total liters delivered today."
                   />
+                  <SnapshotItem
+                    title="Approved for invoicing"
+                    value={`${approvedInvoicing?.count || 0} • ${formatNum(approvedInvoicing?.totalLiters || 0)} L`}
+                    icon={ShieldCheck}
+                    accent="bg-amber-400/20 text-amber-300"
+                    description="Tasks approved and ready for billing."
+                  />
                 </CardContent>
               </Card>
             </div>
