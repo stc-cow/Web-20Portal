@@ -40,6 +40,7 @@ export default function Index() {
   const { data: regionTotals } = useRegionLitersTotal();
   const { data: regionPie } = useRegionLitersPie();
   const { data: missionPie } = useMissionCategoryPie();
+  const { data: approvedInvoicing } = useApprovedForInvoicing();
 
   const totalRegionalVolume = (regionPie || []).reduce(
     (sum, entry) => sum + Number(entry?.value || 0),
