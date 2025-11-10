@@ -236,21 +236,29 @@ export default function ReportsPage() {
       }
       heroContent={
         <div className="grid gap-3 sm:grid-cols-3">
-          {[{
-            label: 'Invoice lines',
-            value: lineCount.toLocaleString(),
-            description: 'Filtered task entries included in this export.',
-          },
-          {
-            label: 'Subtotal',
-            value: subtotal.toLocaleString(undefined, { style: 'currency', currency: 'SAR' }),
-            description: 'Fuel charges before VAT.',
-          },
-          {
-            label: 'Total with VAT',
-            value: total.toLocaleString(undefined, { style: 'currency', currency: 'SAR' }),
-            description: `${uniqueSites} site${uniqueSites === 1 ? '' : 's'} represented.`,
-          }].map((metric) => (
+          {[
+            {
+              label: 'Invoice lines',
+              value: lineCount.toLocaleString(),
+              description: 'Filtered task entries included in this export.',
+            },
+            {
+              label: 'Subtotal',
+              value: subtotal.toLocaleString(undefined, {
+                style: 'currency',
+                currency: 'SAR',
+              }),
+              description: 'Fuel charges before VAT.',
+            },
+            {
+              label: 'Total with VAT',
+              value: total.toLocaleString(undefined, {
+                style: 'currency',
+                currency: 'SAR',
+              }),
+              description: `${uniqueSites} site${uniqueSites === 1 ? '' : 's'} represented.`,
+            },
+          ].map((metric) => (
             <Card
               key={metric.label}
               className="rounded-3xl border border-white/10 bg-white/[0.07] text-slate-100 shadow-lg backdrop-blur"
@@ -259,8 +267,12 @@ export default function ReportsPage() {
                 <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-200/70">
                   {metric.label}
                 </p>
-                <p className="mt-1 text-2xl font-semibold text-white">{metric.value}</p>
-                <p className="mt-2 text-xs text-slate-200/70">{metric.description}</p>
+                <p className="mt-1 text-2xl font-semibold text-white">
+                  {metric.value}
+                </p>
+                <p className="mt-2 text-xs text-slate-200/70">
+                  {metric.description}
+                </p>
               </CardContent>
             </Card>
           ))}
@@ -274,7 +286,9 @@ export default function ReportsPage() {
           </div>
           <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-4">
             <div>
-              <div className="text-xs uppercase tracking-[0.2em] text-slate-200/60">From date</div>
+              <div className="text-xs uppercase tracking-[0.2em] text-slate-200/60">
+                From date
+              </div>
               <Input
                 type="date"
                 value={fromDate}
@@ -283,7 +297,9 @@ export default function ReportsPage() {
               />
             </div>
             <div>
-              <div className="text-xs uppercase tracking-[0.2em] text-slate-200/60">To date</div>
+              <div className="text-xs uppercase tracking-[0.2em] text-slate-200/60">
+                To date
+              </div>
               <Input
                 type="date"
                 value={toDate}
@@ -292,7 +308,9 @@ export default function ReportsPage() {
               />
             </div>
             <div>
-              <div className="text-xs uppercase tracking-[0.2em] text-slate-200/60">Site</div>
+              <div className="text-xs uppercase tracking-[0.2em] text-slate-200/60">
+                Site
+              </div>
               <Input
                 value={siteQuery}
                 onChange={(e) => setSiteQuery(e.target.value)}
@@ -301,7 +319,9 @@ export default function ReportsPage() {
               />
             </div>
             <div>
-              <div className="text-xs uppercase tracking-[0.2em] text-slate-200/60">Region/Zone</div>
+              <div className="text-xs uppercase tracking-[0.2em] text-slate-200/60">
+                Region/Zone
+              </div>
               <Input
                 value={region}
                 onChange={(e) => setRegion(e.target.value)}
@@ -315,18 +335,33 @@ export default function ReportsPage() {
             <Table>
               <TableHeader>
                 <TableRow className="bg-white/[0.08] text-xs uppercase tracking-[0.2em] text-slate-100">
-                  <TableHead className="border-none text-slate-100">Site Name</TableHead>
-                  <TableHead className="border-none text-slate-100">Region</TableHead>
-                  <TableHead className="border-none text-slate-100">Date</TableHead>
-                  <TableHead className="border-none text-slate-100">Liters</TableHead>
-                  <TableHead className="border-none text-slate-100">Unit Price</TableHead>
-                  <TableHead className="border-none text-slate-100">Line Price</TableHead>
+                  <TableHead className="border-none text-slate-100">
+                    Site Name
+                  </TableHead>
+                  <TableHead className="border-none text-slate-100">
+                    Region
+                  </TableHead>
+                  <TableHead className="border-none text-slate-100">
+                    Date
+                  </TableHead>
+                  <TableHead className="border-none text-slate-100">
+                    Liters
+                  </TableHead>
+                  <TableHead className="border-none text-slate-100">
+                    Unit Price
+                  </TableHead>
+                  <TableHead className="border-none text-slate-100">
+                    Line Price
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {lines.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={6} className="py-8 text-center text-sm text-slate-200/70">
+                    <TableCell
+                      colSpan={6}
+                      className="py-8 text-center text-sm text-slate-200/70"
+                    >
                       No data
                     </TableCell>
                   </TableRow>
@@ -336,12 +371,24 @@ export default function ReportsPage() {
                     key={`${l.taskId}-${i}`}
                     className="border-b border-white/5 bg-white/[0.02] text-sm text-slate-100 hover:bg-white/[0.08]"
                   >
-                    <TableCell className="font-semibold text-white">{l.siteName}</TableCell>
-                    <TableCell className="text-slate-200/80">{l.region}</TableCell>
-                    <TableCell className="text-slate-200/80">{l.date}</TableCell>
-                    <TableCell className="text-slate-200/80">{l.liters.toFixed(2)}</TableCell>
-                    <TableCell className="text-slate-200/80">{l.unitPrice.toFixed(2)}</TableCell>
-                    <TableCell className="text-slate-200/80">{l.linePrice.toFixed(2)}</TableCell>
+                    <TableCell className="font-semibold text-white">
+                      {l.siteName}
+                    </TableCell>
+                    <TableCell className="text-slate-200/80">
+                      {l.region}
+                    </TableCell>
+                    <TableCell className="text-slate-200/80">
+                      {l.date}
+                    </TableCell>
+                    <TableCell className="text-slate-200/80">
+                      {l.liters.toFixed(2)}
+                    </TableCell>
+                    <TableCell className="text-slate-200/80">
+                      {l.unitPrice.toFixed(2)}
+                    </TableCell>
+                    <TableCell className="text-slate-200/80">
+                      {l.linePrice.toFixed(2)}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
