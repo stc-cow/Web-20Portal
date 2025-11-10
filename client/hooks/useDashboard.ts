@@ -136,3 +136,32 @@ export function useMissionCategoryPie() {
     },
   });
 }
+
+export function useApprovedForInvoicing() {
+  return useQuery({
+    queryKey: ['approvedForInvoicing'],
+    queryFn: async () => {
+      const { data: tasks } = await supabase
+        .from('driver_tasks')
+        .select('id')
+        .eq('admin_status', 'approved');
+
+      const taskIds = (tasks ?? []).map((t: any) => Number(t.id));
+      if (taskIds.length === 0) {
+        return { count: 0, totalLiters: 0 };
+      }
+
+      const { data: entries } = await supabase
+        .from('driver_task_entries')
+        .select('liters')
+        .in('task_id', taskIds);
+
+      const totalLiters = (entries ?? []).reduce(
+        (sum: number, e: any) => sum + num(e.liters),
+        0,
+      );
+
+      return { count: taskIds.length, totalLiters };
+    },
+  });
+}
