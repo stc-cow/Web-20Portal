@@ -101,22 +101,22 @@ export default function ReportsPage() {
     const filters: any[] = [{ column: 'task_id', op: 'in', value: taskIds }];
     const q = supabase
       .from('driver_task_entries')
-      .select('task_id, liters_added, timestamp');
-    if (fromDate) q.gte('timestamp', new Date(fromDate).toISOString());
+      .select('task_id, liters, submitted_at');
+    if (fromDate) q.gte('submitted_at', new Date(fromDate).toISOString());
     if (toDate) {
       const end = new Date(toDate);
       end.setHours(23, 59, 59, 999);
-      q.lte('timestamp', end.toISOString());
+      q.lte('submitted_at', end.toISOString());
     }
     const { data: entries } = await q;
 
     const byTask: Record<number, { liters: number; last: string | null }> = {};
     for (const e of entries ?? []) {
       const id = Number((e as any).task_id);
-      const l = Number((e as any).liters_added ?? 0);
+      const l = Number((e as any).liters ?? 0);
       byTask[id] = byTask[id] || { liters: 0, last: null };
       byTask[id].liters += l;
-      const ts = (e as any).timestamp as string;
+      const ts = (e as any).submitted_at as string;
       if (!byTask[id].last || ts > byTask[id].last) byTask[id].last = ts;
     }
 
