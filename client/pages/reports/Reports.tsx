@@ -373,7 +373,7 @@ export default function ReportsPage() {
                   <TableRow>
                     <TableCell
                       colSpan={6}
-                      className="py-8 text-center text-sm text-slate-200/70"
+                      className="py-8 text-center text-sm text-slate-500"
                     >
                       No data
                     </TableCell>
@@ -382,21 +382,21 @@ export default function ReportsPage() {
                 {lines.map((l, i) => (
                   <TableRow
                     key={`${l.taskId}-${i}`}
-                    className="border-b border-white/5 bg-white/[0.02] text-sm text-slate-100 hover:bg-white/[0.08]"
+                    className="border-b border-slate-200 bg-white text-sm text-slate-900 hover:bg-slate-50"
                   >
-                    <TableCell className="font-semibold text-white">
+                    <TableCell className="font-semibold text-slate-900">
                       {l.siteName}
                     </TableCell>
-                    <TableCell className="text-slate-200/80">
+                    <TableCell className="text-slate-700">
                       {l.region}
                     </TableCell>
-                    <TableCell className="text-slate-200/80">
+                    <TableCell className="text-slate-700">
                       {l.date}
                     </TableCell>
-                    <TableCell className="text-slate-200/80">
+                    <TableCell className="text-slate-700">
                       {l.liters.toFixed(2)}
                     </TableCell>
-                    <TableCell className="text-slate-200/80">
+                    <TableCell className="text-slate-700">
                       {l.unitPrice.toFixed(2)}
                     </TableCell>
                     <TableCell className="text-slate-200/80">
