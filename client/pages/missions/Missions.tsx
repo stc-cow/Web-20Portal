@@ -1433,7 +1433,7 @@ export default function MissionsPage() {
                   <TableRow>
                     <TableCell
                       colSpan={VISIBLE_COLUMNS.length}
-                      className="text-center text-sm text-muted-foreground"
+                      className="py-10 text-center text-sm text-slate-200/70"
                     >
                       No results
                     </TableCell>
