@@ -161,7 +161,7 @@ export default function ReportsPage() {
   useEffect(() => {
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fromDate, toDate, siteQuery, region]);
+  }, [fromDate, toDate, siteQuery, region, settings.fuel_unit_price]);
 
   const exportCsv = async () => {
     const invNo = `${settings.invoice_prefix || 'INV-'}${String(settings.invoice_sequence || 1).padStart(4, '0')}`;
