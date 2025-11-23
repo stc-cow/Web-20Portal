@@ -69,27 +69,27 @@ export default function SettingsIndexPage() {
     >
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         <Link to="/settings/general" className="group block">
-          <GlassCard className="h-full border-white/10 bg-gradient-to-br from-sky-500/10 via-sky-500/5 to-transparent p-7 transition hover:border-sky-400/40 hover:bg-sky-500/15">
+          <GlassCard className="h-full border-sky-200 bg-gradient-to-br from-sky-50 via-white to-white p-7 transition hover:border-sky-300 hover:bg-sky-50">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-sky-100/80">
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-sky-700">
                   {t('settingsGeneral')}
                 </p>
-                <h2 className="mt-2 text-2xl font-semibold text-white">
+                <h2 className="mt-2 text-2xl font-semibold text-slate-900">
                   Platform defaults
                 </h2>
               </div>
-              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-sky-500/20 text-sky-100">
+              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-sky-200 text-sky-600">
                 <SettingsIcon className="h-6 w-6" />
               </span>
             </div>
-            <p className="mt-4 text-sm text-slate-200/70">
+            <p className="mt-4 text-sm text-slate-700">
               Update billing entities, branding and locale defaults that power
               every workspace.
             </p>
-            <div className="mt-6 flex items-center justify-between text-xs uppercase tracking-[0.2em] text-slate-200/60">
+            <div className="mt-6 flex items-center justify-between text-xs uppercase tracking-[0.2em] text-slate-600">
               <span>{t('configure', { defaultValue: 'Configure' })}</span>
-              <span className="transition group-hover:text-white">→</span>
+              <span className="transition group-hover:text-slate-900">→</span>
             </div>
           </GlassCard>
         </Link>
