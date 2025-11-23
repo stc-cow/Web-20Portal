@@ -274,16 +274,16 @@ export default function ReportsPage() {
           ].map((metric) => (
             <Card
               key={metric.label}
-              className="rounded-3xl border border-white/10 bg-white/[0.07] text-slate-100 shadow-lg backdrop-blur"
+              className="rounded-3xl border border-slate-200 bg-white text-slate-900 shadow-md"
             >
               <CardContent className="p-5">
-                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-200/70">
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-600">
                   {metric.label}
                 </p>
-                <p className="mt-1 text-2xl font-semibold text-white">
+                <p className="mt-1 text-2xl font-semibold text-slate-900">
                   {metric.value}
                 </p>
-                <p className="mt-2 text-xs text-slate-200/70">
+                <p className="mt-2 text-xs text-slate-700">
                   {metric.description}
                 </p>
               </CardContent>
