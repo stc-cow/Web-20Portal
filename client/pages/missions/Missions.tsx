@@ -400,12 +400,25 @@ export default function MissionsPage() {
 
   const loadFromDb = async () => {
     try {
-      const { data, error } = await supabase
-        .from('driver_tasks')
-        .select(
-          'id, mission_id, site_name, driver_name, scheduled_at, status, admin_status, required_liters, notes, created_at',
-        )
-        .order('created_at', { ascending: false });
+      const response = await fetch('/api/db/query', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          table: 'driver_tasks',
+          operation: 'select',
+          select: 'id, mission_id, site_name, driver_name, scheduled_at, status, admin_status, required_liters, notes, created_at',
+          order: ['created_at', 'desc'],
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to fetch missions');
+      }
+
+      const { data, error } = await response.json();
       if (error) throw error;
       if (!data || !Array.isArray(data) || data.length === 0) {
         toast({
