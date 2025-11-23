@@ -6,10 +6,10 @@ import { Link } from 'react-router-dom';
 import type { ReactNode } from 'react';
 
 export const glassCardClass =
-  'relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04] text-slate-100 shadow-xl backdrop-blur';
+  'relative overflow-hidden rounded-3xl border border-slate-200 bg-white text-slate-900 shadow-md';
 
 export const softBorderCardClass =
-  'rounded-2xl border border-white/10 bg-white/5 text-slate-100 shadow-lg backdrop-blur';
+  'rounded-2xl border border-slate-200 bg-slate-50 text-slate-900 shadow-sm';
 
 type Breadcrumb = {
   label: string;
