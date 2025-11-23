@@ -110,34 +110,34 @@ export default function NotificationsPage() {
           }].map((metric) => (
             <GlassCard
               key={metric.label}
-              className="flex items-start gap-4 border-white/10 bg-white/[0.07] p-5"
+              className="flex items-start gap-4 border-slate-200 bg-white p-5"
             >
-              <span className="mt-1 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white">
+              <span className="mt-1 flex h-10 w-10 items-center justify-center rounded-full bg-sky-100 text-sky-600">
                 <metric.icon className="h-5 w-5" />
               </span>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-200/70">
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-600">
                   {metric.label}
                 </p>
-                <p className="mt-1 text-2xl font-semibold text-white">{metric.value}</p>
-                <p className="mt-2 text-xs text-slate-200/70">{metric.description}</p>
+                <p className="mt-1 text-2xl font-semibold text-slate-900">{metric.value}</p>
+                <p className="mt-2 text-xs text-slate-700">{metric.description}</p>
               </div>
             </GlassCard>
           ))}
         </div>
       }
     >
-      <GlassCard className="max-w-3xl border-white/10 bg-white/10 p-8">
+      <GlassCard className="max-w-3xl border-slate-200 bg-white p-8">
         <div className="grid gap-6">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-200/70">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-700">
               Drivers
             </p>
             <Select value={driver} onValueChange={setDriver}>
-              <SelectTrigger className="mt-2 max-w-sm border-white/20 bg-white/10 text-white focus:ring-sky-400">
+              <SelectTrigger className="mt-2 max-w-sm border-slate-300 bg-slate-50 text-slate-900 focus:ring-sky-500">
                 <SelectValue placeholder="All" />
               </SelectTrigger>
-              <SelectContent className="border border-white/10 bg-[#0b1e3e] text-slate-100">
+              <SelectContent className="border border-slate-300 bg-white text-slate-900">
                 {drivers.map((d) => (
                   <SelectItem key={d} value={d}>
                     {d}
@@ -147,28 +147,28 @@ export default function NotificationsPage() {
             </Select>
           </div>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-200/70">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-700">
               Title
             </p>
             <Input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Fuel restock briefing"
-              className="mt-2 h-11 max-w-md border-white/20 bg-white/10 text-white placeholder:text-slate-200/60 focus-visible:ring-sky-400"
+              className="mt-2 h-11 max-w-md border-slate-300 bg-slate-50 text-slate-900 placeholder:text-slate-500 focus-visible:ring-sky-500"
             />
           </div>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-200/70">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-700">
               Message
             </p>
             <Textarea
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Share mission updates, schedule adjustments or escalation alerts."
-              className="mt-2 h-36 border-white/20 bg-white/10 text-white placeholder:text-slate-200/60 focus-visible:ring-sky-400"
+              className="mt-2 h-36 border-slate-300 bg-slate-50 text-slate-900 placeholder:text-slate-500 focus-visible:ring-sky-500"
             />
           </div>
-          <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-xs text-slate-200/70">
+          <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-700">
             <span>
               Use short, action-oriented language to keep crews aligned.
             </span>
