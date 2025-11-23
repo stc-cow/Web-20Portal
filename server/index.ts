@@ -34,7 +34,7 @@ export function createServer() {
         return res.status(500).json({ error: 'Supabase not configured' });
       }
 
-      const { table, operation, select, order, filters } = req.body;
+      const { table, operation, select, order, filters, limit } = req.body;
 
       if (!table || !operation) {
         return res.status(400).json({ error: 'Missing table or operation' });
@@ -45,14 +45,17 @@ export function createServer() {
       switch (operation) {
         case 'select':
           query = query.select(select || '*');
-          if (order) {
-            const [column, direction] = Array.isArray(order) ? order : [order, 'asc'];
-            query = query.order(column, { ascending: direction === 'asc' });
-          }
           if (filters) {
             for (const [key, value] of Object.entries(filters)) {
               query = query.eq(key, value);
             }
+          }
+          if (order) {
+            const [column, direction] = Array.isArray(order) ? order : [order, 'asc'];
+            query = query.order(column, { ascending: direction === 'asc' });
+          }
+          if (limit) {
+            query = query.limit(limit);
           }
           break;
         case 'insert':
