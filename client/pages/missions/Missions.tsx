@@ -741,7 +741,15 @@ export default function MissionsPage() {
   };
 
   const remove = async (id: number) => {
-    await supabase.from('driver_tasks').delete().eq('id', id);
+    await fetch('/api/db/query', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        table: 'driver_tasks',
+        operation: 'delete',
+        filters: { id },
+      }),
+    });
     setRows((r) => r.filter((x) => x.id !== id));
   };
 
