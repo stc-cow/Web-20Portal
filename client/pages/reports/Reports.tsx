@@ -399,7 +399,7 @@ export default function ReportsPage() {
                     <TableCell className="text-slate-700">
                       {l.unitPrice.toFixed(2)}
                     </TableCell>
-                    <TableCell className="text-slate-200/80">
+                    <TableCell className="text-slate-700">
                       {l.linePrice.toFixed(2)}
                     </TableCell>
                   </TableRow>
@@ -408,13 +408,13 @@ export default function ReportsPage() {
             </Table>
           </div>
 
-          <div className="mt-6 grid grid-cols-1 gap-4 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-slate-200/80 md:grid-cols-3">
+          <div className="mt-6 grid grid-cols-1 gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-900 md:grid-cols-3">
             <div>Subtotal: {subtotal.toFixed(2)}</div>
             <div>
               VAT ({((settings.vat_rate ?? 0) * 100).toFixed(0)}%):{' '}
               {(subtotal * (settings.vat_rate ?? 0)).toFixed(2)}
             </div>
-            <div className="font-semibold text-white">
+            <div className="font-semibold text-slate-900">
               Total with VAT: {total.toFixed(2)}
             </div>
           </div>
