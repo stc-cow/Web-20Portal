@@ -262,8 +262,8 @@ export default function SitesPage() {
                 <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-200/70">
                   {metric.label}
                 </p>
-                <p className="mt-1 text-2xl font-semibold text-white">{metric.value}</p>
-                <p className="mt-2 text-xs text-slate-200/70">{metric.description}</p>
+                <p className="mt-1 text-2xl font-semibold text-black">{metric.value}</p>
+                <p className="mt-2 text-xs text-black">{metric.description}</p>
               </CardContent>
             </Card>
           ))}
@@ -273,11 +273,11 @@ export default function SitesPage() {
       <Card className="overflow-hidden rounded-3xl border border-white/10 bg-white/5 text-slate-100 shadow-xl backdrop-blur">
         <CardContent className="p-0">
           <div className="flex flex-col gap-4 border-b border-white/10 px-6 py-5 md:flex-row md:items-center md:justify-between">
-            <div className="text-xs uppercase tracking-[0.25em] text-slate-200/70">
+            <div className="text-xs uppercase tracking-[0.25em] text-black">
               Print • Column visibility • Showing {pageSize} rows
             </div>
             <div className="flex flex-wrap items-center gap-3">
-              <span className="text-xs uppercase tracking-[0.25em] text-slate-200/60">
+              <span className="text-xs uppercase tracking-[0.25em] text-black">
                 Search
               </span>
               <Input
@@ -390,7 +390,7 @@ export default function SitesPage() {
                   <TableRow>
                     <TableCell
                       colSpan={allColumns.length}
-                      className="py-10 text-center text-sm text-slate-200/70"
+                      className="py-10 text-center text-sm text-black"
                     >
                       No results
                     </TableCell>
@@ -415,7 +415,7 @@ export default function SitesPage() {
               >
                 Previous
               </Button>
-              <span className="tabular-nums text-sm text-white/80">
+              <span className="tabular-nums text-sm text-black">
                 {page} / {totalPages}
               </span>
               <Button
@@ -440,25 +440,25 @@ export default function SitesPage() {
           {viewing && (
             <div className="grid gap-4 text-sm">
               <div>
-                <p className="text-xs uppercase tracking-[0.25em] text-slate-200/70">Name</p>
-                <p className="mt-1 text-white">{viewing.name}</p>
+                <p className="text-xs uppercase tracking-[0.25em] text-black">Name</p>
+                <p className="mt-1 text-black">{viewing.name}</p>
               </div>
               <div>
-                <p className="text-xs uppercase tracking-[0.25em] text-slate-200/70">City</p>
-                <p className="mt-1 text-slate-200/80">{viewing.city}</p>
+                <p className="text-xs uppercase tracking-[0.25em] text-black">City</p>
+                <p className="mt-1 text-black">{viewing.city}</p>
               </div>
               <div>
-                <p className="text-xs uppercase tracking-[0.25em] text-slate-200/70">Address</p>
-                <p className="mt-1 text-slate-200/80">{viewing.address}</p>
+                <p className="text-xs uppercase tracking-[0.25em] text-black">Address</p>
+                <p className="mt-1 text-black">{viewing.address}</p>
               </div>
               <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-                <span className="text-xs uppercase tracking-[0.25em] text-slate-200/70">Status</span>
+                <span className="text-xs uppercase tracking-[0.25em] text-black">Status</span>
                 {viewing.active ? (
-                  <span className="inline-flex items-center gap-2 text-sm font-medium text-emerald-200">
+                  <span className="inline-flex items-center gap-2 text-sm font-medium text-black">
                     <CheckCircle2 className="h-4 w-4" /> Active
                   </span>
                 ) : (
-                  <span className="inline-flex items-center gap-2 text-sm font-medium text-rose-200">
+                  <span className="inline-flex items-center gap-2 text-sm font-medium text-black">
                     <XCircle className="h-4 w-4" /> Inactive
                   </span>
                 )}
@@ -476,7 +476,7 @@ export default function SitesPage() {
           {editing && (
             <div className="space-y-4">
               <div>
-                <Label htmlFor="site_name" className="text-xs uppercase tracking-[0.25em] text-slate-200/70">
+                <Label htmlFor="site_name" className="text-xs uppercase tracking-[0.25em] text-black">
                   Name (Site name)
                 </Label>
                 <Input
@@ -489,7 +489,7 @@ export default function SitesPage() {
                 />
               </div>
               <div>
-                <Label htmlFor="district" className="text-xs uppercase tracking-[0.25em] text-slate-200/70">
+                <Label htmlFor="district" className="text-xs uppercase tracking-[0.25em] text-black">
                   District
                 </Label>
                 <Input
@@ -502,7 +502,7 @@ export default function SitesPage() {
                 />
               </div>
               <div>
-                <Label htmlFor="city" className="text-xs uppercase tracking-[0.25em] text-slate-200/70">
+                <Label htmlFor="city" className="text-xs uppercase tracking-[0.25em] text-black">
                   City
                 </Label>
                 <Input
@@ -515,7 +515,7 @@ export default function SitesPage() {
                 />
               </div>
               <div>
-                <Label htmlFor="cow_status" className="text-xs uppercase tracking-[0.25em] text-slate-200/70">
+                <Label htmlFor="cow_status" className="text-xs uppercase tracking-[0.25em] text-black">
                   COW status
                 </Label>
                 <Input
@@ -538,7 +538,7 @@ export default function SitesPage() {
               Cancel
             </Button>
             <Button
-              className="rounded-full bg-sky-500 px-6 text-white hover:bg-sky-400"
+              className="rounded-full bg-sky-500 px-6 text-black hover:bg-sky-400"
               onClick={saveEdit}
             >
               Save changes
