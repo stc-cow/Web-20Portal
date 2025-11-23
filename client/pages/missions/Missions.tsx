@@ -797,10 +797,10 @@ export default function MissionsPage() {
                 <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-200/70">
                   {metric.label}
                 </p>
-                <p className="mt-1 text-2xl font-semibold text-white">
+                <p className="mt-1 text-2xl font-semibold text-black">
                   {metric.value}
                 </p>
-                <p className="mt-2 text-xs text-slate-200/70">
+                <p className="mt-2 text-xs text-black">
                   {metric.description}
                 </p>
               </CardContent>
@@ -831,7 +831,7 @@ export default function MissionsPage() {
                   }
                 />
                 {addErrors.siteName && (
-                  <span className="text-sm text-red-500">required</span>
+                  <span className="text-sm text-black">required</span>
                 )}
               </div>
               <div className="grid gap-2">
@@ -937,7 +937,7 @@ export default function MissionsPage() {
         {STATUS_ORDER.map((s) => (
           <Badge
             key={s}
-            className={`${statusColor[s]} cursor-pointer text-white hover:opacity-90`}
+            className={`${statusColor[s]} cursor-pointer text-black hover:opacity-90`}
             onClick={() => setStatusFilter(s)}
           >
             {s}
@@ -949,13 +949,13 @@ export default function MissionsPage() {
       </div>
 
       <Card className="overflow-hidden rounded-3xl border border-white/10 bg-white/5 text-slate-100 shadow-xl backdrop-blur">
-        <CardContent className="p-0 text-slate-100">
+        <CardContent className="p-0 text-black">
           <div className="flex items-center justify-between gap-4 border-b border-white/10 px-4 py-4">
             <div className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-200/70">
               Missions
             </div>
             <div className="flex items-center gap-2">
-              <div className="text-xs uppercase tracking-[0.2em] text-slate-200/60">
+              <div className="text-xs uppercase tracking-[0.2em] text-black">
                 Rows per page
               </div>
               <Select
@@ -980,31 +980,31 @@ export default function MissionsPage() {
           </div>
 
           <div className="overflow-x-hidden">
-            <Table className="table-fixed text-slate-100">
+            <Table className="table-fixed text-black">
               <TableHeader>
                 <TableRow className="bg-white/[0.08] text-xs uppercase tracking-[0.2em] text-slate-100">
-                  <TableHead className="border-none text-slate-100">
+                  <TableHead className="border-none text-black">
                     Mission ID
                   </TableHead>
-                  <TableHead className="border-none text-slate-100">
+                  <TableHead className="border-none text-black">
                     Site Name
                   </TableHead>
-                  <TableHead className="border-none text-slate-100">
+                  <TableHead className="border-none text-black">
                     Created Date
                   </TableHead>
-                  <TableHead className="border-none text-slate-100">
+                  <TableHead className="border-none text-black">
                     Added Liters
                   </TableHead>
-                  <TableHead className="border-none text-slate-100">
+                  <TableHead className="border-none text-black">
                     Actual Liters Found in Tank
                   </TableHead>
-                  <TableHead className="border-none text-slate-100">
+                  <TableHead className="border-none text-black">
                     Quantity Added (Last Task)
                   </TableHead>
-                  <TableHead className="border-none text-slate-100">
+                  <TableHead className="border-none text-black">
                     City
                   </TableHead>
-                  <TableHead className="border-none text-slate-100">
+                  <TableHead className="border-none text-black">
                     Mission Status
                   </TableHead>
                 </TableRow>
@@ -1162,7 +1162,7 @@ export default function MissionsPage() {
                     <TableCell className="break-words text-black">{r.city}</TableCell>
                     <TableCell>
                       <span
-                        className={`rounded px-2 py-0.5 text-xs text-white ${statusColor[r.missionStatus]}`}
+                        className={`rounded px-2 py-0.5 text-xs text-black ${statusColor[r.missionStatus]}`}
                       >
                         {r.missionStatus}
                       </span>
@@ -1230,7 +1230,7 @@ export default function MissionsPage() {
                             </div>
                           </div>
                           <div className="md:col-span-3">
-                            <div className="text-xs text-slate-200/70 mb-1">
+                            <div className="text-xs text-black mb-1">
                               Images
                             </div>
                             <div className="grid grid-cols-3 gap-2">
