@@ -267,7 +267,8 @@ export default function MissionsPage() {
         body: JSON.stringify({
           table: 'driver_task_entries',
           operation: 'select',
-          select: 'liters, rate, station, receipt_number, photo_url, odometer, submitted_by, submitted_at',
+          select:
+            'liters, rate, station, receipt_number, photo_url, odometer, submitted_by, submitted_at',
           filters: { task_id: r.id },
           order: ['submitted_at', 'desc'],
         }),
@@ -441,7 +442,8 @@ export default function MissionsPage() {
         body: JSON.stringify({
           table: 'driver_tasks',
           operation: 'select',
-          select: 'id, mission_id, site_name, driver_name, scheduled_at, status, admin_status, required_liters, notes, created_at',
+          select:
+            'id, mission_id, site_name, driver_name, scheduled_at, status, admin_status, required_liters, notes, created_at',
           order: ['created_at', 'desc'],
         }),
       });
@@ -800,9 +802,7 @@ export default function MissionsPage() {
                 <p className="mt-1 text-2xl font-semibold text-black">
                   {metric.value}
                 </p>
-                <p className="mt-2 text-xs text-black">
-                  {metric.description}
-                </p>
+                <p className="mt-2 text-xs text-black">{metric.description}</p>
               </CardContent>
             </Card>
           ))}
@@ -1001,9 +1001,7 @@ export default function MissionsPage() {
                   <TableHead className="border-none text-black">
                     Quantity Added (Last Task)
                   </TableHead>
-                  <TableHead className="border-none text-black">
-                    City
-                  </TableHead>
+                  <TableHead className="border-none text-black">City</TableHead>
                   <TableHead className="border-none text-black">
                     Mission Status
                   </TableHead>
@@ -1159,7 +1157,9 @@ export default function MissionsPage() {
                     <TableCell className="break-words text-black">
                       {r.quantityAddedLastTask}
                     </TableCell>
-                    <TableCell className="break-words text-black">{r.city}</TableCell>
+                    <TableCell className="break-words text-black">
+                      {r.city}
+                    </TableCell>
                     <TableCell>
                       <span
                         className={`rounded px-2 py-0.5 text-xs text-black ${statusColor[r.missionStatus]}`}
@@ -1171,26 +1171,31 @@ export default function MissionsPage() {
                 ))}
                 {current.map((r) =>
                   expanded[r.id] ? (
-                    <TableRow key={`exp-${r.id}`} className="bg-white/[0.02] border-b border-white/5">
+                    <TableRow
+                      key={`exp-${r.id}`}
+                      className="bg-white/[0.02] border-b border-white/5"
+                    >
                       <TableCell colSpan={VISIBLE_COLUMNS.length}>
                         <div className="grid grid-cols-1 gap-3 p-4 rounded-md transition-all duration-300 ease-in-out md:grid-cols-3 text-black">
                           <div>
-                            <div className="text-xs text-black">
-                              Mission ID
+                            <div className="text-xs text-black">Mission ID</div>
+                            <div className="font-medium text-black">
+                              {r.missionId}
                             </div>
-                            <div className="font-medium text-black">{r.missionId}</div>
                           </div>
                           <div>
-                            <div className="text-xs text-black">
-                              Site Name
+                            <div className="text-xs text-black">Site Name</div>
+                            <div className="font-medium text-black">
+                              {r.siteName}
                             </div>
-                            <div className="font-medium text-black">{r.siteName}</div>
                           </div>
                           <div>
                             <div className="text-xs text-black">
                               Driver Name
                             </div>
-                            <div className="font-medium text-black">{r.driverName}</div>
+                            <div className="font-medium text-black">
+                              {r.driverName}
+                            </div>
                           </div>
                           <div>
                             <div className="text-xs text-black">
@@ -1349,9 +1354,7 @@ export default function MissionsPage() {
                               />
                             </div>
                             <div className="md:col-span-1">
-                              <div className="text-xs text-black">
-                                Notes
-                              </div>
+                              <div className="text-xs text-black">Notes</div>
                               <Input
                                 className="mt-1"
                                 value={editDraft[r.id]?.notes ?? ''}

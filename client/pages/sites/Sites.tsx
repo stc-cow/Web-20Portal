@@ -11,7 +11,14 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useEffect, useMemo, useState } from 'react';
-import { Eye, Pencil, Trash2, Download, CheckCircle2, XCircle } from 'lucide-react';
+import {
+  Eye,
+  Pencil,
+  Trash2,
+  Download,
+  CheckCircle2,
+  XCircle,
+} from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import {
   Dialog,
@@ -93,8 +100,8 @@ export default function SitesPage() {
     if (!query) return rows;
     const q = query.toLowerCase();
     return rows.filter((r) =>
-      [r.name, r.generator, r.driver, r.project, r.city, r.address].some((value) =>
-        String(value).toLowerCase().includes(q),
+      [r.name, r.generator, r.driver, r.project, r.city, r.address].some(
+        (value) => String(value).toLowerCase().includes(q),
       ),
     );
   }, [rows, query]);
@@ -239,21 +246,23 @@ export default function SitesPage() {
       }
       heroContent={
         <div className="grid gap-3 sm:grid-cols-3">
-          {[{
-            label: 'Total sites',
-            value: totalSites.toLocaleString(),
-            description: 'Sites onboarded across all regions.',
-          },
-          {
-            label: 'Operational',
-            value: activeSites.toLocaleString(),
-            description: 'Currently live or in-progress COW locations.',
-          },
-          {
-            label: 'Needs attention',
-            value: inactiveSites.toLocaleString(),
-            description: 'Offline or awaiting activation follow-up.',
-          }].map((metric) => (
+          {[
+            {
+              label: 'Total sites',
+              value: totalSites.toLocaleString(),
+              description: 'Sites onboarded across all regions.',
+            },
+            {
+              label: 'Operational',
+              value: activeSites.toLocaleString(),
+              description: 'Currently live or in-progress COW locations.',
+            },
+            {
+              label: 'Needs attention',
+              value: inactiveSites.toLocaleString(),
+              description: 'Offline or awaiting activation follow-up.',
+            },
+          ].map((metric) => (
             <Card
               key={metric.label}
               className="rounded-3xl border border-white/10 bg-white/[0.07] text-slate-100 shadow-lg backdrop-blur"
@@ -262,7 +271,9 @@ export default function SitesPage() {
                 <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-200/70">
                   {metric.label}
                 </p>
-                <p className="mt-1 text-2xl font-semibold text-black">{metric.value}</p>
+                <p className="mt-1 text-2xl font-semibold text-black">
+                  {metric.value}
+                </p>
                 <p className="mt-2 text-xs text-black">{metric.description}</p>
               </CardContent>
             </Card>
@@ -296,9 +307,19 @@ export default function SitesPage() {
             <Table>
               <TableHeader>
                 <TableRow className="bg-white/[0.08] text-xs uppercase tracking-[0.2em] text-black">
-                  {cols.index && <TableHead className="border-none text-black">#</TableHead>}
-                  {cols.name && <TableHead className="border-none text-black">Name</TableHead>}
-                  {cols.generator && <TableHead className="border-none text-black">Generator</TableHead>}
+                  {cols.index && (
+                    <TableHead className="border-none text-black">#</TableHead>
+                  )}
+                  {cols.name && (
+                    <TableHead className="border-none text-black">
+                      Name
+                    </TableHead>
+                  )}
+                  {cols.generator && (
+                    <TableHead className="border-none text-black">
+                      Generator
+                    </TableHead>
+                  )}
                   {cols.currentLiters && (
                     <TableHead className="border-none text-black">
                       Current liters in tank
@@ -309,12 +330,36 @@ export default function SitesPage() {
                       Daily virtual consumption
                     </TableHead>
                   )}
-                  {cols.rate && <TableHead className="border-none text-black">Rate</TableHead>}
-                  {cols.driver && <TableHead className="border-none text-black">Driver</TableHead>}
-                  {cols.project && <TableHead className="border-none text-black">Project</TableHead>}
-                  {cols.city && <TableHead className="border-none text-black">City</TableHead>}
-                  {cols.address && <TableHead className="border-none text-black">Address</TableHead>}
-                  {cols.active && <TableHead className="border-none text-black">Status</TableHead>}
+                  {cols.rate && (
+                    <TableHead className="border-none text-black">
+                      Rate
+                    </TableHead>
+                  )}
+                  {cols.driver && (
+                    <TableHead className="border-none text-black">
+                      Driver
+                    </TableHead>
+                  )}
+                  {cols.project && (
+                    <TableHead className="border-none text-black">
+                      Project
+                    </TableHead>
+                  )}
+                  {cols.city && (
+                    <TableHead className="border-none text-black">
+                      City
+                    </TableHead>
+                  )}
+                  {cols.address && (
+                    <TableHead className="border-none text-black">
+                      Address
+                    </TableHead>
+                  )}
+                  {cols.active && (
+                    <TableHead className="border-none text-black">
+                      Status
+                    </TableHead>
+                  )}
                   {cols.settings && (
                     <TableHead className="border-none text-right text-black">
                       Actions
@@ -333,59 +378,96 @@ export default function SitesPage() {
                         {(page - 1) * pageSize + idx + 1}
                       </TableCell>
                     )}
-                    {cols.name && <TableCell className="font-semibold text-black">{r.name}</TableCell>}
-                    {cols.generator && <TableCell className="text-black">{r.generator || '—'}</TableCell>}
-                    {cols.currentLiters && <TableCell className="text-black">{r.currentLiters || '—'}</TableCell>}
-                    {cols.dailyVirtual && <TableCell className="text-black">{r.dailyVirtual || '—'}</TableCell>}
-                    {cols.rate && <TableCell className="text-black">{r.rate || '—'}</TableCell>}
-                    {cols.driver && <TableCell className="text-black">{r.driver || '—'}</TableCell>}
-                    {cols.project && <TableCell className="text-black">{r.project || '—'}</TableCell>}
-                    {cols.city && <TableCell className="text-black">{r.city || '—'}</TableCell>}
-                    {cols.address && <TableCell className="text-black">{r.address || '—'}</TableCell>}
-                  {cols.active && (
-                    <TableCell>
-                      <span
-                        className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] ${r.active ? 'bg-emerald-500/15 text-emerald-200' : 'bg-rose-500/10 text-rose-200'}`}
-                      >
-                        <span className="flex h-2 w-2 rounded-full bg-current" />
-                        {r.active ? 'Active' : 'Inactive'}
-                      </span>
-                    </TableCell>
-                  )}
-                  {cols.settings && (
-                    <TableCell className="text-right">
-                      <div className="flex justify-end gap-2">
-                        <button
-                          type="button"
-                          onClick={() => openView(r)}
-                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-black transition hover:border-white/30 hover:bg-white/15"
-                          aria-label="View site"
+                    {cols.name && (
+                      <TableCell className="font-semibold text-black">
+                        {r.name}
+                      </TableCell>
+                    )}
+                    {cols.generator && (
+                      <TableCell className="text-black">
+                        {r.generator || '—'}
+                      </TableCell>
+                    )}
+                    {cols.currentLiters && (
+                      <TableCell className="text-black">
+                        {r.currentLiters || '—'}
+                      </TableCell>
+                    )}
+                    {cols.dailyVirtual && (
+                      <TableCell className="text-black">
+                        {r.dailyVirtual || '—'}
+                      </TableCell>
+                    )}
+                    {cols.rate && (
+                      <TableCell className="text-black">
+                        {r.rate || '—'}
+                      </TableCell>
+                    )}
+                    {cols.driver && (
+                      <TableCell className="text-black">
+                        {r.driver || '—'}
+                      </TableCell>
+                    )}
+                    {cols.project && (
+                      <TableCell className="text-black">
+                        {r.project || '—'}
+                      </TableCell>
+                    )}
+                    {cols.city && (
+                      <TableCell className="text-black">
+                        {r.city || '—'}
+                      </TableCell>
+                    )}
+                    {cols.address && (
+                      <TableCell className="text-black">
+                        {r.address || '—'}
+                      </TableCell>
+                    )}
+                    {cols.active && (
+                      <TableCell>
+                        <span
+                          className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] ${r.active ? 'bg-emerald-500/15 text-emerald-200' : 'bg-rose-500/10 text-rose-200'}`}
                         >
-                          <Eye className="h-4 w-4" />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => openEdit(r)}
-                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-black transition hover:border-white/30 hover:bg-white/15"
-                          aria-label="Edit site"
-                        >
-                          <Pencil className="h-4 w-4" />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (window.confirm('Remove this site?')) remove(r.id);
-                          }}
-                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-rose-200 transition hover:border-white/30 hover:bg-rose-500/10"
-                          aria-label="Delete site"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </TableCell>
-                  )}
-                </TableRow>
-              ))}
+                          <span className="flex h-2 w-2 rounded-full bg-current" />
+                          {r.active ? 'Active' : 'Inactive'}
+                        </span>
+                      </TableCell>
+                    )}
+                    {cols.settings && (
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-2">
+                          <button
+                            type="button"
+                            onClick={() => openView(r)}
+                            className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-black transition hover:border-white/30 hover:bg-white/15"
+                            aria-label="View site"
+                          >
+                            <Eye className="h-4 w-4" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => openEdit(r)}
+                            className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-black transition hover:border-white/30 hover:bg-white/15"
+                            aria-label="Edit site"
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (window.confirm('Remove this site?'))
+                                remove(r.id);
+                            }}
+                            className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-rose-200 transition hover:border-white/30 hover:bg-rose-500/10"
+                            aria-label="Delete site"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </TableCell>
+                    )}
+                  </TableRow>
+                ))}
                 {current.length === 0 && (
                   <TableRow>
                     <TableCell
@@ -402,8 +484,13 @@ export default function SitesPage() {
 
           <div className="flex flex-col gap-3 border-t border-white/10 px-6 py-4 text-xs text-slate-200/70 md:flex-row md:items-center md:justify-between">
             <div>
-              Showing <span className="font-semibold text-black">{current.length}</span> of{' '}
-              <span className="font-semibold text-black">{filtered.length}</span> entries
+              Showing{' '}
+              <span className="font-semibold text-black">{current.length}</span>{' '}
+              of{' '}
+              <span className="font-semibold text-black">
+                {filtered.length}
+              </span>{' '}
+              entries
             </div>
             <div className="flex items-center gap-2">
               <Button
@@ -435,24 +522,34 @@ export default function SitesPage() {
       <Dialog open={viewOpen} onOpenChange={setViewOpen}>
         <DialogContent className="max-w-lg border border-white/10 bg-gradient-to-br from-[#0b1e3e] via-[#102c57] to-[#040b1d] text-slate-100">
           <DialogHeader>
-            <DialogTitle className="text-lg font-semibold text-white">Site details</DialogTitle>
+            <DialogTitle className="text-lg font-semibold text-white">
+              Site details
+            </DialogTitle>
           </DialogHeader>
           {viewing && (
             <div className="grid gap-4 text-sm">
               <div>
-                <p className="text-xs uppercase tracking-[0.25em] text-black">Name</p>
+                <p className="text-xs uppercase tracking-[0.25em] text-black">
+                  Name
+                </p>
                 <p className="mt-1 text-black">{viewing.name}</p>
               </div>
               <div>
-                <p className="text-xs uppercase tracking-[0.25em] text-black">City</p>
+                <p className="text-xs uppercase tracking-[0.25em] text-black">
+                  City
+                </p>
                 <p className="mt-1 text-black">{viewing.city}</p>
               </div>
               <div>
-                <p className="text-xs uppercase tracking-[0.25em] text-black">Address</p>
+                <p className="text-xs uppercase tracking-[0.25em] text-black">
+                  Address
+                </p>
                 <p className="mt-1 text-black">{viewing.address}</p>
               </div>
               <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-                <span className="text-xs uppercase tracking-[0.25em] text-black">Status</span>
+                <span className="text-xs uppercase tracking-[0.25em] text-black">
+                  Status
+                </span>
                 {viewing.active ? (
                   <span className="inline-flex items-center gap-2 text-sm font-medium text-black">
                     <CheckCircle2 className="h-4 w-4" /> Active
@@ -471,38 +568,53 @@ export default function SitesPage() {
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
         <DialogContent className="max-w-lg border border-white/10 bg-gradient-to-br from-[#0b1e3e] via-[#102c57] to-[#040b1d] text-slate-100">
           <DialogHeader>
-            <DialogTitle className="text-lg font-semibold text-white">Edit site</DialogTitle>
+            <DialogTitle className="text-lg font-semibold text-white">
+              Edit site
+            </DialogTitle>
           </DialogHeader>
           {editing && (
             <div className="space-y-4">
               <div>
-                <Label htmlFor="site_name" className="text-xs uppercase tracking-[0.25em] text-black">
+                <Label
+                  htmlFor="site_name"
+                  className="text-xs uppercase tracking-[0.25em] text-black"
+                >
                   Name (Site name)
                 </Label>
                 <Input
                   id="site_name"
                   value={editing.site_name}
                   onChange={(e) =>
-                    setEditing((s) => (s ? { ...s, site_name: e.target.value } : s))
+                    setEditing((s) =>
+                      s ? { ...s, site_name: e.target.value } : s,
+                    )
                   }
                   className="mt-2 border-white/20 bg-white/10 text-white placeholder:text-slate-200/60 focus-visible:ring-sky-400"
                 />
               </div>
               <div>
-                <Label htmlFor="district" className="text-xs uppercase tracking-[0.25em] text-black">
+                <Label
+                  htmlFor="district"
+                  className="text-xs uppercase tracking-[0.25em] text-black"
+                >
                   District
                 </Label>
                 <Input
                   id="district"
                   value={editing.district}
                   onChange={(e) =>
-                    setEditing((s) => (s ? { ...s, district: e.target.value } : s))
+                    setEditing((s) =>
+                      s ? { ...s, district: e.target.value } : s,
+                    )
                   }
                   className="mt-2 border-white/20 bg-white/10 text-white placeholder:text-slate-200/60 focus-visible:ring-sky-400"
                 />
               </div>
               <div>
-                <Label htmlFor="city" className="text-xs uppercase tracking-[0.25em] text-black">
+                <Label
+                  htmlFor="city"
+                  className="text-xs uppercase tracking-[0.25em] text-black"
+                >
                   City
                 </Label>
                 <Input
@@ -515,14 +627,19 @@ export default function SitesPage() {
                 />
               </div>
               <div>
-                <Label htmlFor="cow_status" className="text-xs uppercase tracking-[0.25em] text-black">
+                <Label
+                  htmlFor="cow_status"
+                  className="text-xs uppercase tracking-[0.25em] text-black"
+                >
                   COW status
                 </Label>
                 <Input
                   id="cow_status"
                   value={editing.cow_status}
                   onChange={(e) =>
-                    setEditing((s) => (s ? { ...s, cow_status: e.target.value } : s))
+                    setEditing((s) =>
+                      s ? { ...s, cow_status: e.target.value } : s,
+                    )
                   }
                   className="mt-2 border-white/20 bg-white/10 text-white placeholder:text-slate-200/60 focus-visible:ring-sky-400"
                 />
