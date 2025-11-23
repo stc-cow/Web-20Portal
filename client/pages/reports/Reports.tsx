@@ -292,63 +292,63 @@ export default function ReportsPage() {
         </div>
       }
     >
-      <Card className="rounded-3xl border border-white/10 bg-white/5 text-slate-100 shadow-xl backdrop-blur">
+      <Card className="rounded-3xl border border-slate-200 bg-white text-slate-900 shadow-md">
         <CardContent className="p-6">
-          <div className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-200/70">
+          <div className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-600">
             Fuel supplier invoice
           </div>
           <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-4">
             <div>
-              <div className="text-xs uppercase tracking-[0.2em] text-slate-200/60">
+              <div className="text-xs uppercase tracking-[0.2em] text-slate-700">
                 From date
               </div>
               <Input
                 type="date"
                 value={fromDate}
                 onChange={(e) => setFromDate(e.target.value)}
-                className="mt-2 border-white/20 bg-white/10 text-white focus-visible:ring-sky-400"
+                className="mt-2 border-slate-300 bg-slate-50 text-slate-900 focus-visible:ring-sky-500"
               />
             </div>
             <div>
-              <div className="text-xs uppercase tracking-[0.2em] text-slate-200/60">
+              <div className="text-xs uppercase tracking-[0.2em] text-slate-700">
                 To date
               </div>
               <Input
                 type="date"
                 value={toDate}
                 onChange={(e) => setToDate(e.target.value)}
-                className="mt-2 border-white/20 bg-white/10 text-white focus-visible:ring-sky-400"
+                className="mt-2 border-slate-300 bg-slate-50 text-slate-900 focus-visible:ring-sky-500"
               />
             </div>
             <div>
-              <div className="text-xs uppercase tracking-[0.2em] text-slate-200/60">
+              <div className="text-xs uppercase tracking-[0.2em] text-slate-700">
                 Site
               </div>
               <Input
                 value={siteQuery}
                 onChange={(e) => setSiteQuery(e.target.value)}
                 placeholder="Filter by site name"
-                className="mt-2 border-white/20 bg-white/10 text-white placeholder:text-slate-200/60 focus-visible:ring-sky-400"
+                className="mt-2 border-slate-300 bg-slate-50 text-slate-900 placeholder:text-slate-500 focus-visible:ring-sky-500"
               />
             </div>
             <div>
-              <div className="text-xs uppercase tracking-[0.2em] text-slate-200/60">
+              <div className="text-xs uppercase tracking-[0.2em] text-slate-700">
                 Region/Zone
               </div>
               <Input
                 value={region}
                 onChange={(e) => setRegion(e.target.value)}
                 placeholder="e.g. East"
-                className="mt-2 border-white/20 bg-white/10 text-white placeholder:text-slate-200/60 focus-visible:ring-sky-400"
+                className="mt-2 border-slate-300 bg-slate-50 text-slate-900 placeholder:text-slate-500 focus-visible:ring-sky-500"
               />
             </div>
           </div>
 
-          <div className="mt-6 overflow-x-auto rounded-2xl border border-white/10 bg-white/5">
+          <div className="mt-6 overflow-x-auto rounded-2xl border border-slate-200 bg-slate-50">
             <Table>
               <TableHeader>
-                <TableRow className="bg-white/[0.08] text-xs uppercase tracking-[0.2em] text-slate-100">
-                  <TableHead className="border-none text-slate-100">
+                <TableRow className="bg-slate-100 text-xs uppercase tracking-[0.2em] text-slate-900">
+                  <TableHead className="border-none text-slate-900">
                     Site Name
                   </TableHead>
                   <TableHead className="border-none text-slate-100">
