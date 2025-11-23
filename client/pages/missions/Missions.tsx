@@ -389,9 +389,18 @@ export default function MissionsPage() {
       required_liters: r.quantityAddedLastTask || r.filledLiters || null,
       notes: r.notes || null,
     }));
-    const { error } = await supabase.from('driver_tasks').insert(payload);
+    const response = await fetch('/api/db/query', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        table: 'driver_tasks',
+        operation: 'insert',
+        data: payload,
+      }),
+    });
+    const { error } = await response.json();
     if (error) {
-      toast({ title: 'Sync failed', description: error.message });
+      toast({ title: 'Sync failed', description: error });
       return;
     }
     try {
