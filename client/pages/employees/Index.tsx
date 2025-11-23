@@ -38,17 +38,17 @@ export default function EmployeesIndexPage() {
           }].map((item) => (
             <GlassCard
               key={item.label}
-              className="flex items-start gap-4 border-white/10 bg-white/[0.07] p-5"
+              className="flex items-start gap-4 border-slate-200 bg-white p-5"
             >
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-sky-100 text-sky-600">
                 <item.icon className="h-5 w-5" />
               </span>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-200/70">
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-600">
                   {item.label}
                 </p>
-                <p className="mt-1 text-2xl font-semibold text-white">{item.value}</p>
-                <p className="mt-2 text-xs text-slate-200/70">{item.description}</p>
+                <p className="mt-1 text-2xl font-semibold text-slate-900">{item.value}</p>
+                <p className="mt-2 text-xs text-slate-700">{item.description}</p>
               </div>
             </GlassCard>
           ))}
@@ -57,52 +57,52 @@ export default function EmployeesIndexPage() {
     >
       <div className="grid gap-6 lg:grid-cols-2">
         <Link to="/employees/drivers" className="group block">
-          <GlassCard className="h-full border-white/10 bg-gradient-to-br from-sky-500/10 via-sky-500/5 to-transparent p-7 transition hover:border-sky-400/40 hover:bg-sky-500/15">
+          <GlassCard className="h-full border-sky-200 bg-gradient-to-br from-sky-50 via-white to-white p-7 transition hover:border-sky-300 hover:bg-sky-50">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-sky-100/80">
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-sky-700">
                   {t('drivers')}
                 </p>
-                <h2 className="mt-2 text-2xl font-semibold text-white">
+                <h2 className="mt-2 text-2xl font-semibold text-slate-900">
                   Fleet drivers roster
                 </h2>
               </div>
-              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-sky-500/20 text-sky-100">
+              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-sky-200 text-sky-600">
                 <Truck className="h-6 w-6" />
               </span>
             </div>
-            <p className="mt-4 text-sm text-slate-200/70">
+            <p className="mt-4 text-sm text-slate-700">
               Review certifications, zone assignments and activation status
               for every field driver.
             </p>
-            <div className="mt-6 flex items-center justify-between text-xs uppercase tracking-[0.2em] text-slate-200/60">
+            <div className="mt-6 flex items-center justify-between text-xs uppercase tracking-[0.2em] text-slate-600">
               <span>View roster</span>
-              <span className="transition group-hover:text-white">→</span>
+              <span className="transition group-hover:text-slate-900">→</span>
             </div>
           </GlassCard>
         </Link>
         <Link to="/employees/technicians" className="group block">
-          <GlassCard className="h-full border-white/10 bg-gradient-to-br from-emerald-500/10 via-emerald-500/5 to-transparent p-7 transition hover:border-emerald-400/40 hover:bg-emerald-500/10">
+          <GlassCard className="h-full border-emerald-200 bg-gradient-to-br from-emerald-50 via-white to-white p-7 transition hover:border-emerald-300 hover:bg-emerald-50">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-emerald-100/80">
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-emerald-700">
                   {t('technicians', { defaultValue: 'Technicians' })}
                 </p>
-                <h2 className="mt-2 text-2xl font-semibold text-white">
+                <h2 className="mt-2 text-2xl font-semibold text-slate-900">
                   Maintenance coverage
                 </h2>
               </div>
-              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-100">
+              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-200 text-emerald-600">
                 <ShieldCheck className="h-6 w-6" />
               </span>
             </div>
-            <p className="mt-4 text-sm text-slate-200/70">
+            <p className="mt-4 text-sm text-slate-700">
               Track technician duty rotations, equipment readiness and
               certification expirations.
             </p>
-            <div className="mt-6 flex items-center justify-between text-xs uppercase tracking-[0.2em] text-slate-200/60">
-              <span>Manage specialists</span>
-              <span className="transition group-hover:text-white">→</span>
+            <div className="mt-6 flex items-center justify-between text-xs uppercase tracking-[0.2em] text-slate-600">
+              <span>{t('manageRoster', { defaultValue: 'Manage roster' })}</span>
+              <span className="transition group-hover:text-slate-900">→</span>
             </div>
           </GlassCard>
         </Link>
