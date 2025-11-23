@@ -46,19 +46,19 @@ export default function SettingsIndexPage() {
           ].map((metric) => (
             <GlassCard
               key={metric.label}
-              className="flex items-start gap-4 border-white/10 bg-white/[0.07] p-5"
+              className="flex items-start gap-4 border-slate-200 bg-white p-5"
             >
-              <span className="mt-1 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white">
+              <span className="mt-1 flex h-10 w-10 items-center justify-center rounded-full bg-sky-100 text-sky-600">
                 <metric.icon className="h-5 w-5" />
               </span>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-200/70">
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-600">
                   {metric.label}
                 </p>
-                <p className="mt-1 text-2xl font-semibold text-white">
+                <p className="mt-1 text-2xl font-semibold text-slate-900">
                   {metric.value}
                 </p>
-                <p className="mt-2 text-xs text-slate-200/70">
+                <p className="mt-2 text-xs text-slate-700">
                   {metric.description}
                 </p>
               </div>
