@@ -65,25 +65,38 @@ export default function ReportsPage() {
     [lines],
   );
 
+  const loadSettings = async () => {
+    const { data } = await supabase
+      .from('settings')
+      .select('*')
+      .limit(1)
+      .maybeSingle();
+    if (data) {
+      setSettings((s) => ({
+        id: Number(data.id ?? 1),
+        fuel_unit_price: Number(data.fuel_unit_price ?? s.fuel_unit_price),
+        vat_rate: Number(data.vat_rate ?? s.vat_rate),
+        supplier_name: data.supplier_name ?? s.supplier_name,
+        supplier_address: data.supplier_address ?? s.supplier_address,
+        invoice_prefix: data.invoice_prefix ?? s.invoice_prefix,
+        invoice_sequence: Number(data.invoice_sequence ?? s.invoice_sequence),
+      }));
+    }
+  };
+
   useEffect(() => {
-    (async () => {
-      const { data } = await supabase
-        .from('settings')
-        .select('*')
-        .limit(1)
-        .maybeSingle();
-      if (data) {
-        setSettings((s) => ({
-          id: Number(data.id ?? 1),
-          fuel_unit_price: Number(data.fuel_unit_price ?? s.fuel_unit_price),
-          vat_rate: Number(data.vat_rate ?? s.vat_rate),
-          supplier_name: data.supplier_name ?? s.supplier_name,
-          supplier_address: data.supplier_address ?? s.supplier_address,
-          invoice_prefix: data.invoice_prefix ?? s.invoice_prefix,
-          invoice_sequence: Number(data.invoice_sequence ?? s.invoice_sequence),
-        }));
+    loadSettings();
+  }, []);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        loadSettings();
       }
-    })();
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, []);
 
   const load = async () => {
