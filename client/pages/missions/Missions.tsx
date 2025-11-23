@@ -314,18 +314,23 @@ export default function MissionsPage() {
     if (status === 'Task approved') {
       const t = rows.find((r) => r.id === id);
       if (t) {
-        await supabase.from('approved_reports').upsert(
-          {
-            task_id: id,
-            mission_id: t.missionId,
-            site_name: t.siteName,
-            driver_name: t.driverName,
-            quantity_added: t.quantityAddedLastTask || t.filledLiters || null,
-            notes: t.notes || null,
-            status: 'approved',
-          },
-          { onConflict: 'task_id' },
-        );
+        await fetch('/api/db/query', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            table: 'approved_reports',
+            operation: 'insert',
+            data: {
+              task_id: id,
+              mission_id: t.missionId,
+              site_name: t.siteName,
+              driver_name: t.driverName,
+              quantity_added: t.quantityAddedLastTask || t.filledLiters || null,
+              notes: t.notes || null,
+              status: 'approved',
+            },
+          }),
+        });
       }
       setRows((arr) => arr.filter((r) => r.id !== id));
       toast({ title: 'Approved and moved to Reports' });
