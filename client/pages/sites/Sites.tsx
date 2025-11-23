@@ -295,28 +295,28 @@ export default function SitesPage() {
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="bg-white/[0.08] text-xs uppercase tracking-[0.2em] text-slate-100">
-                  {cols.index && <TableHead className="border-none text-slate-100">#</TableHead>}
-                  {cols.name && <TableHead className="border-none text-slate-100">Name</TableHead>}
-                  {cols.generator && <TableHead className="border-none text-slate-100">Generator</TableHead>}
+                <TableRow className="bg-white/[0.08] text-xs uppercase tracking-[0.2em] text-black">
+                  {cols.index && <TableHead className="border-none text-black">#</TableHead>}
+                  {cols.name && <TableHead className="border-none text-black">Name</TableHead>}
+                  {cols.generator && <TableHead className="border-none text-black">Generator</TableHead>}
                   {cols.currentLiters && (
-                    <TableHead className="border-none text-slate-100">
+                    <TableHead className="border-none text-black">
                       Current liters in tank
                     </TableHead>
                   )}
                   {cols.dailyVirtual && (
-                    <TableHead className="border-none text-slate-100">
+                    <TableHead className="border-none text-black">
                       Daily virtual consumption
                     </TableHead>
                   )}
-                  {cols.rate && <TableHead className="border-none text-slate-100">Rate</TableHead>}
-                  {cols.driver && <TableHead className="border-none text-slate-100">Driver</TableHead>}
-                  {cols.project && <TableHead className="border-none text-slate-100">Project</TableHead>}
-                  {cols.city && <TableHead className="border-none text-slate-100">City</TableHead>}
-                  {cols.address && <TableHead className="border-none text-slate-100">Address</TableHead>}
-                  {cols.active && <TableHead className="border-none text-slate-100">Status</TableHead>}
+                  {cols.rate && <TableHead className="border-none text-black">Rate</TableHead>}
+                  {cols.driver && <TableHead className="border-none text-black">Driver</TableHead>}
+                  {cols.project && <TableHead className="border-none text-black">Project</TableHead>}
+                  {cols.city && <TableHead className="border-none text-black">City</TableHead>}
+                  {cols.address && <TableHead className="border-none text-black">Address</TableHead>}
+                  {cols.active && <TableHead className="border-none text-black">Status</TableHead>}
                   {cols.settings && (
-                    <TableHead className="border-none text-right text-slate-100">
+                    <TableHead className="border-none text-right text-black">
                       Actions
                     </TableHead>
                   )}
@@ -326,22 +326,22 @@ export default function SitesPage() {
                 {current.map((r, idx) => (
                   <TableRow
                     key={r.id}
-                    className="border-b border-white/5 bg-white/[0.02] text-sm text-slate-100 transition hover:bg-white/[0.08]"
+                    className="border-b border-white/5 bg-white/[0.02] text-sm text-black transition hover:bg-white/[0.08]"
                   >
                     {cols.index && (
-                      <TableCell className="font-semibold text-white">
+                      <TableCell className="font-semibold text-black">
                         {(page - 1) * pageSize + idx + 1}
                       </TableCell>
                     )}
-                    {cols.name && <TableCell className="font-semibold text-white">{r.name}</TableCell>}
-                    {cols.generator && <TableCell className="text-slate-200/80">{r.generator || '—'}</TableCell>}
-                    {cols.currentLiters && <TableCell className="text-slate-200/80">{r.currentLiters || '—'}</TableCell>}
-                    {cols.dailyVirtual && <TableCell className="text-slate-200/80">{r.dailyVirtual || '—'}</TableCell>}
-                    {cols.rate && <TableCell className="text-slate-200/80">{r.rate || '—'}</TableCell>}
-                    {cols.driver && <TableCell className="text-slate-200/80">{r.driver || '—'}</TableCell>}
-                    {cols.project && <TableCell className="text-slate-200/80">{r.project || '—'}</TableCell>}
-                    {cols.city && <TableCell className="text-slate-200/80">{r.city || '—'}</TableCell>}
-                    {cols.address && <TableCell className="text-slate-200/80">{r.address || '—'}</TableCell>}
+                    {cols.name && <TableCell className="font-semibold text-black">{r.name}</TableCell>}
+                    {cols.generator && <TableCell className="text-black">{r.generator || '—'}</TableCell>}
+                    {cols.currentLiters && <TableCell className="text-black">{r.currentLiters || '—'}</TableCell>}
+                    {cols.dailyVirtual && <TableCell className="text-black">{r.dailyVirtual || '—'}</TableCell>}
+                    {cols.rate && <TableCell className="text-black">{r.rate || '—'}</TableCell>}
+                    {cols.driver && <TableCell className="text-black">{r.driver || '—'}</TableCell>}
+                    {cols.project && <TableCell className="text-black">{r.project || '—'}</TableCell>}
+                    {cols.city && <TableCell className="text-black">{r.city || '—'}</TableCell>}
+                    {cols.address && <TableCell className="text-black">{r.address || '—'}</TableCell>}
                   {cols.active && (
                     <TableCell>
                       <span
@@ -358,7 +358,7 @@ export default function SitesPage() {
                         <button
                           type="button"
                           onClick={() => openView(r)}
-                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-100 transition hover:border-white/30 hover:bg-white/15"
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-black transition hover:border-white/30 hover:bg-white/15"
                           aria-label="View site"
                         >
                           <Eye className="h-4 w-4" />
@@ -366,7 +366,7 @@ export default function SitesPage() {
                         <button
                           type="button"
                           onClick={() => openEdit(r)}
-                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-100 transition hover:border-white/30 hover:bg-white/15"
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-black transition hover:border-white/30 hover:bg-white/15"
                           aria-label="Edit site"
                         >
                           <Pencil className="h-4 w-4" />
@@ -402,8 +402,8 @@ export default function SitesPage() {
 
           <div className="flex flex-col gap-3 border-t border-white/10 px-6 py-4 text-xs text-slate-200/70 md:flex-row md:items-center md:justify-between">
             <div>
-              Showing <span className="font-semibold text-white">{current.length}</span> of{' '}
-              <span className="font-semibold text-white">{filtered.length}</span> entries
+              Showing <span className="font-semibold text-black">{current.length}</span> of{' '}
+              <span className="font-semibold text-black">{filtered.length}</span> entries
             </div>
             <div className="flex items-center gap-2">
               <Button
