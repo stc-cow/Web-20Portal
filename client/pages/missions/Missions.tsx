@@ -239,11 +239,19 @@ export default function MissionsPage() {
         localStorage.getItem('auth.username') ||
         localStorage.getItem('remember.username') ||
         'Admin';
-      await supabase.from('driver_notifications').insert({
-        title: 'New mission assigned',
-        message: `A new mission has been assigned to you for site: ${addForm.siteName}`,
-        driver_name: addForm.driverName || null,
-        sent_by: sentBy,
+      await fetch('/api/db/query', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          table: 'driver_notifications',
+          operation: 'insert',
+          data: {
+            title: 'New mission assigned',
+            message: `A new mission has been assigned to you for site: ${addForm.siteName}`,
+            driver_name: addForm.driverName || null,
+            sent_by: sentBy,
+          },
+        }),
       });
     } catch {}
     setAddForm(emptyForm);
