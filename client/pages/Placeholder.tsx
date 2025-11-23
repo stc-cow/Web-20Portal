@@ -38,10 +38,10 @@ export default function Placeholder() {
       breadcrumbs={[{ label: 'Work-in-progress' }, { label: title || 'Placeholder' }]}
     >
       <div className="flex min-h-[50vh] items-center justify-center">
-        <GlassCard className="max-w-lg border-white/10 bg-white/5 p-10 text-center text-slate-100">
-          <h2 className="text-2xl font-semibold text-white">{title}</h2>
-          <p className="mt-4 text-sm text-slate-200/70">
-            This page is ready to be filled. Tell me what to add and I’ll build it.
+        <GlassCard className="max-w-lg border-slate-200 bg-white p-10 text-center text-slate-900">
+          <h2 className="text-2xl font-semibold text-slate-900">{title}</h2>
+          <p className="mt-4 text-sm text-slate-700">
+            This page is ready to be filled. Tell me what to add and I'll build it.
           </p>
         </GlassCard>
       </div>
