@@ -415,7 +415,15 @@ export default function MissionsPage() {
         sent_by: sentBy,
       }));
       if (notices.length > 0)
-        await supabase.from('driver_notifications').insert(notices);
+        await fetch('/api/db/query', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            table: 'driver_notifications',
+            operation: 'insert',
+            data: notices,
+          }),
+        });
     } catch {}
     toast({ title: 'Missions synced to Supabase' });
   };
