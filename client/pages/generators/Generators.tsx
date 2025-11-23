@@ -213,35 +213,35 @@ export default function GeneratorsPage() {
           }].map((metric) => (
             <GlassCard
               key={metric.label}
-              className="border-white/10 bg-white/[0.07] p-5"
+              className="border-slate-200 bg-white p-5"
             >
-              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-200/70">
+              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-600">
                 {metric.label}
               </p>
-              <p className="mt-1 text-2xl font-semibold text-white">{metric.value}</p>
-              <p className="mt-2 text-xs text-slate-200/70">{metric.description}</p>
+              <p className="mt-1 text-2xl font-semibold text-slate-900">{metric.value}</p>
+              <p className="mt-2 text-xs text-slate-700">{metric.description}</p>
             </GlassCard>
           ))}
         </div>
       }
     >
       <div className="space-y-6">
-        <GlassCard className="border-white/10 bg-white/10 p-6">
+        <GlassCard className="border-slate-200 bg-white p-6">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div className="text-sm text-slate-200/80">
+            <div className="text-sm text-slate-700">
               Fine-tune generator visibility, export manifests and print onsite runbooks.
             </div>
             <div className="flex flex-wrap items-center gap-2">
               <Button
                 variant="ghost"
-                className="rounded-full border border-white/10 bg-white/5 text-white hover:border-white/30 hover:bg-white/10"
+                className="rounded-full border border-slate-300 bg-slate-50 text-slate-900 hover:border-slate-400 hover:bg-slate-100"
                 onClick={() => window.print()}
               >
                 <Printer className="mr-2 h-4 w-4" /> Print summary
               </Button>
               <Button
                 variant="ghost"
-                className="rounded-full border border-white/10 bg-white/5 text-white hover:border-white/30 hover:bg-white/10"
+                className="rounded-full border border-slate-300 bg-slate-50 text-slate-900 hover:border-slate-400 hover:bg-slate-100"
                 onClick={exportCsv}
               >
                 <Download className="mr-2 h-4 w-4" /> Export CSV
@@ -249,10 +249,10 @@ export default function GeneratorsPage() {
               <Button
                 variant="ghost"
                 className={cn(
-                  'rounded-full border border-white/10 px-4 text-white transition hover:border-white/30 hover:bg-white/10',
+                  'rounded-full border border-slate-300 px-4 text-slate-900 transition hover:border-slate-400 hover:bg-slate-100',
                   onlyWithoutSite
                     ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/30 hover:bg-emerald-400'
-                    : 'bg-white/5',
+                    : 'bg-slate-50',
                 )}
                 onClick={() => setOnlyWithoutSite((v) => !v)}
               >
@@ -260,13 +260,13 @@ export default function GeneratorsPage() {
               </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button className="rounded-full border border-white/10 bg-white/5 px-4 text-white hover:border-white/30 hover:bg-white/10">
+                  <Button className="rounded-full border border-slate-300 bg-slate-50 px-4 text-slate-900 hover:border-slate-400 hover:bg-slate-100">
                     <Columns2 className="mr-2 h-4 w-4" /> Columns
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
                   align="end"
-                  className="border border-white/10 bg-[#0b1e3e] text-slate-100"
+                  className="border border-slate-300 bg-white text-slate-900"
                 >
                   {allColumns.map((c) => (
                     <DropdownMenuCheckboxItem
@@ -285,10 +285,10 @@ export default function GeneratorsPage() {
           </div>
         </GlassCard>
 
-        <GlassCard className="border-white/10 bg-white/5 p-0">
+        <GlassCard className="border-slate-200 bg-white p-0">
           <div className="space-y-4 p-6">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <div className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-200/70">
+              <div className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-600">
                 Fleet roster
               </div>
               <div className="flex flex-wrap items-center gap-3">
@@ -296,16 +296,16 @@ export default function GeneratorsPage() {
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Search generators"
-                  className="h-10 min-w-[200px] border-white/20 bg-white/10 text-white placeholder:text-slate-200/60 focus-visible:ring-sky-400"
+                  className="h-10 min-w-[200px] border-slate-300 bg-slate-50 text-slate-900 placeholder:text-slate-500 focus-visible:ring-sky-500"
                 />
                 <Select
                   value={String(pageSize)}
                   onValueChange={(value) => setPageSize(Number(value))}
                 >
-                  <SelectTrigger className="h-10 w-[130px] border-white/20 bg-white/10 text-white focus:ring-sky-400">
+                  <SelectTrigger className="h-10 w-[130px] border-slate-300 bg-slate-50 text-slate-900 focus:ring-sky-500">
                     <SelectValue placeholder="10" />
                   </SelectTrigger>
-                  <SelectContent className="border border-white/10 bg-[#0b1e3e] text-slate-100">
+                  <SelectContent className="border border-slate-300 bg-white text-slate-900">
                     {[10, 25, 50].map((size) => (
                       <SelectItem key={size} value={String(size)}>
                         Show {size}
@@ -317,12 +317,12 @@ export default function GeneratorsPage() {
             </div>
 
             <div className="overflow-x-auto">
-              <Table className="min-w-full text-slate-100">
+              <Table className="min-w-full text-slate-900">
                 <TableHeader>
-                  <TableRow className="bg-white/[0.08] text-xs uppercase tracking-[0.2em] text-slate-100">
+                  <TableRow className="bg-slate-100 text-xs uppercase tracking-[0.2em] text-slate-900">
                     {allColumns.map((column) =>
                       cols[column.key] ? (
-                        <TableHead key={column.key} className="border-none text-slate-100">
+                        <TableHead key={column.key} className="border-none text-slate-900">
                           {column.label}
                         </TableHead>
                       ) : null,
@@ -334,7 +334,7 @@ export default function GeneratorsPage() {
                     <TableRow>
                       <TableCell
                         colSpan={allColumns.length}
-                        className="py-8 text-center text-sm text-slate-200/70"
+                        className="py-8 text-center text-sm text-slate-500"
                       >
                         No generators match your filters.
                       </TableCell>
@@ -343,25 +343,25 @@ export default function GeneratorsPage() {
                   {current.map((row) => (
                     <TableRow
                       key={row.id}
-                      className="border-white/5 bg-white/[0.02] text-sm text-slate-100 transition hover:bg-white/[0.08]"
+                      className="border-slate-200 bg-white text-sm text-slate-900 transition hover:bg-slate-50"
                     >
                       {cols.name && (
-                        <TableCell className="font-semibold text-white">
+                        <TableCell className="font-semibold text-slate-900">
                           {row.name}
                         </TableCell>
                       )}
                       {cols.site && (
-                        <TableCell className="text-slate-200/80">
+                        <TableCell className="text-slate-700">
                           {row.site || '—'}
                         </TableCell>
                       )}
                       {cols.dailyVirtual && (
-                        <TableCell className="text-slate-200/80">
+                        <TableCell className="text-slate-700">
                           {row.dailyVirtual.toLocaleString()}
                         </TableCell>
                       )}
                       {cols.lastAvg && (
-                        <TableCell className="text-slate-200/80">
+                        <TableCell className="text-slate-700">
                           {row.lastAvg.toLocaleString()}
                         </TableCell>
                       )}
@@ -396,14 +396,14 @@ export default function GeneratorsPage() {
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="text-slate-200 hover:text-white"
+                            className="text-slate-600 hover:text-slate-900"
                           >
                             <Eye className="h-4 w-4" />
                           </Button>
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="text-slate-200 hover:text-white"
+                            className="text-slate-600 hover:text-slate-900"
                           >
                             <Pencil className="h-4 w-4" />
                           </Button>
@@ -423,25 +423,25 @@ export default function GeneratorsPage() {
               </Table>
             </div>
 
-            <div className="flex flex-col gap-3 border-t border-white/10 pt-4 text-sm text-slate-200/70 md:flex-row md:items-center md:justify-between">
+            <div className="flex flex-col gap-3 border-t border-slate-200 pt-4 text-sm text-slate-700 md:flex-row md:items-center md:justify-between">
               <div>
                 Showing {current.length} of {filtered.length} generators
               </div>
               <div className="flex items-center gap-2">
                 <Button
                   variant="ghost"
-                  className="rounded-full border border-white/10 bg-white/5 px-4 text-white hover:border-white/30 hover:bg-white/10"
+                  className="rounded-full border border-slate-300 bg-slate-50 px-4 text-slate-900 hover:border-slate-400 hover:bg-slate-100"
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page === 1}
                 >
                   Previous
                 </Button>
-                <span className="text-xs uppercase tracking-[0.3em] text-slate-200/60">
+                <span className="text-xs uppercase tracking-[0.3em] text-slate-600">
                   Page {page} of {totalPages}
                 </span>
                 <Button
                   variant="ghost"
-                  className="rounded-full border border-white/10 bg-white/5 px-4 text-white hover:border-white/30 hover:bg-white/10"
+                  className="rounded-full border border-slate-300 bg-slate-50 px-4 text-slate-900 hover:border-slate-400 hover:bg-slate-100"
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                   disabled={page === totalPages}
                 >
