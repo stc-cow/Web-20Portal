@@ -119,13 +119,13 @@ export default function GeneralSettingsPage() {
           }].map((metric) => (
             <GlassCard
               key={metric.label}
-              className="border-white/10 bg-white/[0.07] p-5"
+              className="border-slate-200 bg-white p-5"
             >
-              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-200/70">
+              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-600">
                 {metric.label}
               </p>
-              <p className="mt-1 text-2xl font-semibold text-white">{metric.value}</p>
-              <p className="mt-2 text-xs text-slate-200/70">{metric.description}</p>
+              <p className="mt-1 text-2xl font-semibold text-slate-900">{metric.value}</p>
+              <p className="mt-2 text-xs text-slate-700">{metric.description}</p>
             </GlassCard>
           ))}
         </div>
@@ -133,15 +133,15 @@ export default function GeneralSettingsPage() {
     >
       <div className="space-y-6">
         {!isAdmin && (
-          <GlassCard className="border-white/10 bg-amber-500/10 p-5 text-sm text-amber-100">
+          <GlassCard className="border-amber-300 bg-amber-50 p-5 text-sm text-amber-900">
             Only administrators can edit settings. Values are read-only.
           </GlassCard>
         )}
 
-        <GlassCard className="border-white/10 bg-white/5 p-6">
+        <GlassCard className="border-slate-200 bg-white p-6">
           <div className="grid gap-6 md:grid-cols-2">
             <div>
-              <div className="text-xs uppercase tracking-[0.2em] text-slate-200/60">
+              <div className="text-xs uppercase tracking-[0.2em] text-slate-700">
                 Fuel unit price
               </div>
               <Input
@@ -155,11 +155,11 @@ export default function GeneralSettingsPage() {
                   }))
                 }
                 disabled={!isAdmin}
-                className="mt-2 border-white/20 bg-white/10 text-white focus-visible:ring-sky-400"
+                className="mt-2 border-slate-300 bg-slate-50 text-slate-900 focus-visible:ring-sky-500 disabled:bg-slate-100 disabled:text-slate-500"
               />
             </div>
             <div>
-              <div className="text-xs uppercase tracking-[0.2em] text-slate-200/60">
+              <div className="text-xs uppercase tracking-[0.2em] text-slate-700">
                 VAT rate
               </div>
               <Input
@@ -170,11 +170,11 @@ export default function GeneralSettingsPage() {
                   setForm((f) => ({ ...f, vat_rate: Number(e.target.value) }))
                 }
                 disabled={!isAdmin}
-                className="mt-2 border-white/20 bg-white/10 text-white focus-visible:ring-sky-400"
+                className="mt-2 border-slate-300 bg-slate-50 text-slate-900 focus-visible:ring-sky-500 disabled:bg-slate-100 disabled:text-slate-500"
               />
             </div>
             <div>
-              <div className="text-xs uppercase tracking-[0.2em] text-slate-200/60">
+              <div className="text-xs uppercase tracking-[0.2em] text-slate-700">
                 Supplier name
               </div>
               <Input
@@ -183,11 +183,11 @@ export default function GeneralSettingsPage() {
                   setForm((f) => ({ ...f, supplier_name: e.target.value }))
                 }
                 disabled={!isAdmin}
-                className="mt-2 border-white/20 bg-white/10 text-white focus-visible:ring-sky-400"
+                className="mt-2 border-slate-300 bg-slate-50 text-slate-900 focus-visible:ring-sky-500 disabled:bg-slate-100 disabled:text-slate-500"
               />
             </div>
             <div>
-              <div className="text-xs uppercase tracking-[0.2em] text-slate-200/60">
+              <div className="text-xs uppercase tracking-[0.2em] text-slate-700">
                 Supplier address
               </div>
               <Input
@@ -196,11 +196,11 @@ export default function GeneralSettingsPage() {
                   setForm((f) => ({ ...f, supplier_address: e.target.value }))
                 }
                 disabled={!isAdmin}
-                className="mt-2 border-white/20 bg-white/10 text-white focus-visible:ring-sky-400"
+                className="mt-2 border-slate-300 bg-slate-50 text-slate-900 focus-visible:ring-sky-500 disabled:bg-slate-100 disabled:text-slate-500"
               />
             </div>
             <div>
-              <div className="text-xs uppercase tracking-[0.2em] text-slate-200/60">
+              <div className="text-xs uppercase tracking-[0.2em] text-slate-700">
                 Invoice prefix
               </div>
               <Input
@@ -209,11 +209,11 @@ export default function GeneralSettingsPage() {
                   setForm((f) => ({ ...f, invoice_prefix: e.target.value }))
                 }
                 disabled={!isAdmin}
-                className="mt-2 border-white/20 bg-white/10 text-white focus-visible:ring-sky-400"
+                className="mt-2 border-slate-300 bg-slate-50 text-slate-900 focus-visible:ring-sky-500 disabled:bg-slate-100 disabled:text-slate-500"
               />
             </div>
             <div>
-              <div className="text-xs uppercase tracking-[0.2em] text-slate-200/60">
+              <div className="text-xs uppercase tracking-[0.2em] text-slate-700">
                 Invoice sequence
               </div>
               <Input
@@ -226,11 +226,11 @@ export default function GeneralSettingsPage() {
                   }))
                 }
                 disabled={!isAdmin}
-                className="mt-2 border-white/20 bg-white/10 text-white focus-visible:ring-sky-400"
+                className="mt-2 border-slate-300 bg-slate-50 text-slate-900 focus-visible:ring-sky-500 disabled:bg-slate-100 disabled:text-slate-500"
               />
             </div>
             <div className="md:col-span-2">
-              <div className="text-xs uppercase tracking-[0.2em] text-slate-200/60">
+              <div className="text-xs uppercase tracking-[0.2em] text-slate-700">
                 FCM server key
               </div>
               <Input
@@ -239,11 +239,11 @@ export default function GeneralSettingsPage() {
                   setForm((f) => ({ ...f, fcm_server_key: e.target.value }))
                 }
                 disabled={!isAdmin}
-                className="mt-2 border-white/20 bg-white/10 text-white focus-visible:ring-sky-400"
+                className="mt-2 border-slate-300 bg-slate-50 text-slate-900 focus-visible:ring-sky-500 disabled:bg-slate-100 disabled:text-slate-500"
               />
             </div>
             <div className="md:col-span-2">
-              <div className="text-xs uppercase tracking-[0.2em] text-slate-200/60">
+              <div className="text-xs uppercase tracking-[0.2em] text-slate-700">
                 FCM sender ID
               </div>
               <Input
@@ -252,7 +252,7 @@ export default function GeneralSettingsPage() {
                   setForm((f) => ({ ...f, fcm_sender_id: e.target.value }))
                 }
                 disabled={!isAdmin}
-                className="mt-2 border-white/20 bg-white/10 text-white focus-visible:ring-sky-400"
+                className="mt-2 border-slate-300 bg-slate-50 text-slate-900 focus-visible:ring-sky-500 disabled:bg-slate-100 disabled:text-slate-500"
               />
             </div>
           </div>
