@@ -351,19 +351,19 @@ export default function ReportsPage() {
                   <TableHead className="border-none text-slate-900">
                     Site Name
                   </TableHead>
-                  <TableHead className="border-none text-slate-100">
+                  <TableHead className="border-none text-slate-900">
                     Region
                   </TableHead>
-                  <TableHead className="border-none text-slate-100">
+                  <TableHead className="border-none text-slate-900">
                     Date
                   </TableHead>
-                  <TableHead className="border-none text-slate-100">
+                  <TableHead className="border-none text-slate-900">
                     Liters
                   </TableHead>
-                  <TableHead className="border-none text-slate-100">
+                  <TableHead className="border-none text-slate-900">
                     Unit Price
                   </TableHead>
-                  <TableHead className="border-none text-slate-100">
+                  <TableHead className="border-none text-slate-900">
                     Line Price
                   </TableHead>
                 </TableRow>
