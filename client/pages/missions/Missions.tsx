@@ -261,16 +261,19 @@ export default function MissionsPage() {
   const toggleExpand = async (r: Mission) => {
     setExpanded((e) => ({ ...e, [r.id]: !e[r.id] }));
     if (!expanded[r.id]) {
-      const { data } = await supabase
-        .from('driver_task_entries')
-        .select(
-          'liters, rate, station, receipt_number, photo_url, odometer, submitted_by, submitted_at',
-        )
-        .eq('task_id', r.id)
-        .order('submitted_at', { ascending: false })
-        .limit(1)
-        .maybeSingle();
-      setEntryByTask((m) => ({ ...m, [r.id]: data || null }));
+      const response = await fetch('/api/db/query', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          table: 'driver_task_entries',
+          operation: 'select',
+          select: 'liters, rate, station, receipt_number, photo_url, odometer, submitted_by, submitted_at',
+          filters: { task_id: r.id },
+          order: ['submitted_at', 'desc'],
+        }),
+      });
+      const { data } = await response.json();
+      setEntryByTask((m) => ({ ...m, [r.id]: data?.[0] || null }));
       try {
         const dir = `${(r.driverName || 'driver').replace(/\s+/g, '_')}/${r.id}`;
         const { data: files } = await (supabase.storage as any)
