@@ -1209,6 +1209,16 @@ export default function MissionsPage() {
                               {r.quantityAddedLastTask}
                             </div>
                           </div>
+                          {r.missionStatus === 'Task approved' && (
+                            <div className="md:col-span-3 rounded-lg border-2 border-amber-500 bg-amber-50 px-4 py-3">
+                              <div className="text-sm font-semibold text-amber-900">
+                                🔒 Mission Locked
+                              </div>
+                              <div className="text-xs text-amber-800 mt-1">
+                                This mission has been approved and is now locked for editing. No changes can be made.
+                              </div>
+                            </div>
+                          )}
                           <div className="md:col-span-3">
                             <div className="text-xs text-black">
                               Driver Entry
