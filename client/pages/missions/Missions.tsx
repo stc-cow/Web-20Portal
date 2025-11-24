@@ -1209,13 +1209,15 @@ export default function MissionsPage() {
                               {r.quantityAddedLastTask}
                             </div>
                           </div>
-                          {(r.missionStatus === 'Task approved' || r.missionStatus === 'approved') && (
+                          {(r.missionStatus === 'Task approved' ||
+                            r.missionStatus === 'approved') && (
                             <div className="md:col-span-3 rounded-lg border-2 border-amber-500 bg-amber-50 px-4 py-3">
                               <div className="text-sm font-semibold text-amber-900">
                                 🔒 Mission Locked
                               </div>
                               <div className="text-xs text-amber-800 mt-1">
-                                This mission has been approved and is now locked for editing. No changes can be made.
+                                This mission has been approved and is now locked
+                                for editing. No changes can be made.
                               </div>
                             </div>
                           )}
@@ -1300,7 +1302,10 @@ export default function MissionsPage() {
                                 type="number"
                                 className="mt-1"
                                 value={editDraft[r.id]?.added ?? 0}
-                                disabled={r.missionStatus === 'Task approved' || r.missionStatus === 'approved'}
+                                disabled={
+                                  r.missionStatus === 'Task approved' ||
+                                  r.missionStatus === 'approved'
+                                }
                                 onClick={(e) => e.stopPropagation()}
                                 onChange={(e) =>
                                   setEditDraft((d) => ({
@@ -1326,7 +1331,10 @@ export default function MissionsPage() {
                                 type="number"
                                 className="mt-1"
                                 value={editDraft[r.id]?.actual ?? 0}
-                                disabled={r.missionStatus === 'Task approved' || r.missionStatus === 'approved'}
+                                disabled={
+                                  r.missionStatus === 'Task approved' ||
+                                  r.missionStatus === 'approved'
+                                }
                                 onClick={(e) => e.stopPropagation()}
                                 onChange={(e) =>
                                   setEditDraft((d) => ({
@@ -1352,7 +1360,10 @@ export default function MissionsPage() {
                                 type="number"
                                 className="mt-1"
                                 value={editDraft[r.id]?.qtyLast ?? 0}
-                                disabled={r.missionStatus === 'Task approved' || r.missionStatus === 'approved'}
+                                disabled={
+                                  r.missionStatus === 'Task approved' ||
+                                  r.missionStatus === 'approved'
+                                }
                                 onClick={(e) => e.stopPropagation()}
                                 onChange={(e) =>
                                   setEditDraft((d) => ({
@@ -1375,7 +1386,10 @@ export default function MissionsPage() {
                               <Input
                                 className="mt-1"
                                 value={editDraft[r.id]?.notes ?? ''}
-                                disabled={r.missionStatus === 'Task approved' || r.missionStatus === 'approved'}
+                                disabled={
+                                  r.missionStatus === 'Task approved' ||
+                                  r.missionStatus === 'approved'
+                                }
                                 onClick={(e) => e.stopPropagation()}
                                 onChange={(e) =>
                                   setEditDraft((d) => ({
@@ -1398,7 +1412,10 @@ export default function MissionsPage() {
                           <div className="md:col-span-3 flex flex-wrap items-center justify-end gap-2">
                             <Button
                               className="bg-[#16A34A] hover:opacity-90"
-                              disabled={r.missionStatus === 'Task approved' || r.missionStatus === 'approved'}
+                              disabled={
+                                r.missionStatus === 'Task approved' ||
+                                r.missionStatus === 'approved'
+                              }
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setAdminStatus(r.id, 'Task approved');
@@ -1408,7 +1425,10 @@ export default function MissionsPage() {
                             </Button>
                             <Button
                               variant="outline"
-                              disabled={r.missionStatus === 'Task approved' || r.missionStatus === 'approved'}
+                              disabled={
+                                r.missionStatus === 'Task approved' ||
+                                r.missionStatus === 'approved'
+                              }
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setAdminStatus(
@@ -1421,7 +1441,10 @@ export default function MissionsPage() {
                             </Button>
                             <Button
                               variant="destructive"
-                              disabled={r.missionStatus === 'Task approved' || r.missionStatus === 'approved'}
+                              disabled={
+                                r.missionStatus === 'Task approved' ||
+                                r.missionStatus === 'approved'
+                              }
                               onClick={(e) => {
                                 e.stopPropagation();
                                 remove(r.id);
@@ -1431,7 +1454,10 @@ export default function MissionsPage() {
                             </Button>
                             <Button
                               variant="secondary"
-                              disabled={r.missionStatus === 'Task approved' || r.missionStatus === 'approved'}
+                              disabled={
+                                r.missionStatus === 'Task approved' ||
+                                r.missionStatus === 'approved'
+                              }
                               onClick={(e) => {
                                 e.stopPropagation();
                                 // Edit opens inline fields above; make changes then click Save Changes
@@ -1441,7 +1467,10 @@ export default function MissionsPage() {
                             </Button>
                             <Button
                               variant="outline"
-                              disabled={r.missionStatus === 'Task approved' || r.missionStatus === 'approved'}
+                              disabled={
+                                r.missionStatus === 'Task approved' ||
+                                r.missionStatus === 'approved'
+                              }
                               onClick={(e) => {
                                 e.stopPropagation();
                                 saveEdit(r);
