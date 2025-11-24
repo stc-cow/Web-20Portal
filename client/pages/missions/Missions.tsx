@@ -336,8 +336,12 @@ export default function MissionsPage() {
           }),
         });
       }
-      setRows((arr) => arr.filter((r) => r.id !== id));
-      toast({ title: 'Approved and moved to Reports' });
+      setRows((arr) =>
+        arr.map((r) =>
+          r.id === id ? { ...r, missionStatus: 'Task approved' } : r,
+        ),
+      );
+      toast({ title: 'Mission approved and locked for editing' });
       return;
     }
     setRows((arr) =>
