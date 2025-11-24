@@ -11,7 +11,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -1172,234 +1172,229 @@ export default function MissionsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {current.map((r) => (
-                  <TableRow
-                    key={r.id}
-                    onClick={() => toggleExpand(r)}
-                    className="cursor-pointer border-b border-white/5 bg-white/[0.02] text-sm text-black transition hover:bg-white/[0.08]"
-                  >
-                    <TableCell className="font-medium break-words text-black">
-                      {r.missionId}
-                    </TableCell>
-                    <TableCell className="font-medium break-words text-black">
-                      {r.siteName}
-                    </TableCell>
-                    <TableCell className="break-words text-black">
-                      {r.createdDate}
-                    </TableCell>
-                    <TableCell className="break-words text-black">
-                      {r.filledLiters}
-                    </TableCell>
-                    <TableCell className="break-words text-black">
-                      {r.actualInTank}
-                    </TableCell>
-                    <TableCell className="break-words text-black">
-                      {r.quantityAddedLastTask}
-                    </TableCell>
-                    <TableCell className="break-words text-black">
-                      {r.city}
-                    </TableCell>
-                    <TableCell>
-                      <span
-                        className={`rounded px-2 py-0.5 text-xs text-black ${statusColor[r.missionStatus]}`}
-                      >
-                        {r.missionStatus}
-                      </span>
-                    </TableCell>
-                  </TableRow>
-                ))}
                 {current.map((r) => {
-                  if (!expanded[r.id]) return null;
                   const locked = isMissionLocked(r);
                   return (
-                    <TableRow
-                      key={`exp-${r.id}`}
-                      className="bg-white/[0.02] border-b border-white/5"
-                    >
-                      <TableCell colSpan={VISIBLE_COLUMNS.length}>
-                        <div className="grid grid-cols-1 gap-3 p-4 rounded-md transition-all duration-300 ease-in-out md:grid-cols-3 text-black">
-                          <div>
-                            <div className="text-xs text-black">Mission ID</div>
-                            <div className="font-medium text-black">
-                              {r.missionId}
-                            </div>
-                          </div>
-                          <div>
-                            <div className="text-xs text-black">Site Name</div>
-                            <div className="font-medium text-black">
-                              {r.siteName}
-                            </div>
-                          </div>
-                          <div>
-                            <div className="text-xs text-black">
-                              Driver Name
-                            </div>
-                            <div className="font-medium text-black">
-                              {r.driverName}
-                            </div>
-                          </div>
-                          <div>
-                            <div className="text-xs text-black">
-                              Required Liters
-                            </div>
-                            <div className="font-medium text-black">
-                              {r.quantityAddedLastTask}
-                            </div>
-                          </div>
-                          <div className="md:col-span-3">
-                            <div className="text-xs text-black">
-                              Driver Entry
-                            </div>
-                            <div className="grid grid-cols-2 gap-2 text-sm text-black">
+                    <Fragment key={r.id}>
+                      <TableRow
+                        onClick={() => toggleExpand(r)}
+                        className="cursor-pointer border-b border-white/5 bg-white/[0.02] text-sm text-black transition hover:bg-white/[0.08]"
+                      >
+                        <TableCell className="font-medium break-words text-black">
+                          {r.missionId}
+                        </TableCell>
+                        <TableCell className="font-medium break-words text-black">
+                          {r.siteName}
+                        </TableCell>
+                        <TableCell className="break-words text-black">
+                          {r.createdDate}
+                        </TableCell>
+                        <TableCell className="break-words text-black">
+                          {r.filledLiters}
+                        </TableCell>
+                        <TableCell className="break-words text-black">
+                          {r.actualInTank}
+                        </TableCell>
+                        <TableCell className="break-words text-black">
+                          {r.quantityAddedLastTask}
+                        </TableCell>
+                        <TableCell className="break-words text-black">
+                          {r.city}
+                        </TableCell>
+                        <TableCell>
+                          <span
+                            className={`rounded px-2 py-0.5 text-xs text-black ${statusColor[r.missionStatus]}`}
+                          >
+                            {r.missionStatus}
+                          </span>
+                        </TableCell>
+                      </TableRow>
+                      {expanded[r.id] && (
+                        <TableRow className="bg-white/[0.02] border-b border-white/5">
+                          <TableCell colSpan={VISIBLE_COLUMNS.length}>
+                            <div className="grid grid-cols-1 gap-3 p-4 rounded-md transition-all duration-300 ease-in-out md:grid-cols-3 text-black">
                               <div>
-                                Liters: {entryByTask[r.id]?.liters ?? '-'}
-                              </div>
-                              <div>Rate: {entryByTask[r.id]?.rate ?? '-'}</div>
-                              <div>
-                                Station: {entryByTask[r.id]?.station ?? '-'}
+                                <div className="text-xs text-black">Mission ID</div>
+                                <div className="font-medium text-black">
+                                  {r.missionId}
+                                </div>
                               </div>
                               <div>
-                                Receipt #:{' '}
-                                {entryByTask[r.id]?.receipt_number ?? '-'}
+                                <div className="text-xs text-black">Site Name</div>
+                                <div className="font-medium text-black">
+                                  {r.siteName}
+                                </div>
                               </div>
                               <div>
-                                Odometer: {entryByTask[r.id]?.odometer ?? '-'}
+                                <div className="text-xs text-black">
+                                  Driver Name
+                                </div>
+                                <div className="font-medium text-black">
+                                  {r.driverName}
+                                </div>
                               </div>
                               <div>
-                                Submitted By:{' '}
-                                {entryByTask[r.id]?.submitted_by ?? '-'}
+                                <div className="text-xs text-black">
+                                  Required Liters
+                                </div>
+                                <div className="font-medium text-black">
+                                  {r.quantityAddedLastTask}
+                                </div>
                               </div>
-                              <div className="col-span-2">
-                                Submitted At:{' '}
-                                {entryByTask[r.id]?.submitted_at ?? '-'}
-                              </div>
-                            </div>
-                          </div>
-                          <div className="md:col-span-3">
-                            <div className="text-xs text-black mb-1">
-                              Images
-                            </div>
-                            <div className="grid grid-cols-3 gap-2">
-                              {entryByTask[r.id]?.photo_url && (
-                                <img
-                                  src={entryByTask[r.id]?.photo_url}
-                                  alt="photo"
-                                  className="h-24 w-24 rounded object-cover cursor-zoom-in"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setImageSrc(
-                                      entryByTask[r.id]?.photo_url as string,
-                                    );
-                                    setImageOpen(true);
-                                  }}
-                                />
-                              )}
-                              {(imagesByTask[r.id] || []).map((u, i) => (
-                                <img
-                                  key={i}
-                                  src={u}
-                                  alt={`upload-${i + 1}`}
-                                  className="h-24 w-24 rounded object-cover cursor-zoom-in"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setImageSrc(u);
-                                    setImageOpen(true);
-                                  }}
-                                />
-                              ))}
-                              {!entryByTask[r.id]?.photo_url &&
-                                (!imagesByTask[r.id] ||
-                                  imagesByTask[r.id].length === 0) && (
-                                  <div className="text-sm text-black">
-                                    No images
+                              <div className="md:col-span-3">
+                                <div className="text-xs text-black">
+                                  Driver Entry
+                                </div>
+                                <div className="grid grid-cols-2 gap-2 text-sm text-black">
+                                  <div>
+                                    Liters: {entryByTask[r.id]?.liters ?? '-'}
                                   </div>
-                                )}
-                            </div>
-                          </div>
+                                  <div>Rate: {entryByTask[r.id]?.rate ?? '-'}</div>
+                                  <div>
+                                    Station: {entryByTask[r.id]?.station ?? '-'}
+                                  </div>
+                                  <div>
+                                    Receipt #:{' '}
+                                    {entryByTask[r.id]?.receipt_number ?? '-'}
+                                  </div>
+                                  <div>
+                                    Odometer: {entryByTask[r.id]?.odometer ?? '-'}
+                                  </div>
+                                  <div>
+                                    Submitted By:{' '}
+                                    {entryByTask[r.id]?.submitted_by ?? '-'}
+                                  </div>
+                                  <div className="col-span-2">
+                                    Submitted At:{' '}
+                                    {entryByTask[r.id]?.submitted_at ?? '-'}
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="md:col-span-3">
+                                <div className="text-xs text-black mb-1">
+                                  Images
+                                </div>
+                                <div className="grid grid-cols-3 gap-2">
+                                  {entryByTask[r.id]?.photo_url && (
+                                    <img
+                                      src={entryByTask[r.id]?.photo_url}
+                                      alt="photo"
+                                      className="h-24 w-24 rounded object-cover cursor-zoom-in"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setImageSrc(
+                                          entryByTask[r.id]?.photo_url as string,
+                                        );
+                                        setImageOpen(true);
+                                      }}
+                                    />
+                                  )}
+                                  {(imagesByTask[r.id] || []).map((u, i) => (
+                                    <img
+                                      key={i}
+                                      src={u}
+                                      alt={`upload-${i + 1}`}
+                                      className="h-24 w-24 rounded object-cover cursor-zoom-in"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setImageSrc(u);
+                                        setImageOpen(true);
+                                      }}
+                                    />
+                                  ))}
+                                  {!entryByTask[r.id]?.photo_url &&
+                                    (!imagesByTask[r.id] ||
+                                      imagesByTask[r.id].length === 0) && (
+                                      <div className="text-sm text-black">
+                                        No images
+                                      </div>
+                                    )}
+                                </div>
+                              </div>
 
-                          {/* Inline edit form */}
-                          <div className="md:col-span-3 grid grid-cols-1 gap-3 md:grid-cols-4">
-                            <div>
-                              <div className="text-xs text-black">
-                                Added Liters
-                              </div>
-                              <Input
-                                type="number"
-                                className="mt-1"
-                                value={editDraft[r.id]?.added ?? 0}
-                                disabled={locked}
-                                onClick={(e) => e.stopPropagation()}
-                                onChange={(e) =>
-                                  setEditDraft((d) => ({
-                                    ...d,
-                                    [r.id]: {
-                                      ...(d[r.id] || {
-                                        notes: '',
-                                        added: 0,
-                                        actual: 0,
-                                        qtyLast: 0,
-                                      }),
-                                      added: Number(e.target.value) || 0,
-                                    },
-                                  }))
-                                }
-                              />
-                            </div>
-                            <div>
-                              <div className="text-xs text-black">
-                                Actual In Tank
-                              </div>
-                              <Input
-                                type="number"
-                                className="mt-1"
-                                value={editDraft[r.id]?.actual ?? 0}
-                                disabled={locked}
-                                onClick={(e) => e.stopPropagation()}
-                                onChange={(e) =>
-                                  setEditDraft((d) => ({
-                                    ...d,
-                                    [r.id]: {
-                                      ...(d[r.id] || {
-                                        notes: '',
-                                        added: 0,
-                                        actual: 0,
-                                        qtyLast: 0,
-                                      }),
-                                      actual: Number(e.target.value) || 0,
-                                    },
-                                  }))
-                                }
-                              />
-                            </div>
-                            <div>
-                              <div className="text-xs text-black">
-                                Quantity Added (Last Task)
-                              </div>
-                              <Input
-                                type="number"
-                                className="mt-1"
-                                value={editDraft[r.id]?.qtyLast ?? 0}
-                                disabled={locked}
-                                onClick={(e) => e.stopPropagation()}
-                                onChange={(e) =>
-                                  setEditDraft((d) => ({
-                                    ...d,
-                                    [r.id]: {
-                                      ...(d[r.id] || {
-                                        notes: '',
-                                        added: 0,
-                                        actual: 0,
-                                        qtyLast: 0,
-                                      }),
-                                      qtyLast: Number(e.target.value) || 0,
-                                    },
-                                  }))
-                                }
-                              />
-                            </div>
-                            <div className="md:col-span-1">
-                              <div className="text-xs text-black">Notes</div>
-                              <Input
+                              {/* Inline edit form */}
+                              <div className="md:col-span-3 grid grid-cols-1 gap-3 md:grid-cols-4">
+                                <div>
+                                  <div className="text-xs text-black">
+                                    Added Liters
+                                  </div>
+                                  <Input
+                                    type="number"
+                                    className="mt-1"
+                                    value={editDraft[r.id]?.added ?? 0}
+                                    disabled={locked}
+                                    onClick={(e) => e.stopPropagation()}
+                                    onChange={(e) =>
+                                      setEditDraft((d) => ({
+                                        ...d,
+                                        [r.id]: {
+                                          ...(d[r.id] || {
+                                            notes: '',
+                                            added: 0,
+                                            actual: 0,
+                                            qtyLast: 0,
+                                          }),
+                                          added: Number(e.target.value) || 0,
+                                        },
+                                      }))
+                                    }
+                                  />
+                                </div>
+                                <div>
+                                  <div className="text-xs text-black">
+                                    Actual In Tank
+                                  </div>
+                                  <Input
+                                    type="number"
+                                    className="mt-1"
+                                    value={editDraft[r.id]?.actual ?? 0}
+                                    disabled={locked}
+                                    onClick={(e) => e.stopPropagation()}
+                                    onChange={(e) =>
+                                      setEditDraft((d) => ({
+                                        ...d,
+                                        [r.id]: {
+                                          ...(d[r.id] || {
+                                            notes: '',
+                                            added: 0,
+                                            actual: 0,
+                                            qtyLast: 0,
+                                          }),
+                                          actual: Number(e.target.value) || 0,
+                                        },
+                                      }))
+                                    }
+                                  />
+                                </div>
+                                <div>
+                                  <div className="text-xs text-black">
+                                    Quantity Added (Last Task)
+                                  </div>
+                                  <Input
+                                    type="number"
+                                    className="mt-1"
+                                    value={editDraft[r.id]?.qtyLast ?? 0}
+                                    disabled={locked}
+                                    onClick={(e) => e.stopPropagation()}
+                                    onChange={(e) =>
+                                      setEditDraft((d) => ({
+                                        ...d,
+                                        [r.id]: {
+                                          ...(d[r.id] || {
+                                            notes: '',
+                                            added: 0,
+                                            actual: 0,
+                                            qtyLast: 0,
+                                          }),
+                                          qtyLast: Number(e.target.value) || 0,
+                                        },
+                                      }))
+                                    }
+                                  />
+                                </div>
+                                <div className="md:col-span-1">
+                                  <div className="text-xs text-black">Notes</div>
+                                  <Input
                                 className="mt-1"
                                 value={editDraft[r.id]?.notes ?? ''}
                                 disabled={locked}
