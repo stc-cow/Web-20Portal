@@ -73,6 +73,31 @@ const statusColor: Record<Mission['missionStatus'], string> = {
   Canceled: 'bg-gray-400',
 };
 
+const normalizeMissionStatus = (
+  status?: string,
+): Mission['missionStatus'] | '' => {
+  switch ((status || '').toLowerCase()) {
+    case 'approved':
+    case 'task approved':
+      return 'Task approved';
+    case 'completed':
+      return 'Finished by Driver';
+    case 'in_progress':
+      return 'Reported by driver';
+    case 'task returned to the driver':
+      return 'Task returned to the driver';
+    case 'canceled':
+      return 'Canceled';
+    case 'creation':
+      return 'Creation';
+    default:
+      return '';
+  }
+};
+
+const isApprovedStatus = (status?: string) =>
+  normalizeMissionStatus(status) === 'Task approved';
+
 // Visible columns and labels in order requested
 const VISIBLE_COLUMNS = [
   { key: 'missionId', label: 'Mission ID' },
@@ -306,6 +331,11 @@ export default function MissionsPage() {
     id: number,
     status: Mission['missionStatus'],
   ) => {
+    const mission = rows.find((r) => r.id === id);
+    if (isMissionLocked(mission)) {
+      notifyLocked();
+      return;
+    }
     const newAdmin = status === 'Task approved' ? 'approved' : status;
     const { error } = await supabase
       .from('driver_tasks')
@@ -347,6 +377,10 @@ export default function MissionsPage() {
   };
 
   const saveEdit = async (r: Mission) => {
+    if (isMissionLocked(r)) {
+      notifyLocked();
+      return;
+    }
     const draft = editDraft[r.id];
     if (!draft) return;
     // Update local
@@ -463,18 +497,8 @@ export default function MissionsPage() {
         setRows([]);
         return;
       }
-      const mapStatus = (s?: string): Mission['missionStatus'] => {
-        switch ((s || '').toLowerCase()) {
-          case 'completed':
-            return 'Finished by Driver';
-          case 'in_progress':
-            return 'Reported by driver';
-          case 'canceled':
-            return 'Canceled';
-          default:
-            return 'Creation';
-        }
-      };
+      const mapStatus = (s?: string): Mission['missionStatus'] =>
+        normalizeMissionStatus(s) || 'Creation';
       const mapped: Mission[] = data.map((d: any) => ({
         id: Number(d.id),
         missionId: String(d.mission_id || ''),
@@ -492,7 +516,8 @@ export default function MissionsPage() {
         quantityAddedLastTask: Number(d.required_liters || 0),
         city: '',
         notes: d.notes || '',
-        missionStatus: (d.admin_status as string) || mapStatus(d.status),
+        missionStatus:
+          normalizeMissionStatus(d.admin_status) || mapStatus(d.status),
         assignedDriver: d.driver_name || '',
         createdBy: 'System',
       }));
@@ -668,6 +693,15 @@ export default function MissionsPage() {
     return map;
   }, [rows]);
 
+  const isMissionLocked = (mission?: Mission) =>
+    isApprovedStatus(mission?.missionStatus);
+
+  const notifyLocked = () =>
+    toast({
+      title: 'Mission locked',
+      description: 'Approved missions cannot be modified.',
+    });
+
   const filteredByStatus = useMemo(() => {
     const base = rows.filter((r) => r.missionStatus !== 'Task approved');
     if (statusFilter === 'All') return base;
@@ -746,6 +780,11 @@ export default function MissionsPage() {
   };
 
   const remove = async (id: number) => {
+    const mission = rows.find((r) => r.id === id);
+    if (isMissionLocked(mission)) {
+      notifyLocked();
+      return;
+    }
     await fetch('/api/db/query', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -1169,8 +1208,10 @@ export default function MissionsPage() {
                     </TableCell>
                   </TableRow>
                 ))}
-                {current.map((r) =>
-                  expanded[r.id] ? (
+                {current.map((r) => {
+                  if (!expanded[r.id]) return null;
+                  const locked = isMissionLocked(r);
+                  return (
                     <TableRow
                       key={`exp-${r.id}`}
                       className="bg-white/[0.02] border-b border-white/5"
@@ -1286,6 +1327,7 @@ export default function MissionsPage() {
                                 type="number"
                                 className="mt-1"
                                 value={editDraft[r.id]?.added ?? 0}
+                                disabled={locked}
                                 onClick={(e) => e.stopPropagation()}
                                 onChange={(e) =>
                                   setEditDraft((d) => ({
@@ -1311,6 +1353,7 @@ export default function MissionsPage() {
                                 type="number"
                                 className="mt-1"
                                 value={editDraft[r.id]?.actual ?? 0}
+                                disabled={locked}
                                 onClick={(e) => e.stopPropagation()}
                                 onChange={(e) =>
                                   setEditDraft((d) => ({
@@ -1336,6 +1379,7 @@ export default function MissionsPage() {
                                 type="number"
                                 className="mt-1"
                                 value={editDraft[r.id]?.qtyLast ?? 0}
+                                disabled={locked}
                                 onClick={(e) => e.stopPropagation()}
                                 onChange={(e) =>
                                   setEditDraft((d) => ({
@@ -1358,6 +1402,7 @@ export default function MissionsPage() {
                               <Input
                                 className="mt-1"
                                 value={editDraft[r.id]?.notes ?? ''}
+                                disabled={locked}
                                 onClick={(e) => e.stopPropagation()}
                                 onChange={(e) =>
                                   setEditDraft((d) => ({
@@ -1380,6 +1425,7 @@ export default function MissionsPage() {
                           <div className="md:col-span-3 flex flex-wrap items-center justify-end gap-2">
                             <Button
                               className="bg-[#16A34A] hover:opacity-90"
+                              disabled={locked}
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setAdminStatus(r.id, 'Task approved');
@@ -1389,6 +1435,7 @@ export default function MissionsPage() {
                             </Button>
                             <Button
                               variant="outline"
+                              disabled={locked}
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setAdminStatus(
@@ -1401,6 +1448,7 @@ export default function MissionsPage() {
                             </Button>
                             <Button
                               variant="destructive"
+                              disabled={locked}
                               onClick={(e) => {
                                 e.stopPropagation();
                                 remove(r.id);
@@ -1410,6 +1458,7 @@ export default function MissionsPage() {
                             </Button>
                             <Button
                               variant="secondary"
+                              disabled={locked}
                               onClick={(e) => {
                                 e.stopPropagation();
                                 // Edit opens inline fields above; make changes then click Save Changes
@@ -1419,6 +1468,7 @@ export default function MissionsPage() {
                             </Button>
                             <Button
                               variant="outline"
+                              disabled={locked}
                               onClick={(e) => {
                                 e.stopPropagation();
                                 saveEdit(r);
@@ -1430,8 +1480,8 @@ export default function MissionsPage() {
                         </div>
                       </TableCell>
                     </TableRow>
-                  ) : null,
-                )}
+                  );
+                })}
                 {current.length === 0 && (
                   <TableRow>
                     <TableCell
