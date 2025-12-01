@@ -11,7 +11,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -72,6 +72,31 @@ const statusColor: Record<Mission['missionStatus'], string> = {
   'Reported by driver': 'bg-rose-500',
   Canceled: 'bg-gray-400',
 };
+
+const normalizeMissionStatus = (
+  status?: string,
+): Mission['missionStatus'] | '' => {
+  switch ((status || '').toLowerCase()) {
+    case 'approved':
+    case 'task approved':
+      return 'Task approved';
+    case 'completed':
+      return 'Finished by Driver';
+    case 'in_progress':
+      return 'Reported by driver';
+    case 'task returned to the driver':
+      return 'Task returned to the driver';
+    case 'canceled':
+      return 'Canceled';
+    case 'creation':
+      return 'Creation';
+    default:
+      return '';
+  }
+};
+
+const isApprovedStatus = (status?: string) =>
+  normalizeMissionStatus(status) === 'Task approved';
 
 // Visible columns and labels in order requested
 const VISIBLE_COLUMNS = [
@@ -306,6 +331,11 @@ export default function MissionsPage() {
     id: number,
     status: Mission['missionStatus'],
   ) => {
+    const mission = rows.find((r) => r.id === id);
+    if (isMissionLocked(mission)) {
+      notifyLocked();
+      return;
+    }
     const newAdmin = status === 'Task approved' ? 'approved' : status;
     const { error } = await supabase
       .from('driver_tasks')
@@ -351,6 +381,10 @@ export default function MissionsPage() {
   };
 
   const saveEdit = async (r: Mission) => {
+    if (isMissionLocked(r)) {
+      notifyLocked();
+      return;
+    }
     const draft = editDraft[r.id];
     if (!draft) return;
     // Update local
@@ -467,18 +501,8 @@ export default function MissionsPage() {
         setRows([]);
         return;
       }
-      const mapStatus = (s?: string): Mission['missionStatus'] => {
-        switch ((s || '').toLowerCase()) {
-          case 'completed':
-            return 'Finished by Driver';
-          case 'in_progress':
-            return 'Reported by driver';
-          case 'canceled':
-            return 'Canceled';
-          default:
-            return 'Creation';
-        }
-      };
+      const mapStatus = (s?: string): Mission['missionStatus'] =>
+        normalizeMissionStatus(s) || 'Creation';
       const mapped: Mission[] = data.map((d: any) => ({
         id: Number(d.id),
         missionId: String(d.mission_id || ''),
@@ -496,7 +520,8 @@ export default function MissionsPage() {
         quantityAddedLastTask: Number(d.required_liters || 0),
         city: '',
         notes: d.notes || '',
-        missionStatus: (d.admin_status as string) || mapStatus(d.status),
+        missionStatus:
+          normalizeMissionStatus(d.admin_status) || mapStatus(d.status),
         assignedDriver: d.driver_name || '',
         createdBy: 'System',
       }));
@@ -672,6 +697,15 @@ export default function MissionsPage() {
     return map;
   }, [rows]);
 
+  const isMissionLocked = (mission?: Mission) =>
+    isApprovedStatus(mission?.missionStatus);
+
+  const notifyLocked = () =>
+    toast({
+      title: 'Mission locked',
+      description: 'Approved missions cannot be modified.',
+    });
+
   const filteredByStatus = useMemo(() => {
     const base = rows.filter((r) => r.missionStatus !== 'Task approved');
     if (statusFilter === 'All') return base;
@@ -750,6 +784,11 @@ export default function MissionsPage() {
   };
 
   const remove = async (id: number) => {
+    const mission = rows.find((r) => r.id === id);
+    if (isMissionLocked(mission)) {
+      notifyLocked();
+      return;
+    }
     await fetch('/api/db/query', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -1137,36 +1176,13 @@ export default function MissionsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {current.map((r) => (
-                  <TableRow
-                    key={r.id}
-                    onClick={() => toggleExpand(r)}
-                    className="cursor-pointer border-b border-white/5 bg-white/[0.02] text-sm text-black transition hover:bg-white/[0.08]"
-                  >
-                    <TableCell className="font-medium break-words text-black">
-                      {r.missionId}
-                    </TableCell>
-                    <TableCell className="font-medium break-words text-black">
-                      {r.siteName}
-                    </TableCell>
-                    <TableCell className="break-words text-black">
-                      {r.createdDate}
-                    </TableCell>
-                    <TableCell className="break-words text-black">
-                      {r.filledLiters}
-                    </TableCell>
-                    <TableCell className="break-words text-black">
-                      {r.actualInTank}
-                    </TableCell>
-                    <TableCell className="break-words text-black">
-                      {r.quantityAddedLastTask}
-                    </TableCell>
-                    <TableCell className="break-words text-black">
-                      {r.city}
-                    </TableCell>
-                    <TableCell>
-                      <span
-                        className={`rounded px-2 py-0.5 text-xs text-black ${statusColor[r.missionStatus]}`}
+                {current.map((r) => {
+                  const locked = isMissionLocked(r);
+                  return (
+                    <Fragment key={r.id}>
+                      <TableRow
+                        onClick={() => toggleExpand(r)}
+                        className="cursor-pointer border-b border-white/5 bg-white/[0.02] text-sm text-black transition hover:bg-white/[0.08]"
                       >
                         {r.missionStatus}
                       </span>
@@ -1231,62 +1247,40 @@ export default function MissionsPage() {
                               </div>
                               <div>Rate: {entryByTask[r.id]?.rate ?? '-'}</div>
                               <div>
-                                Station: {entryByTask[r.id]?.station ?? '-'}
+                                <div className="text-xs text-black">Mission ID</div>
+                                <div className="font-medium text-black">
+                                  {r.missionId}
+                                </div>
                               </div>
                               <div>
-                                Receipt #:{' '}
-                                {entryByTask[r.id]?.receipt_number ?? '-'}
+                                <div className="text-xs text-black">Site Name</div>
+                                <div className="font-medium text-black">
+                                  {r.siteName}
+                                </div>
                               </div>
                               <div>
-                                Odometer: {entryByTask[r.id]?.odometer ?? '-'}
+                                <div className="text-xs text-black">
+                                  Driver Name
+                                </div>
+                                <div className="font-medium text-black">
+                                  {r.driverName}
+                                </div>
                               </div>
                               <div>
-                                Submitted By:{' '}
-                                {entryByTask[r.id]?.submitted_by ?? '-'}
+                                <div className="text-xs text-black">
+                                  Required Liters
+                                </div>
+                                <div className="font-medium text-black">
+                                  {r.quantityAddedLastTask}
+                                </div>
                               </div>
-                              <div className="col-span-2">
-                                Submitted At:{' '}
-                                {entryByTask[r.id]?.submitted_at ?? '-'}
-                              </div>
-                            </div>
-                          </div>
-                          <div className="md:col-span-3">
-                            <div className="text-xs text-black mb-1">
-                              Images
-                            </div>
-                            <div className="grid grid-cols-3 gap-2">
-                              {entryByTask[r.id]?.photo_url && (
-                                <img
-                                  src={entryByTask[r.id]?.photo_url}
-                                  alt="photo"
-                                  className="h-24 w-24 rounded object-cover cursor-zoom-in"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setImageSrc(
-                                      entryByTask[r.id]?.photo_url as string,
-                                    );
-                                    setImageOpen(true);
-                                  }}
-                                />
-                              )}
-                              {(imagesByTask[r.id] || []).map((u, i) => (
-                                <img
-                                  key={i}
-                                  src={u}
-                                  alt={`upload-${i + 1}`}
-                                  className="h-24 w-24 rounded object-cover cursor-zoom-in"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setImageSrc(u);
-                                    setImageOpen(true);
-                                  }}
-                                />
-                              ))}
-                              {!entryByTask[r.id]?.photo_url &&
-                                (!imagesByTask[r.id] ||
-                                  imagesByTask[r.id].length === 0) && (
-                                  <div className="text-sm text-black">
-                                    No images
+                              <div className="md:col-span-3">
+                                <div className="text-xs text-black">
+                                  Driver Entry
+                                </div>
+                                <div className="grid grid-cols-2 gap-2 text-sm text-black">
+                                  <div>
+                                    Liters: {entryByTask[r.id]?.liters ?? '-'}
                                   </div>
                                 )}
                             </div>
@@ -1482,8 +1476,8 @@ export default function MissionsPage() {
                         </div>
                       </TableCell>
                     </TableRow>
-                  ) : null,
-                )}
+                  );
+                })}
                 {current.length === 0 && (
                   <TableRow>
                     <TableCell
